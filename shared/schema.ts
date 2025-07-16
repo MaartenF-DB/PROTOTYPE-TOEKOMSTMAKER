@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, jsonb, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, jsonb, timestamp, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -16,6 +16,7 @@ export const surveyResponses = pgTable("survey_responses", {
   actionChoice: text("action_choice").notNull(),
   confidenceAfter: integer("confidence_after").notNull(),
   result: text("result").notNull(),
+  isNewCheckoutUser: boolean("is_new_checkout_user").default(false),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

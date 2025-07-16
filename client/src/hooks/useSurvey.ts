@@ -15,7 +15,8 @@ const initialAnswers: SurveyAnswers = {
   feelingAfter: null,
   actionChoice: '',
   confidenceAfter: null,
-  result: ''
+  result: '',
+  isNewCheckoutUser: false
 };
 
 export function useSurvey() {
@@ -43,7 +44,8 @@ export function useSurvey() {
         feelingAfter: answers.feelingAfter || 0,
         actionChoice: answers.actionChoice,
         confidenceAfter: answers.confidenceAfter || 0,
-        result: answers.result
+        result: answers.result,
+        isNewCheckoutUser: answers.isNewCheckoutUser || false
       });
       return response.json();
     },

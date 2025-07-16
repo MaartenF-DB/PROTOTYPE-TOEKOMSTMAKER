@@ -28,6 +28,7 @@ export class MemStorage implements IStorage {
       ...insertResponse, 
       visitingWithOther: insertResponse.visitingWithOther || null,
       topicRanking: insertResponse.topicRanking as string[],
+      isNewCheckoutUser: insertResponse.isNewCheckoutUser || false,
       id, 
       createdAt: new Date()
     };

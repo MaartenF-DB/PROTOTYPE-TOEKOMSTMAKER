@@ -9,6 +9,7 @@ import { MultipleChoice } from '@/components/survey/MultipleChoice';
 import { RankingQuestion } from '@/components/survey/RankingQuestion';
 import { LikertScale } from '@/components/survey/LikertScale';
 import { NameVerification } from '@/components/survey/NameVerification';
+import { NameMatching } from '@/components/survey/NameMatching';
 import { Input } from '@/components/ui/input';
 import { VISITING_OPTIONS, ACTION_OPTIONS, LIKERT_SCALE, CONFIDENCE_SCALE, TOPICS } from '@/types/survey';
 import { useQuery } from '@tanstack/react-query';
@@ -36,10 +37,21 @@ export default function Home() {
     enabled: true
   });
   
-  // Check if current name already exists
+  // Check if current name already exists and get similar names
   const hasNameConflict = existingResponses.some((response: any) => 
     response.name === answers.name && answers.name.length > 0
   );
+  
+  // Find similar names for checkout flow
+  const findSimilarNames = (inputName: string) => {
+    if (!inputName.trim()) return [];
+    const lowerInput = inputName.toLowerCase();
+    return existingResponses
+      .filter((response: any) => response.name.toLowerCase().includes(lowerInput) || lowerInput.includes(response.name.toLowerCase()))
+      .map((response: any) => response.name);
+  };
+  
+  const similarNames = findSimilarNames(answers.name);
   
   // Get topic data for theming
   const topicData = TOPICS[answers.mostImportantTopic as keyof typeof TOPICS];
@@ -370,8 +382,8 @@ export default function Home() {
             buttonColor="bg-orange-600 hover:bg-orange-700"
             onNext={() => {
               // Check if name exists for checkout flow
-              if (hasNameConflict) {
-                setCurrentSection('name-verification');
+              if (similarNames.length > 0) {
+                setCurrentSection('name-matching');
               } else {
                 setCurrentSection('question-6');
               }
@@ -398,6 +410,22 @@ export default function Home() {
               )}
             </div>
           </Question>
+        );
+      case 'name-matching':
+        return (
+          <NameMatching
+            enteredName={answers.name}
+            existingNames={similarNames}
+            onNameMatch={(matchedName) => {
+              updateAnswers({ name: matchedName });
+              setCurrentSection('question-6');
+            }}
+            onProceedAnyway={() => {
+              // Keep the entered name and mark as new checkout user
+              updateAnswers({ isNewCheckoutUser: true });
+              setCurrentSection('question-6');
+            }}
+          />
         );
 
       case 'question-6':

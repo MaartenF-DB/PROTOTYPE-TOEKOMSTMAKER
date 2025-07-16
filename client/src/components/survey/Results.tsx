@@ -18,16 +18,27 @@ export function Results({ answers, onRestart }: ResultsProps) {
 
   const topicData = TOPICS[answers.mostImportantTopic as keyof typeof TOPICS];
   
-  // Random motivational messages
-  const motivationalMessages = [
-    "Jouw ideeën betekenen veel voor de rest van de wereld. Hoe klein ze ook zijn!",
-    "Met jouw ideeën kom je er wel! Blijf in jezelf en anderen geloven.",
-    "Je bent geweldig! Blijf zo denken en doen. Samen geven we vorm aan de toekomst.",
-    "Je doet het geweldig! Je zelfvertrouwen zal je helpen de wereld te veranderen.",
-    "Je bent een superster! Je zelfvertrouwen is inspirerend, blijf stralen en wijs de weg!"
-  ];
+  // Confidence-based motivational messages
+  const getMotivationalMessage = (confidenceLevel: number | null) => {
+    if (!confidenceLevel) return "Blijf geloven in jezelf en je ideeën!";
+    
+    switch (confidenceLevel) {
+      case 1:
+        return "Jouw ideeën betekenen veel voor de rest van de wereld. Hoe klein ze ook zijn!";
+      case 2:
+        return "Met jouw ideeën kom je er wel! Blijf in jezelf en anderen geloven.";
+      case 3:
+        return "Je bent geweldig! Blijf zo denken en doen. Samen geven we vorm aan de toekomst.";
+      case 4:
+        return "Je doet het geweldig! Je zelfvertrouwen zal je helpen de wereld te veranderen.";
+      case 5:
+        return "Je bent een superster! Je zelfvertrouwen is inspirerend, blijf stralen en wijs de weg!";
+      default:
+        return "Blijf geloven in jezelf en je ideeën!";
+    }
+  };
   
-  const randomMessage = motivationalMessages[Math.floor(Math.random() * motivationalMessages.length)];
+  const motivationalMessage = getMotivationalMessage(answers.confidenceAfter);
 
   useEffect(() => {
     // Automatically export to CSV
@@ -87,7 +98,7 @@ export function Results({ answers, onRestart }: ResultsProps) {
           
           <div className="bg-white bg-opacity-30 rounded-xl p-6 mt-6">
             <p className="text-xl font-medium text-white leading-relaxed">
-              {randomMessage}
+              {motivationalMessage}
             </p>
           </div>
         </div>

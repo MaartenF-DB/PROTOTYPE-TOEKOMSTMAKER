@@ -11,6 +11,7 @@ export interface SurveyAnswers {
   actionChoice: string;
   confidenceAfter: number | null;
   result: string;
+  isNewCheckoutUser?: boolean;
 }
 
 export interface SurveyState {
