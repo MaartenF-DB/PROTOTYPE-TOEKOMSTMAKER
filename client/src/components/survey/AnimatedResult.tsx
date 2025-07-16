@@ -19,7 +19,7 @@ export function AnimatedResult({ finalResult, onComplete }: AnimatedResultProps)
   const [currentIcon, setCurrentIcon] = useState('🔮');
   const [currentColor, setCurrentColor] = useState('#6366f1');
   const [isAnimating, setIsAnimating] = useState(true);
-
+  const [timeRemaining, setTimeRemaining] = useState(10);
 
   const topicKeys = Object.keys(TOPICS);
   const icons = topicKeys.map(key => TOPICS[key as keyof typeof TOPICS].icon);
@@ -28,9 +28,11 @@ export function AnimatedResult({ finalResult, onComplete }: AnimatedResultProps)
   useEffect(() => {
     let interval: NodeJS.Timeout;
     let timeout: NodeJS.Timeout;
+    let countdownInterval: NodeJS.Timeout;
 
-    console.log('AnimatedResult started');
+    console.log('AnimatedResult started - 10 seconds countdown');
 
+    // Animation interval
     interval = setInterval(() => {
       const shuffledIcons = shuffleArray(icons);
       const shuffledColors = shuffleArray(colors);
@@ -38,25 +40,43 @@ export function AnimatedResult({ finalResult, onComplete }: AnimatedResultProps)
       setCurrentColor(shuffledColors[0]);
     }, 100);
 
-    // Stop animation after 10 seconds and immediately go to final results
+    // Countdown timer
+    countdownInterval = setInterval(() => {
+      setTimeRemaining(prev => {
+        const next = prev - 1;
+        console.log(`Time remaining: ${next} seconds`);
+        return next;
+      });
+    }, 1000);
+
+    // Complete after 10 seconds
     timeout = setTimeout(() => {
-      console.log('AnimatedResult completing after 10 seconds');
+      console.log('AnimatedResult completing after 10 seconds - calling onComplete');
       setIsAnimating(false);
       clearInterval(interval);
+      clearInterval(countdownInterval);
       onComplete();
     }, 10000);
 
     return () => {
       clearInterval(interval);
+      clearInterval(countdownInterval);
       clearTimeout(timeout);
     };
   }, [finalResult, icons, colors, onComplete]);
+
+  const handleSkip = () => {
+    console.log('Animation skipped by user');
+    setIsAnimating(false);
+    onComplete();
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-purple-600 to-indigo-600 text-white">
       <div className="text-center max-w-2xl w-full">
         <div className="bg-white bg-opacity-20 rounded-2xl p-8 mb-8 backdrop-blur-sm">
           <h2 className="text-3xl font-bold mb-8">🔮 De waarzegger onthult je persoonlijkheid...</h2>
+          <div className="text-sm opacity-75 mb-4">({timeRemaining} seconden)</div>
           
           <div className="relative mb-8">
             <div 
@@ -77,7 +97,12 @@ export function AnimatedResult({ finalResult, onComplete }: AnimatedResultProps)
             )}
           </div>
 
-
+          <button
+            onClick={handleSkip}
+            className="text-sm opacity-75 hover:opacity-100 underline transition-opacity"
+          >
+            Klik om over te slaan
+          </button>
         </div>
       </div>
     </div>

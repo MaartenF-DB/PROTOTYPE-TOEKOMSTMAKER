@@ -29,7 +29,9 @@ export function Results({ answers, onRestart }: ResultsProps) {
       <AnimatedResult 
         finalResult={answers.mostImportantTopic}
         onComplete={() => {
+          console.log('AnimatedResult onComplete called - showing final results');
           setShowAnimatedResult(false);
+          setAnimationComplete(true);
           speak(answers.result);
         }}
       />
