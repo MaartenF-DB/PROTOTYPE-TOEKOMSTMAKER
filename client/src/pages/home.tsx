@@ -213,19 +213,6 @@ export default function Home() {
                 ranking={answers.topicRanking}
                 onRankingChange={(ranking) => updateAnswers({ topicRanking: ranking })}
               />
-              {answers.topicRanking.length > 0 && (
-                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
-                  <p className="text-white font-semibold">Jouw ranking (van minst naar meest belangrijk):</p>
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {answers.topicRanking.map((topic, index) => (
-                      <div key={topic} className="flex items-center space-x-1">
-                        <span className="text-white text-sm">#{index + 1}</span>
-                        <span className="text-white text-sm font-medium">{topic}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
           </Question>
         );
@@ -457,13 +444,14 @@ export default function Home() {
                   </div>
                   
                   {/* Selected option display */}
-                  <div className="text-center">
-                    {answers.actionChoice && (
-                      <p className="text-lg font-semibold">
+                  {answers.actionChoice && (
+                    <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
+                      <p className="text-white font-semibold">Jouw antwoord:</p>
+                      <p className="text-white text-lg">
                         {ACTION_OPTIONS.find(opt => opt.value === answers.actionChoice)?.label}
                       </p>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
               </div>
               
