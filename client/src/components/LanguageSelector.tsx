@@ -33,36 +33,30 @@ export function LanguageSelector({ onLanguageChange, currentLanguage }: Language
         }`}
         title="English"
       >
-        <svg viewBox="0 0 60 30" className="w-full h-full">
+        <div className="w-full h-full relative bg-blue-800 overflow-hidden">
           {/* Blue background */}
-          <rect width="60" height="30" fill="#012169"/>
+          <div className="absolute inset-0 bg-blue-800"></div>
           
-          {/* White diagonals */}
-          <g stroke="#fff" strokeWidth="6">
-            <path d="m0,0 60,30 m0,-30 L0,30"/>
-          </g>
-          <g stroke="#fff" strokeWidth="4">
-            <path d="m0,0 60,30 m0,-30 L0,30"/>
-          </g>
+          {/* White diagonal stripes (thicker) */}
+          <div className="absolute inset-0">
+            <div className="absolute w-full h-1 bg-white top-1/2 transform -translate-y-0.5 rotate-45 origin-center"></div>
+            <div className="absolute w-full h-1 bg-white top-1/2 transform -translate-y-0.5 -rotate-45 origin-center"></div>
+          </div>
           
-          {/* Red diagonals */}
-          <g stroke="#C8102E" strokeWidth="2">
-            <path d="m0,0 60,30 m0,-30 L0,30"/>
-          </g>
+          {/* Red diagonal stripes (thinner) */}
+          <div className="absolute inset-0">
+            <div className="absolute w-full h-0.5 bg-red-600 top-1/2 transform -translate-y-0.25 rotate-45 origin-center"></div>
+            <div className="absolute w-full h-0.5 bg-red-600 top-1/2 transform -translate-y-0.25 -rotate-45 origin-center"></div>
+          </div>
           
-          {/* White cross */}
-          <g stroke="#fff" strokeWidth="10">
-            <path d="m30,0 v30 m-30,-15 h60"/>
-          </g>
-          <g stroke="#fff" strokeWidth="6">
-            <path d="m30,0 v30 m-30,-15 h60"/>
-          </g>
+          {/* White cross (background) */}
+          <div className="absolute w-full h-1.5 bg-white top-1/2 transform -translate-y-0.75"></div>
+          <div className="absolute h-full w-1.5 bg-white left-1/2 transform -translate-x-0.75"></div>
           
-          {/* Red cross */}
-          <g stroke="#C8102E" strokeWidth="4">
-            <path d="m30,0 v30 m-30,-15 h60"/>
-          </g>
-        </svg>
+          {/* Red cross (foreground) */}
+          <div className="absolute w-full h-1 bg-red-600 top-1/2 transform -translate-y-0.5"></div>
+          <div className="absolute h-full w-1 bg-red-600 left-1/2 transform -translate-x-0.5"></div>
+        </div>
       </button>
     </div>
   );

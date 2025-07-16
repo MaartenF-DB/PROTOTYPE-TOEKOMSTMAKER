@@ -399,22 +399,24 @@ export default function Home() {
             bgGradient="from-orange-500 to-red-500"
             buttonColor="bg-orange-600 hover:bg-orange-700"
             onNext={() => {
-              // If checkout only, skip name matching and go directly to questions
-              if (checkoutOnly) {
-                setCurrentSection('question-6');
-                return;
-              }
+              // Check if name exists in check-in responses
+              const nameExists = existingResponses.some((r: any) => r.name === answers.name);
               
-              // For regular checkout, check if name exists
-              if (similarNames.length > 0) {
-                setCurrentSection('name-matching');
-              } else {
-                // Name entered but no match found - proceed to questions
+              if (nameExists) {
+                // Name exists from check-in, proceed normally
                 setCurrentSection('question-6');
+              } else {
+                // Name doesn't exist - user must check the box to confirm checkout-only
+                if (checkoutOnly) {
+                  setCurrentSection('question-6');
+                } else {
+                  // Show validation message or force checkbox
+                  return;
+                }
               }
             }}
             showPrevious={false}
-            isValid={checkoutOnly ? (answers.name.length > 0 && checkoutOnly) : answers.name.length > 0}
+            isValid={answers.name.length > 0 && (existingResponses.some((r: any) => r.name === answers.name) || checkoutOnly)}
           >
             <div className="space-y-4">
               <Input
@@ -446,24 +448,27 @@ export default function Home() {
                 </div>
               )}
               
-              {/* Checkbox for checkout only */}
-              <div className="border-t border-white border-opacity-30 pt-4">
-                <label className="flex items-center space-x-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={checkoutOnly}
-                    onChange={(e) => {
-                      setCheckoutOnly(e.target.checked);
-                      if (!e.target.checked) {
-                        // When unchecking, clear name to force selection from list
-                        updateAnswers({ name: '', isNewCheckoutUser: false });
-                      }
-                    }}
-                    className="w-5 h-5 rounded"
-                  />
-                  <span className="text-white text-lg">Ik heb de eerdere vragen niet beantwoord</span>
-                </label>
-              </div>
+              {/* Checkbox for checkout only - only show if name is not from existing list */}
+              {!existingResponses.some((r: any) => r.name === answers.name) && (
+                <div className="border-t border-white border-opacity-30 pt-4">
+                  <label className="flex items-center space-x-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={checkoutOnly}
+                      onChange={(e) => {
+                        setCheckoutOnly(e.target.checked);
+                        if (e.target.checked) {
+                          updateAnswers({ isNewCheckoutUser: true });
+                        } else {
+                          updateAnswers({ isNewCheckoutUser: false });
+                        }
+                      }}
+                      className="w-5 h-5 rounded"
+                    />
+                    <span className="text-white text-lg">Ik heb de eerdere vragen niet beantwoord</span>
+                  </label>
+                </div>
+              )}
               
               {answers.name.length > 0 && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
