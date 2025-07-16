@@ -193,11 +193,22 @@ export default function Home() {
             onPrevious={() => setCurrentSection('question-3')}
             isValid={answers.feelingBefore !== null}
           >
-            <LikertScale
-              options={LIKERT_SCALE}
-              value={answers.feelingBefore}
-              onValueChange={(value) => updateAnswers({ feelingBefore: value })}
-            />
+            <div className="flex flex-col items-center space-y-6">
+              {topicImage && (
+                <div className="mb-4">
+                  <img 
+                    src={topicImage} 
+                    alt={answers.mostImportantTopic} 
+                    className="w-1/2 h-auto max-h-48 object-contain rounded-[20px] bg-white bg-opacity-20 p-4"
+                  />
+                </div>
+              )}
+              <LikertScale
+                options={LIKERT_SCALE}
+                value={answers.feelingBefore}
+                onValueChange={(value) => updateAnswers({ feelingBefore: value })}
+              />
+            </div>
           </Question>
         );
 
@@ -214,11 +225,22 @@ export default function Home() {
             showComplete={true}
             isValid={answers.confidenceBefore !== null}
           >
-            <LikertScale
-              options={CONFIDENCE_SCALE}
-              value={answers.confidenceBefore}
-              onValueChange={(value) => updateAnswers({ confidenceBefore: value })}
-            />
+            <div className="flex flex-col items-center space-y-6">
+              {topicImage && (
+                <div className="mb-4">
+                  <img 
+                    src={topicImage} 
+                    alt={answers.mostImportantTopic} 
+                    className="w-1/2 h-auto max-h-48 object-contain rounded-[20px] bg-white bg-opacity-20 p-4"
+                  />
+                </div>
+              )}
+              <LikertScale
+                options={CONFIDENCE_SCALE}
+                value={answers.confidenceBefore}
+                onValueChange={(value) => updateAnswers({ confidenceBefore: value })}
+              />
+            </div>
           </Question>
         );
 
@@ -277,7 +299,7 @@ export default function Home() {
                     <img 
                       src={topicImage} 
                       alt={answers.mostImportantTopic} 
-                      className="w-24 h-24 mx-auto object-contain rounded-[20px] bg-white bg-opacity-20 p-2"
+                      className="w-1/2 h-auto max-h-48 mx-auto object-contain rounded-[20px] bg-white bg-opacity-20 p-4"
                     />
                   </div>
                 )}
@@ -321,7 +343,7 @@ export default function Home() {
                     <img 
                       src={topicImage} 
                       alt={answers.mostImportantTopic} 
-                      className="w-24 h-24 mx-auto object-contain rounded-[20px] bg-white bg-opacity-20 p-2"
+                      className="w-1/2 h-auto max-h-48 mx-auto object-contain rounded-[20px] bg-white bg-opacity-20 p-4"
                     />
                   </div>
                 )}
@@ -402,7 +424,7 @@ export default function Home() {
                     <img 
                       src={topicImage} 
                       alt={answers.mostImportantTopic} 
-                      className="w-24 h-24 mx-auto object-contain rounded-[20px] bg-white bg-opacity-20 p-2"
+                      className="w-1/2 h-auto max-h-48 mx-auto object-contain rounded-[20px] bg-white bg-opacity-20 p-4"
                     />
                   </div>
                 )}
@@ -465,6 +487,16 @@ export default function Home() {
           className="h-full bg-blue-600 transition-all duration-300"
           style={{ width: `${progressPercentage}%` }}
         />
+      </div>
+
+      {/* Dashboard Link for Staff */}
+      <div className="fixed top-4 right-4 z-50">
+        <a 
+          href="/dashboard" 
+          className="bg-gray-800 text-white px-3 py-1 rounded-md text-sm hover:bg-gray-700 transition-colors"
+        >
+          Dashboard
+        </a>
       </div>
 
       {renderCurrentSection()}

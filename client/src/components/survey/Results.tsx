@@ -59,13 +59,7 @@ export function Results({ answers, onRestart }: ResultsProps) {
           <div className="text-3xl mb-6">voor</div>
           <div className="text-5xl font-bold text-yellow-300">{answers.mostImportantTopic}</div>
           
-          <div className="mt-8 rounded-xl overflow-hidden shadow-lg">
-            <img 
-              src="https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400" 
-              alt="Kinderen werken aan creatieve projecten" 
-              className="w-full h-auto"
-            />
-          </div>
+
         </div>
         
         <div className="flex justify-center">
