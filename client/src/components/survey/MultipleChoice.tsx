@@ -42,35 +42,7 @@ export function MultipleChoice({
     }
   };
 
-  // If a value is selected, show only that option
-  if (value && value !== '') {
-    if (value === 'other') {
-      return (
-        <div className="w-full max-w-2xl mx-auto">
-          <div className="p-4 rounded-xl bg-white text-gray-900 border-2 border-gray-200">
-            <div className="flex items-center space-x-3">
-              <span className="text-2xl">✏️</span>
-              <span className="text-lg font-medium">Anders: {otherValue}</span>
-            </div>
-          </div>
-        </div>
-      );
-    } else {
-      const selectedOption = options.find(opt => opt.value === value);
-      if (selectedOption) {
-        return (
-          <div className="w-full max-w-2xl mx-auto">
-            <div className="p-4 rounded-xl bg-white text-gray-900 border-2 border-gray-200">
-              <div className="flex items-center space-x-3">
-                {selectedOption.icon && <span className="text-2xl">{selectedOption.icon}</span>}
-                <span className="text-lg font-medium">{selectedOption.label}</span>
-              </div>
-            </div>
-          </div>
-        );
-      }
-    }
-  }
+  // Keep all options visible - no simplified display
 
   const gridCols = columns === 1 ? 'grid-cols-1' : 
                   columns === 2 ? 'grid-cols-2' :

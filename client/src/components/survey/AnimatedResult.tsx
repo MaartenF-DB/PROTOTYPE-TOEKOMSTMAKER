@@ -37,7 +37,7 @@ export function AnimatedResult({ finalResult, onComplete }: AnimatedResultProps)
         setCurrentColor(shuffledColors[0]);
       }, 100);
 
-      // Stop animation after 3 seconds and show final result
+      // Stop animation after 10 seconds and show final result
       timeout = setTimeout(() => {
         setIsAnimating(false);
         clearInterval(interval);
@@ -56,7 +56,7 @@ export function AnimatedResult({ finalResult, onComplete }: AnimatedResultProps)
             onComplete();
           }, 2000);
         }, 500);
-      }, 3000);
+      }, 10000);
     }
 
     return () => {

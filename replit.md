@@ -126,9 +126,14 @@ The application follows a modern full-stack architecture with the following comp
   - Seamless integration with survey flow
 
 - **Animated Result Reveal**: Created engaging result presentation
-  - 3-second shuffling animation of icons and colors
+  - 10-second shuffling animation of icons and colors
   - Smooth transition to final personality result
   - Enhanced visual feedback with topic-specific styling
+
+- **Persistent Answer Display**: Updated answer display behavior
+  - Multiple choice and Likert scale questions now show all options after selection
+  - Ranking questions maintain drag-and-drop interface without white answer boxes
+  - Consistent behavior across age, companion, and feeling/confidence sections
 
 - **Improved Action Choice Display**: Consistent white box styling for all answer types
   - Maintains design consistency across question types

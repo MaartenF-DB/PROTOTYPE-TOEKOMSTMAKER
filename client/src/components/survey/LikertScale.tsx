@@ -13,22 +13,7 @@ interface LikertScaleProps {
 }
 
 export function LikertScale({ options, value, onValueChange }: LikertScaleProps) {
-  // If a value is selected, show only that option
-  if (value !== null) {
-    const selectedOption = options.find(opt => opt.value === value);
-    if (selectedOption) {
-      return (
-        <div className="w-full max-w-2xl mx-auto">
-          <div className="p-4 rounded-xl bg-white text-gray-900 border-2 border-gray-200">
-            <div className="flex items-center justify-center space-x-4">
-              <span className="text-3xl">{selectedOption.emoji}</span>
-              <span className="text-lg font-medium">{selectedOption.label}</span>
-            </div>
-          </div>
-        </div>
-      );
-    }
-  }
+  // Keep all options visible - no simplified display
 
   return (
     <div className="flex flex-col space-y-6 w-full max-w-4xl mx-auto">
