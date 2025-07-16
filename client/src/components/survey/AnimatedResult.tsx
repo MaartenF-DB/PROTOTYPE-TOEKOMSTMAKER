@@ -19,7 +19,7 @@ export function AnimatedResult({ finalResult, onComplete }: AnimatedResultProps)
   const [currentIcon, setCurrentIcon] = useState('🔮');
   const [currentColor, setCurrentColor] = useState('#6366f1');
   const [isAnimating, setIsAnimating] = useState(true);
-  const [showFinal, setShowFinal] = useState(false);
+
 
   const topicKeys = Object.keys(TOPICS);
   const icons = topicKeys.map(key => TOPICS[key as keyof typeof TOPICS].icon);
@@ -37,25 +37,11 @@ export function AnimatedResult({ finalResult, onComplete }: AnimatedResultProps)
         setCurrentColor(shuffledColors[0]);
       }, 100);
 
-      // Stop animation after 10 seconds and show final result
+      // Stop animation after 10 seconds and immediately go to final results
       timeout = setTimeout(() => {
         setIsAnimating(false);
         clearInterval(interval);
-        
-        // Show final result
-        const finalTopic = TOPICS[finalResult as keyof typeof TOPICS];
-        if (finalTopic) {
-          setCurrentIcon(finalTopic.icon);
-          setCurrentColor(finalTopic.hexColor);
-        }
-        
-        // Show the final result text after a brief delay
-        setTimeout(() => {
-          setShowFinal(true);
-          setTimeout(() => {
-            onComplete();
-          }, 2000);
-        }, 500);
+        onComplete();
       }, 10000);
     }
 
@@ -90,20 +76,7 @@ export function AnimatedResult({ finalResult, onComplete }: AnimatedResultProps)
             )}
           </div>
 
-          {showFinal && (
-            <div className="animate-fade-in">
-              <h3 className="text-2xl font-bold mb-4">Je persoonlijkheid is:</h3>
-              <p 
-                className="text-4xl font-bold mb-6 p-4 rounded-xl border-2 border-white border-opacity-30"
-                style={{ color: currentColor }}
-              >
-                {finalResult}
-              </p>
-              <p className="text-lg opacity-90">
-                {TOPICS[finalResult as keyof typeof TOPICS]?.description}
-              </p>
-            </div>
-          )}
+
         </div>
       </div>
     </div>
