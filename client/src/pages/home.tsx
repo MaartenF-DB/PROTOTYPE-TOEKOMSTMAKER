@@ -10,6 +10,7 @@ import { LikertScale } from '@/components/survey/LikertScale';
 import { NameVerification } from '@/components/survey/NameVerification';
 import { Input } from '@/components/ui/input';
 import { VISITING_OPTIONS, ACTION_OPTIONS, LIKERT_SCALE, CONFIDENCE_SCALE, TOPICS } from '@/types/survey';
+import { useQuery } from '@tanstack/react-query';
 
 export default function Home() {
   const {
@@ -27,6 +28,17 @@ export default function Home() {
   const { currentSection, answers } = state;
 
   const progressPercentage = getCurrentProgress();
+  
+  // Query to check for existing names
+  const { data: existingResponses = [] } = useQuery({
+    queryKey: ['/api/survey-responses'],
+    enabled: true
+  });
+  
+  // Check if current name already exists
+  const hasNameConflict = existingResponses.some((response: any) => 
+    response.name === answers.name && answers.name.length > 0
+  );
   
   // Get topic data for theming
   const topicData = TOPICS[answers.mostImportantTopic as keyof typeof TOPICS];
@@ -82,9 +94,17 @@ export default function Home() {
                 placeholder="Typ hier je naam..."
                 className="w-full p-4 text-2xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-blue-300 outline-none"
               />
-              <p className="text-sm text-white opacity-80">
-                Als er meer mensen zijn met dezelfde naam, typ dan je naam met een nummer (bijvoorbeeld: Jan 1)
-              </p>
+              {hasNameConflict && (
+                <p className="text-sm text-white opacity-80">
+                  Als er meer mensen zijn met dezelfde naam, typ dan je naam met een nummer (bijvoorbeeld: Jan 1)
+                </p>
+              )}
+              {answers.name.length > 0 && (
+                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
+                  <p className="text-white font-semibold">Jouw antwoord:</p>
+                  <p className="text-white text-lg">{answers.name}</p>
+                </div>
+              )}
             </div>
           </Question>
         );
@@ -100,23 +120,31 @@ export default function Home() {
             onPrevious={() => setCurrentSection('question-0')}
             isValid={answers.age.length > 0}
           >
-            <MultipleChoice
-              options={[
-                { value: '6', label: '6' },
-                { value: '7', label: '7' },
-                { value: '8', label: '8' },
-                { value: '9', label: '9' },
-                { value: '10', label: '10' },
-                { value: '11', label: '11' },
-                { value: '12', label: '12' },
-                { value: 'other', label: 'Anders...', icon: '❓' }
-              ]}
-              value={answers.age}
-              onValueChange={(value) => updateAnswers({ age: value })}
-              otherValue={answers.age === 'other' ? answers.age : ''}
-              onOtherValueChange={(value) => updateAnswers({ age: value })}
-              columns={8}
-            />
+            <div className="space-y-4">
+              <MultipleChoice
+                options={[
+                  { value: '6', label: '6' },
+                  { value: '7', label: '7' },
+                  { value: '8', label: '8' },
+                  { value: '9', label: '9' },
+                  { value: '10', label: '10' },
+                  { value: '11', label: '11' },
+                  { value: '12', label: '12' },
+                  { value: 'other', label: 'Anders...' }
+                ]}
+                value={answers.age}
+                onValueChange={(value) => updateAnswers({ age: value })}
+                otherValue={answers.age === 'other' ? answers.age : ''}
+                onOtherValueChange={(value) => updateAnswers({ age: value })}
+                columns={8}
+              />
+              {answers.age.length > 0 && (
+                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
+                  <p className="text-white font-semibold">Jouw antwoord:</p>
+                  <p className="text-white text-lg">{answers.age === 'other' ? answers.age : `${answers.age} jaar`}</p>
+                </div>
+              )}
+            </div>
           </Question>
         );
 
@@ -131,14 +159,25 @@ export default function Home() {
             onPrevious={() => setCurrentSection('question-1')}
             isValid={answers.visitingWith.length > 0}
           >
-            <MultipleChoice
-              options={VISITING_OPTIONS}
-              value={answers.visitingWith}
-              onValueChange={(value) => updateAnswers({ visitingWith: value })}
-              otherValue={answers.visitingWithOther}
-              onOtherValueChange={(value) => updateAnswers({ visitingWithOther: value })}
-              columns={5}
-            />
+            <div className="space-y-4">
+              <MultipleChoice
+                options={VISITING_OPTIONS}
+                value={answers.visitingWith}
+                onValueChange={(value) => updateAnswers({ visitingWith: value })}
+                otherValue={answers.visitingWithOther}
+                onOtherValueChange={(value) => updateAnswers({ visitingWithOther: value })}
+                columns={5}
+              />
+              {answers.visitingWith.length > 0 && (
+                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
+                  <p className="text-white font-semibold">Jouw antwoord:</p>
+                  <p className="text-white text-lg">
+                    {answers.visitingWith === 'other' ? answers.visitingWithOther : 
+                     VISITING_OPTIONS.find(opt => opt.value === answers.visitingWith)?.label}
+                  </p>
+                </div>
+              )}
+            </div>
           </Question>
         );
 
@@ -157,73 +196,140 @@ export default function Home() {
             onPrevious={() => setCurrentSection('question-2')}
             isValid={true}
           >
-            <RankingQuestion
-              ranking={answers.topicRanking}
-              onRankingChange={(ranking) => updateAnswers({ topicRanking: ranking })}
-            />
+            <div className="space-y-4">
+              <RankingQuestion
+                ranking={answers.topicRanking}
+                onRankingChange={(ranking) => updateAnswers({ topicRanking: ranking })}
+              />
+              {answers.topicRanking.length > 0 && (
+                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
+                  <p className="text-white font-semibold">Jouw ranking (van minst naar meest belangrijk):</p>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {answers.topicRanking.map((topic, index) => (
+                      <div key={topic} className="flex items-center space-x-1">
+                        <span className="text-white text-sm">#{index + 1}</span>
+                        <span className="text-white text-sm font-medium">{topic}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </Question>
         );
 
       case 'question-4':
         return (
-          <Question
-            questionNumber={4}
-            question={`Hoe voel je je over het onderwerp ${answers.mostImportantTopic}?`}
-            bgGradient="from-red-500 to-pink-500"
-            buttonColor="bg-red-600 hover:bg-red-700"
-            onNext={() => setCurrentSection('question-5')}
-            onPrevious={() => setCurrentSection('question-3')}
-            isValid={answers.feelingBefore !== null}
+          <div 
+            className="min-h-screen flex flex-col items-center justify-center p-6 text-white"
+            style={{ background: topicData?.hexColor ? getTopicGradient(topicData.hexColor) : 'linear-gradient(135deg, #ef4444 0%, #ec4899 100%)' }}
           >
-            <div className="flex flex-col items-center space-y-6">
-              {topicData && (
-                <div className="mb-4 p-6 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
-                  <div className="text-8xl mb-4 text-center">{topicData.icon}</div>
-                  <div className="text-xl font-semibold text-white mb-2 text-center">{answers.mostImportantTopic}</div>
-                  <div className="text-sm text-white opacity-90 max-w-md mx-auto text-center">
-                    {topicData.description}
-                  </div>
+            <div className="text-center max-w-5xl w-full">
+              <div className="bg-white bg-opacity-20 rounded-2xl p-8 mb-8">
+                <h2 className="text-3xl font-bold mb-6">{`Hoe voel je je over het onderwerp ${answers.mostImportantTopic}?`}</h2>
+                
+                <div className="flex flex-col items-center space-y-6">
+                  {topicData && (
+                    <div className="mb-4 p-6 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
+                      <div className="text-8xl mb-4 text-center">{topicData.icon}</div>
+                      <div className="text-xl font-semibold text-white mb-2 text-center">{answers.mostImportantTopic}</div>
+                      <div className="text-sm text-white opacity-90 max-w-md mx-auto text-center">
+                        {topicData.description}
+                      </div>
+                    </div>
+                  )}
+                  <LikertScale
+                    options={LIKERT_SCALE}
+                    value={answers.feelingBefore}
+                    onValueChange={(value) => updateAnswers({ feelingBefore: value })}
+                  />
+                  {answers.feelingBefore !== null && (
+                    <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
+                      <p className="text-white font-semibold">Jouw antwoord:</p>
+                      <p className="text-white text-lg">{LIKERT_SCALE.find(opt => opt.value === answers.feelingBefore)?.label}</p>
+                    </div>
+                  )}
                 </div>
-              )}
-              <LikertScale
-                options={LIKERT_SCALE}
-                value={answers.feelingBefore}
-                onValueChange={(value) => updateAnswers({ feelingBefore: value })}
-              />
+              </div>
+              
+              <div className="flex justify-center space-x-4">
+                <button 
+                  onClick={() => setCurrentSection('question-3')}
+                  className="px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg bg-white bg-opacity-20 hover:bg-opacity-30 text-white"
+                >
+                  Vorige
+                </button>
+                <button 
+                  onClick={() => setCurrentSection('question-5')}
+                  disabled={answers.feelingBefore === null}
+                  className={`px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg ${
+                    answers.feelingBefore !== null 
+                      ? 'bg-white bg-opacity-20 hover:bg-opacity-30 text-white' 
+                      : 'bg-gray-500 bg-opacity-50 text-gray-300 cursor-not-allowed'
+                  }`}
+                >
+                  Volgende
+                </button>
+              </div>
             </div>
-          </Question>
+          </div>
         );
 
       case 'question-5':
         return (
-          <Question
-            questionNumber={5}
-            question={`Hoeveel vertrouwen heb je dat je iets kan veranderen aan ${answers.mostImportantTopic} in de toekomst?`}
-            bgGradient="from-indigo-500 to-purple-500"
-            buttonColor="bg-purple-600 hover:bg-purple-700"
-            onComplete={() => setCurrentSection('checkin-closing')}
-            onPrevious={() => setCurrentSection('question-4')}
-            showNext={false}
-            showComplete={true}
-            isValid={answers.confidenceBefore !== null}
+          <div 
+            className="min-h-screen flex flex-col items-center justify-center p-6 text-white"
+            style={{ background: topicData?.hexColor ? getTopicGradient(topicData.hexColor) : 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)' }}
           >
-            <div className="flex flex-col items-center space-y-6">
-              {topicData && (
-                <div className="mb-4 p-6 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
-                  <div className="text-8xl mb-4 text-center">{topicData.icon}</div>
-                  <div className="text-xl font-semibold text-white mb-2 text-center">{answers.mostImportantTopic}</div>
-                  <div className="text-sm text-white opacity-90 max-w-md mx-auto text-center">
-                    {topicData.description}
-                  </div>
+            <div className="text-center max-w-5xl w-full">
+              <div className="bg-white bg-opacity-20 rounded-2xl p-8 mb-8">
+                <h2 className="text-3xl font-bold mb-6">{`Hoeveel vertrouwen heb je dat je iets kan veranderen aan ${answers.mostImportantTopic} in de toekomst?`}</h2>
+                
+                <div className="flex flex-col items-center space-y-6">
+                  {topicData && (
+                    <div className="mb-4 p-6 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
+                      <div className="text-8xl mb-4 text-center">{topicData.icon}</div>
+                      <div className="text-xl font-semibold text-white mb-2 text-center">{answers.mostImportantTopic}</div>
+                      <div className="text-sm text-white opacity-90 max-w-md mx-auto text-center">
+                        {topicData.description}
+                      </div>
+                    </div>
+                  )}
+                  <LikertScale
+                    options={CONFIDENCE_SCALE}
+                    value={answers.confidenceBefore}
+                    onValueChange={(value) => updateAnswers({ confidenceBefore: value })}
+                  />
+                  {answers.confidenceBefore !== null && (
+                    <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
+                      <p className="text-white font-semibold">Jouw antwoord:</p>
+                      <p className="text-white text-lg">{CONFIDENCE_SCALE.find(opt => opt.value === answers.confidenceBefore)?.label}</p>
+                    </div>
+                  )}
                 </div>
-              )}
-              <LikertScale
-                options={CONFIDENCE_SCALE}
-                value={answers.confidenceBefore}
-                onValueChange={(value) => updateAnswers({ confidenceBefore: value })}
-              />
+              </div>
+              
+              <div className="flex justify-center space-x-4">
+                <button 
+                  onClick={() => setCurrentSection('question-4')}
+                  className="px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg bg-white bg-opacity-20 hover:bg-opacity-30 text-white"
+                >
+                  Vorige
+                </button>
+                <button 
+                  onClick={() => setCurrentSection('checkin-closing')}
+                  disabled={answers.confidenceBefore === null}
+                  className={`px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg ${
+                    answers.confidenceBefore !== null 
+                      ? 'bg-white bg-opacity-20 hover:bg-opacity-30 text-white' 
+                      : 'bg-gray-500 bg-opacity-50 text-gray-300 cursor-not-allowed'
+                  }`}
+                >
+                  Voltooien
+                </button>
+              </div>
             </div>
-          </Question>
+          </div>
         );
 
       case 'checkin-closing':
@@ -291,6 +397,12 @@ export default function Home() {
                   value={answers.feelingAfter}
                   onValueChange={(value) => updateAnswers({ feelingAfter: value })}
                 />
+                {answers.feelingAfter !== null && (
+                  <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
+                    <p className="text-white font-semibold">Jouw antwoord:</p>
+                    <p className="text-white text-lg">{LIKERT_SCALE.find(opt => opt.value === answers.feelingAfter)?.label}</p>
+                  </div>
+                )}
               </div>
               
               <div className="flex justify-center space-x-4">
@@ -416,6 +528,12 @@ export default function Home() {
                   value={answers.confidenceAfter}
                   onValueChange={(value) => updateAnswers({ confidenceAfter: value })}
                 />
+                {answers.confidenceAfter !== null && (
+                  <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
+                    <p className="text-white font-semibold">Jouw antwoord:</p>
+                    <p className="text-white text-lg">{CONFIDENCE_SCALE.find(opt => opt.value === answers.confidenceAfter)?.label}</p>
+                  </div>
+                )}
               </div>
               
               <div className="flex justify-center space-x-4">

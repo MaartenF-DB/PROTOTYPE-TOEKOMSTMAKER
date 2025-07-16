@@ -35,7 +35,7 @@ export const VISITING_OPTIONS = [
   { value: 'alone', label: 'Alleen', icon: '👤' },
   { value: 'family', label: 'Met mijn familie', icon: '👨‍👩‍👧‍👦' },
   { value: 'school', label: 'Met school', icon: '🏫' },
-  { value: 'babysitter', label: 'Met mijn oppas', icon: '👤' },
+  { value: 'babysitter', label: 'Met mijn oppas', icon: '👶👨' },
   { value: 'other', label: 'Anders...', icon: '❓' }
 ] as const;
 

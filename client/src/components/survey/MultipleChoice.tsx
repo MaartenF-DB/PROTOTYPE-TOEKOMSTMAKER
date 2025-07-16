@@ -74,7 +74,7 @@ export function MultipleChoice({
         <Input
           value={otherValue}
           onChange={(e) => onOtherValueChange(e.target.value)}
-          placeholder="Typ hier je antwoord..."
+          placeholder="Anders..."
           className="w-full p-4 text-xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-blue-300 outline-none"
         />
       )}

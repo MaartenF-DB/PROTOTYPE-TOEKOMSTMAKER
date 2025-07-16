@@ -79,8 +79,8 @@ export function RankingQuestion({ ranking, onRankingChange }: RankingQuestionPro
       </div>
       
       <div className="flex justify-between items-center text-sm">
-        <span className="text-white">Minst belangrijk</span>
-        <span className="text-white">Meest belangrijk</span>
+        <span className="text-white font-bold">Minst belangrijk</span>
+        <span className="text-white font-bold">Meest belangrijk</span>
       </div>
     </div>
   );
