@@ -13,6 +13,7 @@ import { NameMatching } from '@/components/survey/NameMatching';
 import { Input } from '@/components/ui/input';
 import { VISITING_OPTIONS, ACTION_OPTIONS, LIKERT_SCALE, CONFIDENCE_SCALE, TOPICS } from '@/types/survey';
 import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 
 export default function Home() {
   const {
@@ -28,6 +29,7 @@ export default function Home() {
   } = useSurvey();
 
   const { currentSection, answers } = state;
+  const [checkoutOnly, setCheckoutOnly] = useState(false);
 
   const progressPercentage = getCurrentProgress();
   
@@ -85,8 +87,14 @@ export default function Home() {
       case 'entry-choice':
         return (
           <EntryChoice
-            onCheckIn={() => setCurrentSection('checkin-intro')}
-            onCheckOut={() => setCurrentSection('checkout-intro')}
+            onCheckIn={() => {
+              setCheckoutOnly(false);
+              setCurrentSection('checkin-intro');
+            }}
+            onCheckOut={() => {
+              setCheckoutOnly(false);
+              setCurrentSection('checkout-intro');
+            }}
           />
         );
       case 'name-verification':
@@ -358,7 +366,10 @@ export default function Home() {
       case 'checkin-closing':
         return (
           <CheckInClosing 
-            onComplete={() => setCurrentSection('entry-choice')}
+            onComplete={() => {
+              setCheckoutOnly(false);
+              setCurrentSection('entry-choice');
+            }}
           />
         );
 
@@ -381,15 +392,23 @@ export default function Home() {
             bgGradient="from-orange-500 to-red-500"
             buttonColor="bg-orange-600 hover:bg-orange-700"
             onNext={() => {
-              // Check if name exists for checkout flow
+              // If checkout only, skip name matching and go directly to questions
+              if (checkoutOnly) {
+                setCurrentSection('question-6');
+                return;
+              }
+              
+              // For regular checkout, check if name exists
               if (similarNames.length > 0) {
                 setCurrentSection('name-matching');
-              } else {
+              } else if (answers.name.length > 0) {
+                // Name entered but no match found - this shouldn't happen now
+                // since we only allow existing names or checkout-only
                 setCurrentSection('question-6');
               }
             }}
             showPrevious={false}
-            isValid={answers.name.length > 0}
+            isValid={(answers.name.length > 0 && !checkoutOnly) || checkoutOnly}
           >
             <div className="space-y-4">
               <Input
@@ -397,15 +416,58 @@ export default function Home() {
                 onChange={(e) => updateAnswers({ name: e.target.value })}
                 placeholder="Typ hier je naam..."
                 className="w-full p-4 text-2xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-orange-300 outline-none"
+                disabled={checkoutOnly}
               />
-              {hasNameConflict && (
-                <p className="text-sm text-white opacity-80">
-                  Er bestaat al een antwoord met deze naam. Klik verder om te bevestigen dat jij dit bent.
-                </p>
-              )}
-              {answers.name.length > 0 && (
+              
+              {/* Show existing names for selection */}
+              {existingResponses.length > 0 && !checkoutOnly && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
-                  <p className="text-white font-medium">✓ {answers.name}</p>
+                  <p className="text-white font-medium mb-2">Kies je naam uit de lijst:</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {existingResponses.map((response: any, index: number) => (
+                      <button
+                        key={index}
+                        onClick={() => updateAnswers({ name: response.name })}
+                        className="p-2 bg-white bg-opacity-30 rounded-lg hover:bg-opacity-50 transition-all text-white text-left"
+                      >
+                        {response.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {/* Checkbox for checkout only */}
+              <div className="border-t border-white border-opacity-30 pt-4">
+                <label className="flex items-center space-x-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={checkoutOnly}
+                    onChange={(e) => {
+                      setCheckoutOnly(e.target.checked);
+                      if (e.target.checked) {
+                        updateAnswers({ name: `Checkout-${Date.now()}`, isNewCheckoutUser: true });
+                      } else {
+                        updateAnswers({ name: '', isNewCheckoutUser: false });
+                      }
+                    }}
+                    className="w-5 h-5 rounded"
+                  />
+                  <span className="text-white text-lg">Ik doe alleen deze evaluatie (geen check-in gedaan)</span>
+                </label>
+              </div>
+              
+              {answers.name.length > 0 && !checkoutOnly && (
+                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
+                  <p className="text-white font-semibold">Jouw antwoord:</p>
+                  <p className="text-white text-lg">{answers.name}</p>
+                </div>
+              )}
+              
+              {checkoutOnly && (
+                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
+                  <p className="text-white font-semibold">Alleen checkout evaluatie</p>
+                  <p className="text-white text-sm opacity-80">Je doet alleen dit onderdeel van de evaluatie</p>
                 </div>
               )}
             </div>
