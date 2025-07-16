@@ -23,20 +23,30 @@ export function Results({ answers, onRestart }: ResultsProps) {
     exportToCSV(answers);
   }, [answers]);
 
+  useEffect(() => {
+    console.log('Results component mounted, showAnimatedResult:', showAnimatedResult);
+  }, [showAnimatedResult]);
+
   // Show animated result first
   if (showAnimatedResult) {
+    console.log('Rendering AnimatedResult component');
     return (
       <AnimatedResult 
         finalResult={answers.mostImportantTopic}
         onComplete={() => {
-          console.log('AnimatedResult onComplete called - showing final results');
+          console.log('AnimatedResult onComplete called - transitioning to final results');
           setShowAnimatedResult(false);
           setAnimationComplete(true);
-          speak(answers.result);
+          setTimeout(() => {
+            console.log('Speaking result after animation complete');
+            speak(answers.result);
+          }, 500);
         }}
       />
     );
   }
+
+  console.log('Rendering final results section');
 
   const handleStop = () => {
     // Optionally perform any cleanup here

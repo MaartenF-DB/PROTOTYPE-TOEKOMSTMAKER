@@ -34,10 +34,12 @@ export function AnimatedResult({ finalResult, onComplete }: AnimatedResultProps)
 
     // Animation interval
     interval = setInterval(() => {
-      const shuffledIcons = shuffleArray(icons);
-      const shuffledColors = shuffleArray(colors);
-      setCurrentIcon(shuffledIcons[0]);
-      setCurrentColor(shuffledColors[0]);
+      if (isAnimating) {
+        const shuffledIcons = shuffleArray(icons);
+        const shuffledColors = shuffleArray(colors);
+        setCurrentIcon(shuffledIcons[0]);
+        setCurrentColor(shuffledColors[0]);
+      }
     }, 100);
 
     // Countdown timer
@@ -45,29 +47,41 @@ export function AnimatedResult({ finalResult, onComplete }: AnimatedResultProps)
       setTimeRemaining(prev => {
         const next = prev - 1;
         console.log(`Time remaining: ${next} seconds`);
+        
+        // Trigger completion when countdown reaches 0
+        if (next <= 0) {
+          console.log('Countdown reached 0 - triggering completion');
+          setIsAnimating(false);
+          clearInterval(interval);
+          clearInterval(countdownInterval);
+          onComplete();
+          return 0;
+        }
+        
         return next;
       });
     }, 1000);
 
-    // Complete after 10 seconds
+    // Backup timeout in case countdown fails
     timeout = setTimeout(() => {
-      console.log('AnimatedResult completing after 10 seconds - calling onComplete');
+      console.log('Backup timeout triggered - calling onComplete');
       setIsAnimating(false);
       clearInterval(interval);
       clearInterval(countdownInterval);
       onComplete();
-    }, 10000);
+    }, 10500);
 
     return () => {
       clearInterval(interval);
       clearInterval(countdownInterval);
       clearTimeout(timeout);
     };
-  }, [finalResult, icons, colors, onComplete]);
+  }, [isAnimating, finalResult, icons, colors, onComplete]);
 
   const handleSkip = () => {
     console.log('Animation skipped by user');
     setIsAnimating(false);
+    setTimeRemaining(0);
     onComplete();
   };
 
