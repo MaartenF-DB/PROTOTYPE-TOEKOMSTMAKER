@@ -31,9 +31,6 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
         
         <div className="bg-white bg-opacity-20 rounded-2xl p-8 mb-8 backdrop-blur-sm">
           <h1 className="text-4xl font-bold mb-6">{t.entryChoice.title}</h1>
-          <p className="text-xl mb-8">
-            {t.entryChoice.subtitle}
-          </p>
           
           <div className="space-y-4">
             <Button

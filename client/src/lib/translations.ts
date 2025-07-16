@@ -3,7 +3,6 @@ export const translations = {
     // Entry Choice
     entryChoice: {
       title: "Welkom bij Toekomstmakers!",
-      subtitle: "Om je de beste ervaring te geven, willen we graag weten:",
       checkIn: "Ik kom net binnen",
       checkOut: "Ik ben net klaar"
     },
@@ -107,7 +106,6 @@ export const translations = {
     // Entry Choice
     entryChoice: {
       title: "Welcome to Future Makers!",
-      subtitle: "To give you the best experience, we'd like to know:",
       checkIn: "I'm just arriving",
       checkOut: "I'm just finished"
     },
