@@ -1,0 +1,105 @@
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useSpeech } from '@/hooks/useSpeech';
+import { useEffect, useState } from 'react';
+
+interface QuestionProps {
+  questionNumber: number;
+  question: string;
+  children: React.ReactNode;
+  onNext?: () => void;
+  onPrevious?: () => void;
+  onComplete?: () => void;
+  showPrevious?: boolean;
+  showNext?: boolean;
+  showComplete?: boolean;
+  bgGradient?: string;
+  buttonColor?: string;
+  isValid?: boolean;
+}
+
+export function Question({
+  questionNumber,
+  question,
+  children,
+  onNext,
+  onPrevious,
+  onComplete,
+  showPrevious = true,
+  showNext = true,
+  showComplete = false,
+  bgGradient = "from-blue-500 to-teal-500",
+  buttonColor = "bg-blue-600 hover:bg-blue-700",
+  isValid = true
+}: QuestionProps) {
+  const { speak } = useSpeech();
+
+  useEffect(() => {
+    speak(question);
+  }, [speak, question]);
+
+  const handleNext = () => {
+    if (!isValid) {
+      speak("Vul eerst je antwoord in!");
+      return;
+    }
+    if (onNext) onNext();
+  };
+
+  const handleComplete = () => {
+    if (!isValid) {
+      speak("Vul eerst je antwoord in!");
+      return;
+    }
+    if (onComplete) onComplete();
+  };
+
+  return (
+    <section className={`min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br ${bgGradient} text-white`}>
+      <div className="text-center max-w-2xl w-full">
+        <div className="bg-white bg-opacity-20 rounded-2xl p-8 mb-8">
+          <h2 className="text-3xl font-bold mb-6">{question}</h2>
+          {children}
+        </div>
+        
+        <div className="flex justify-center gap-4">
+          {showPrevious && onPrevious && (
+            <Button 
+              onClick={onPrevious}
+              className="bg-gray-600 hover:bg-gray-700 px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg"
+            >
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Vorige
+            </Button>
+          )}
+          
+          {showNext && onNext && (
+            <Button 
+              onClick={handleNext}
+              className={`${buttonColor} px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg`}
+            >
+              Volgende
+              <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </Button>
+          )}
+          
+          {showComplete && onComplete && (
+            <Button 
+              onClick={handleComplete}
+              className={`${buttonColor} px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg`}
+            >
+              Afronden
+              <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </Button>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
