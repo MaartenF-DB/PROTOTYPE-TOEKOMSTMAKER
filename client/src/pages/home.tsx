@@ -48,12 +48,17 @@ export default function Home() {
             showPrevious={false}
             isValid={answers.name.length > 0}
           >
-            <Input
-              value={answers.name}
-              onChange={(e) => updateAnswers({ name: e.target.value })}
-              placeholder="Typ hier je naam..."
-              className="w-full p-4 text-2xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-blue-300 outline-none"
-            />
+            <div className="space-y-4">
+              <Input
+                value={answers.name}
+                onChange={(e) => updateAnswers({ name: e.target.value })}
+                placeholder="Typ hier je naam..."
+                className="w-full p-4 text-2xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-blue-300 outline-none"
+              />
+              <p className="text-sm text-white opacity-80">
+                Als er meer mensen zijn met dezelfde naam, typ dan je naam met een nummer (bijvoorbeeld: Jan 1)
+              </p>
+            </div>
           </Question>
         );
 
@@ -175,17 +180,7 @@ export default function Home() {
       case 'checkin-closing':
         return (
           <CheckInClosing 
-            onComplete={() => setCurrentSection('name-verification')}
-          />
-        );
-
-      case 'name-verification':
-        return (
-          <NameVerification 
-            originalName={answers.name}
-            nameVerification={nameVerification}
-            onNameVerificationChange={setNameVerification}
-            onContinue={() => setCurrentSection('checkout-intro')}
+            onComplete={() => setCurrentSection('checkout-intro')}
           />
         );
 
@@ -232,7 +227,6 @@ export default function Home() {
                 {ACTION_OPTIONS.map((option) => (
                   <div key={option.value} className="flex flex-col items-center space-y-2">
                     <div className="text-4xl">{option.icon}</div>
-                    <p className="text-lg font-semibold text-center">{option.label}</p>
                     <label className="flex items-center cursor-pointer">
                       <input
                         type="radio"
@@ -252,6 +246,21 @@ export default function Home() {
                     </label>
                   </div>
                 ))}
+              </div>
+              
+              {/* X-axis labels */}
+              <div className="flex justify-between items-center px-4">
+                <span className="text-sm font-medium">{ACTION_OPTIONS[0]?.label}</span>
+                <span className="text-sm font-medium">{ACTION_OPTIONS[ACTION_OPTIONS.length - 1]?.label}</span>
+              </div>
+              
+              {/* Selected option display */}
+              <div className="text-center">
+                {answers.actionChoice && (
+                  <p className="text-lg font-semibold">
+                    {ACTION_OPTIONS.find(opt => opt.value === answers.actionChoice)?.label}
+                  </p>
+                )}
               </div>
             </div>
           </Question>

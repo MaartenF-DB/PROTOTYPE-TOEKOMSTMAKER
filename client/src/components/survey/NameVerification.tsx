@@ -29,7 +29,6 @@ export function NameVerification({
     <section className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-indigo-600 to-purple-600 text-white">
       <div className="text-center max-w-2xl w-full">
         <div className="bg-white bg-opacity-20 rounded-2xl p-8 mb-8">
-          <h2 className="text-3xl font-bold mb-6">Hallo {originalName}!</h2>
           <p className="text-xl mb-6">Kun je je naam nog een keer invullen?</p>
           <p className="text-lg mb-8">Als er meer mensen zijn met dezelfde naam, typ dan je naam met een nummer (bijvoorbeeld: {originalName} 1)</p>
           

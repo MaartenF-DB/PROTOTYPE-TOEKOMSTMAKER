@@ -39,6 +39,14 @@ export function LikertScale({ options, value, onValueChange }: LikertScaleProps)
           </div>
         ))}
       </div>
+      
+      {/* X-axis labels */}
+      <div className="flex justify-between items-center px-4">
+        <span className="text-sm font-medium">{options[0]?.label}</span>
+        <span className="text-sm font-medium">{options[options.length - 1]?.label}</span>
+      </div>
+      
+      {/* Selected option display */}
       <div className="text-center">
         {value !== null && (
           <p className="text-lg font-semibold">

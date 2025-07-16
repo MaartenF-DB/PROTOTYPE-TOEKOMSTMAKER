@@ -109,18 +109,17 @@ export function useSurvey() {
   const getCurrentProgress = useCallback(() => {
     const sectionProgress = {
       'checkin-intro': 0,
-      'question-0': 8,
-      'question-1': 16,
-      'question-2': 24,
-      'question-3': 32,
-      'question-4': 40,
-      'question-5': 48,
-      'checkin-closing': 56,
-      'name-verification': 64,
-      'checkout-intro': 72,
+      'question-0': 10,
+      'question-1': 20,
+      'question-2': 30,
+      'question-3': 40,
+      'question-4': 50,
+      'question-5': 60,
+      'checkin-closing': 70,
+      'checkout-intro': 75,
       'question-6': 80,
-      'question-7': 88,
-      'question-8': 96,
+      'question-7': 90,
+      'question-8': 95,
       'results': 100
     };
     return sectionProgress[state.currentSection as keyof typeof sectionProgress] || 0;

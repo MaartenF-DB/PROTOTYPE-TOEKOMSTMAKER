@@ -56,7 +56,7 @@ export function Question({
 
   return (
     <section className={`min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br ${bgGradient} text-white`}>
-      <div className="text-center max-w-2xl w-full">
+      <div className="text-center max-w-5xl w-full">
         <div className="bg-white bg-opacity-20 rounded-2xl p-8 mb-8">
           <h2 className="text-3xl font-bold mb-6">{question}</h2>
           {children}

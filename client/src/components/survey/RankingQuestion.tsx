@@ -60,7 +60,7 @@ export function RankingQuestion({ ranking, onRankingChange }: RankingQuestionPro
               } ${draggedItem === topic ? 'opacity-50' : ''}`}
             >
               <div className="text-2xl mb-2 text-center">{topicData?.icon || '❓'}</div>
-              <h3 className="text-lg font-bold text-center">{topic}</h3>
+              <h3 className="text-sm font-bold text-center">{topic}</h3>
             </div>
           );
         })}
