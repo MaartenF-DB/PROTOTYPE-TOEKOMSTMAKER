@@ -17,6 +17,17 @@ export function Results({ answers, onRestart }: ResultsProps) {
   const [animationComplete, setAnimationComplete] = useState(false);
 
   const topicData = TOPICS[answers.mostImportantTopic as keyof typeof TOPICS];
+  
+  // Random motivational messages
+  const motivationalMessages = [
+    "Jouw ideeën betekenen veel voor de rest van de wereld. Hoe klein ze ook zijn!",
+    "Met jouw ideeën kom je er wel! Blijf in jezelf en anderen geloven.",
+    "Je bent geweldig! Blijf zo denken en doen. Samen geven we vorm aan de toekomst.",
+    "Je doet het geweldig! Je zelfvertrouwen zal je helpen de wereld te veranderen.",
+    "Je bent een superster! Je zelfvertrouwen is inspirerend, blijf stralen en wijs de weg!"
+  ];
+  
+  const randomMessage = motivationalMessages[Math.floor(Math.random() * motivationalMessages.length)];
 
   useEffect(() => {
     // Automatically export to CSV
@@ -72,9 +83,13 @@ export function Results({ answers, onRestart }: ResultsProps) {
              answers.actionChoice === 'veranderen' ? 'VERANDERAAR' : 'TOEKOMSTMAKER'}
           </div>
           <div className="text-3xl mb-6">voor</div>
-          <div className="text-5xl font-bold text-yellow-300">{answers.mostImportantTopic}</div>
+          <div className="text-5xl font-bold text-yellow-300 mb-8">{answers.mostImportantTopic}</div>
           
-
+          <div className="bg-white bg-opacity-30 rounded-xl p-6 mt-6">
+            <p className="text-xl font-medium text-white leading-relaxed">
+              {randomMessage}
+            </p>
+          </div>
         </div>
         
         <div className="flex justify-center">
