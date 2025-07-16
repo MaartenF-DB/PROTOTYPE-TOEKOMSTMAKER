@@ -1,0 +1,107 @@
+Ik wil een werkend prototype maken in Lovable gebaseerd op mijn Figma-ontwerp voor een voor- en na-evaluatie van een tentoonstelling, met navigatieknoppen ("Volgende" en "Vorige") en een aparte sectie voor elke vraag met de vraag als tekst en audio die de vraagtekst herhaalt. De antwoorden moeten worden opgeslagen en geëxporteerd naar een CSV-bestand. Hier zijn de details:
+
+- **Figma-ontwerp**: Gebruik mijn Figma-bestand via deze URL: https://www.figma.com/design/bIw614APGsh0aHm7qRNZUD/Graduation-HNI?node-id=540-31&t=GBSv7mw6X8Pu5awL-1. Volg de styling (kleuren, lettertypen, marges, afbeeldingen) precies zoals in het ontwerp, startend vanaf node-id 540-31.
+- **Type applicatie**: Een single-page webapp met meerdere secties (Check-in, Check-out, en uitkomst).
+- **Technologie**: Gebruik React voor de frontend, Tailwind CSS voor styling (aangepast aan het Figma-ontwerp), Supabase voor gegevensopslag, en Web Speech API voor het voorlezen van vragen en instructies.
+- **Vraagsecties**:
+  - Elke vraag (0 t/m 8) moet in een aparte sectie staan met de vraagtekst duidelijk weergegeven zoals in het Figma-ontwerp.
+  - Gebruik de Web Speech API om bij het laden van de sectie de exacte vraagtekst voor te lezen (bijv. voor Vraag 0: "Wat is je naam?").
+- **Navigatie**:
+  - Voeg bij elke vraag een "Volgende"-knop toe om naar de volgende vraag of sectie te gaan en een "Vorige"-knop om terug te gaan, behalve:
+    - Geen "Vorige"-knop op de eerste vraag (Vraag 0) of Check-in intro.
+    - Geen "Volgende"-knop op de laatste vraag van Check-in (Vraag 5) of Check-out (Vraag 8), maar wel een "Afronden"-knop om de sectie af te sluiten.
+  - Style de knoppen volgens het Figma-ontwerp (kleuren, lettertypen, hover-effecten). Als niet gespecificeerd in Figma, gebruik blauwe knoppen met een lichter blauw hover-effect, geplaatst onderaan de vraag.
+  - Voorlees de navigatie-instructie via Web Speech API (bijv. "Klik op Volgende om verder te gaan" of "Klik op Vorige om terug te gaan") bij het laden van de sectie.
+  - Sla antwoorden tijdelijk op (in React-state of Supabase) zodat ze behouden blijven bij het navigeren heen en terug.
+- **Structuur en functionaliteiten**:
+  - **Sectie 0.1: Check-in Intro**
+    - Toon een video van een waarzegster zoals in het Figma-ontwerp (gebruik een placeholder-video of -afbeelding als de video niet beschikbaar is).
+    - Tekst/audio (waarzegster): "Welkom mijn vriend! Zullen we samen uitvinden wat voor toekomstmaker jij bent? Tik op het scherm om te beginnen!" (voorlezen via Web Speech API).
+    - Interactie: Klik op het scherm om naar Vraag 0 te gaan. Toon de tekst "Tik op het scherm om te beginnen!" zoals in Figma.
+  - **Vraag 0: Wat is je naam?**
+    - Toon een aparte sectie met de vraagtekst "Wat is je naam?" zoals in Figma.
+    - Voorlees de vraag via Web Speech API.
+    - Toon een tekstinvoerveld met een toetsenbord voor de naam.
+    - Sla het antwoord op in Supabase.
+    - Toon een "Volgende"-knop (geen "Vorige").
+  - **Vraag 1: Hoe oud ben jij?**
+    - Toon een aparte sectie met de vraagtekst "Hoe oud ben jij?" zoals in Figma.
+    - Voorlees de vraag via Web Speech API.
+    - Meerkeuze: [6 tot en met 12], met een optie "anders…" die een tekstinvoerveld opent.
+    - Sla het antwoord op in Supabase.
+    - Toon "Volgende"- en "Vorige"-knoppen.
+  - **Vraag 2: Met wie bezoek je de tentoonstelling?**
+    - Toon een aparte sectie met de vraagtekst "Met wie bezoek je de tentoonstelling?" zoals in Figma.
+    - Voorlees de vraag via Web Speech API.
+    - Meerkeuze: [Alleen], [Met mijn familie], [Met school], [Met mijn oppas], [Anders…] (met tekstinvoerveld bij "Anders…").
+    - Sla het antwoord op in Supabase.
+    - Toon "Volgende"- en "Vorige"-knoppen.
+  - **Vraag 3: Welk onderwerp voor de toekomst vind jij het belangrijkst?**
+    - Toon een aparte sectie met de vraagtekst "Welk onderwerp voor de toekomst vind jij het belangrijkst?" zoals in Figma.
+    - Voorlees de vraag via Web Speech API.
+    - Ranking: Sleep de onderwerpen [VREDE], [GEZONDHEID], [RIJKDOM], [VRIJE TIJD], [KLIMAAT], [WONEN] van minst belangrijk (#1, linksonder) naar meest belangrijk (#6, rechtsonder).
+    - Sla de ranking op in Supabase, met name het #6-onderwerp voor latere aanpassingen.
+    - Toon "Volgende"- en "Vorige"-knoppen.
+  - **Vraag 4: Hoe voel je je over het onderwerp [belangrijkste onderwerp uit Vraag 3]?**
+    - Toon een aparte sectie met de vraagtekst "Hoe voel je je over het onderwerp [belangrijkste onderwerp]?" zoals in Figma.
+    - Voorlees de vraag via Web Speech API.
+    - Likert-schaal (1-5): Van "Ik maak me zorgen." (1) naar "Ik heb er zin in!" (5).
+    - Pas de sectie aan op basis van het #6-onderwerp (andere kleur, tekst, en afbeelding zoals in Figma).
+    - Sla het antwoord op in Supabase.
+    - Toon "Volgende"- en "Vorige"-knoppen.
+  - **Vraag 5: Hoeveel vertrouwen heb je dat je iets kan veranderen aan [belangrijkste onderwerp uit Vraag 3] in de toekomst?**
+    - Toon een aparte sectie met de vraagtekst "Hoeveel vertrouwen heb je dat je iets kan veranderen aan [belangrijkste onderwerp] in de toekomst?" zoals in Figma.
+    - Voorlees de vraag via Web Speech API.
+    - Likert-schaal (1-5): Van "Ik heb een ienie mini beetje vertrouwen." (1) naar "Ik heb héééél veel vertrouwen!" (5).
+    - Pas de sectie aan op basis van het #6-onderwerp (zoals in Figma).
+    - Sla het antwoord op in Supabase.
+    - Toon een "Vorige"-knop en een "Afronden"-knop (in plaats van "Volgende") om naar de Check-in afsluiting te gaan.
+  - **Afsluiting Check-in**:
+    - Toon een video van tarotkaarten die worden omgedraaid zoals in het Figma-ontwerp (gebruik een placeholder als deze niet beschikbaar is).
+    - Tekst/audio (waarzegster): "Kom je aan het einde van de tentoonstelling terug? Dan krijg je een cadeau en onderzoeken we verder wat voor toekomstmaker jij bent!" (voorlezen via Web Speech API).
+    - Interactie: Klik op het scherm om de Check-in te sluiten. Toon de tekst "Tik op het scherm!" zoals in Figma.
+  - **Sectie 0.2: Check-out Intro**
+    - Toon een video met tekst: "Welkom terug! Waar zijn we gebleven? Oh ja!! We zijn op de helft. Wat voor toekomstmaker zou je zijn?!?" (voorlezen via Web Speech API).
+    - Pas de sectie aan op basis van het #6-onderwerp uit Vraag 3 (andere kleur, tekst, en afbeelding zoals in Figma).
+    - Interactie: Klik op het scherm om naar Vraag 6 te gaan. Toon de tekst "Tik op het scherm!" zoals in Figma.
+  - **Vraag 6: Hoe voel je je nu over het onderwerp [belangrijkste onderwerp uit Vraag 3]?**
+    - Toon een aparte sectie met de vraagtekst "Hoe voel je je nu over het onderwerp [belangrijkste onderwerp]?" zoals in Figma.
+    - Voorlees de vraag via Web Speech API.
+    - Likert-schaal (1-5): Van "Ik maak me zorgen." (1) naar "Ik heb er zin in!" (5).
+    - Sla het antwoord op in Supabase.
+    - Toon een "Volgende"-knop (geen "Vorige", omdat dit de eerste vraag van Check-out is).
+  - **Vraag 7: Wat zou je doen voor [belangrijkste onderwerp uit Vraag 3] in de toekomst?**
+    - Toon een aparte sectie met de vraagtekst "Wat zou je doen voor [belangrijkste onderwerp] in de toekomst?" zoals in Figma.
+    - Voorlees de vraag via Web Speech API.
+    - Meerkeuze: [Ik ga iets uitvinden], [Ik ga in actie komen], [Ik ga zelf iets veranderen].
+    - Sla het antwoord op in Supabase.
+    - Toon "Volgende"- en "Vorige"-knoppen.
+  - **Vraag 8: Hoeveel vertrouwen heb je dat je iets kan veranderen aan [belangrijkste onderwerp uit Vraag 3] in de toekomst?**
+    - Toon een aparte sectie met de vraagtekst "Hoeveel vertrouwen heb je dat je iets kan veranderen aan [belangrijkste onderwerp] in de toekomst?" zoals in Figma.
+    - Voorlees de vraag via Web Speech API.
+    - Likert-schaal (1-5): Van "Ik heb een ienie mini beetje vertrouwen." (1) naar "Ik heb héééél veel vertrouwen!" (5).
+    - Sla het antwoord op in Supabase.
+    - Toon een "Vorige"-knop en een "Afronden"-knop (in plaats van "Volgende") om naar de uitkomst te gaan.
+  - **Uitkomst evaluatie**:
+    - Toon een animatie waarin de 6 kleuren van de onderwerpen ([VREDE], [GEZONDHEID], [RIJKDOM], [VRIJE TIJD], [KLIMAAT], [WONEN]) om en om verschijnen, gevolgd door een samenvattende illustratie zoals in Figma.
+    - Bepaal de uitkomst op basis van Vraag 3 (#6-onderwerp) en Vraag 7:
+      - Voorbeeldcombinaties: [VREDE + Ik ga iets uitvinden] = "Jij bent een UITVINDER voor VREDE", [GEZONDHEID + Ik ga in actie komen] = "Jij bent een ACTIEVOERDER voor GEZONDHEID", enz.
+    - Toon de uitkomst als tekst met een bijpassende illustratie zoals in Figma (gebruik placeholders als afbeeldingen ontbreken).
+    - Voorlees de uitkomst via Web Speech API.
+  - **CSV-export**:
+    - Voeg een "Exporteer naar CSV"-knop toe op de uitkomstpagina, gestyled zoals in Figma.
+    - Het CSV-bestand moet alle antwoorden bevatten met kolommen: "Naam", "Leeftijd", "Met wie", "Belangrijkste onderwerp", "Gevoel voor (onderwerp)", "Vertrouwen voor (onderwerp)", "Gevoel na (onderwerp)", "Actie voor (onderwerp)", "Vertrouwen na (onderwerp)", "Uitkomst".
+    - Gebruik een client-side JavaScript-oplossing (bijv. Blob en URL.createObjectURL) om het CSV-bestand te genereren en te downloaden.
+    - Voorbeeld CSV-rij: "Jan, 10, Met mijn familie, VREDE, 3, 4, 4, Ik ga iets uitvinden, 5, Jij bent een UITVINDER voor VREDE".
+- **Gebruikersinterface**:
+  - Volg de exacte stijl van het Figma-ontwerp (kleuren, lettertypen, marges, afbeeldingen) vanaf node-id 540-31.
+  - Zorg voor een responsive design voor mobiel en desktop.
+  - Gebruik verschillende kleuren en afbeeldingen voor elk onderwerp ([VREDE], [GEZONDHEID], etc.) zoals in Figma.
+  - Voeg eenvoudige hover-effecten toe aan knoppen (bijv. lichter worden bij hover) zoals in Figma.
+- **Instructies**:
+  - Start met het omzetten van het Figma-ontwerp (vanaf node-id 540-31) naar een statische React-pagina met Tailwind CSS, met elke vraag in een aparte sectie.
+  - Voeg interactieve elementen toe (invoervelden, meerkeuze, ranking, Likert-schalen, navigatieknoppen).
+  - Integreer Supabase voor gegevensopslag en Web Speech API voor audio (vragen en navigatie-instructies).
+  - Implementeer de CSV-exportfunctie en test of het bestand correct downloadt.
+  - Test of de lay-out overeenkomt met het Figma-ontwerp en meld eventuele afwijkingen.
+  - Als er fouten zijn, stel een oplossing voor en vraag mijn goedkeuring voordat je credits gebruikt voor een nieuwe generatie.
