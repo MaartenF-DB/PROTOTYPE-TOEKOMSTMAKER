@@ -33,30 +33,32 @@ export function LanguageSelector({ onLanguageChange, currentLanguage }: Language
         }`}
         title="English"
       >
-        <div className="w-full h-full relative bg-blue-800 overflow-hidden">
+        <svg viewBox="0 0 60 30" className="w-full h-full">
+          <defs>
+            <clipPath id="flag">
+              <rect width="60" height="30"/>
+            </clipPath>
+          </defs>
+          
           {/* Blue background */}
-          <div className="absolute inset-0 bg-blue-800"></div>
+          <rect width="60" height="30" fill="#012169"/>
           
-          {/* White diagonal stripes (thicker) */}
-          <div className="absolute inset-0">
-            <div className="absolute w-full h-1 bg-white top-1/2 transform -translate-y-0.5 rotate-45 origin-center"></div>
-            <div className="absolute w-full h-1 bg-white top-1/2 transform -translate-y-0.5 -rotate-45 origin-center"></div>
-          </div>
+          {/* White diagonal stripes (St. Andrew's Cross) */}
+          <g clipPath="url(#flag)">
+            <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" strokeWidth="6"/>
+          </g>
           
-          {/* Red diagonal stripes (thinner) */}
-          <div className="absolute inset-0">
-            <div className="absolute w-full h-0.5 bg-red-600 top-1/2 transform -translate-y-0.25 rotate-45 origin-center"></div>
-            <div className="absolute w-full h-0.5 bg-red-600 top-1/2 transform -translate-y-0.25 -rotate-45 origin-center"></div>
-          </div>
+          {/* Red diagonal stripes (St. Patrick's Cross) */}
+          <g clipPath="url(#flag)">
+            <path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" strokeWidth="2"/>
+          </g>
           
-          {/* White cross (background) */}
-          <div className="absolute w-full h-1.5 bg-white top-1/2 transform -translate-y-0.75"></div>
-          <div className="absolute h-full w-1.5 bg-white left-1/2 transform -translate-x-0.75"></div>
+          {/* White cross (St. George's Cross background) */}
+          <path d="M30,0 V30 M0,15 H60" stroke="#fff" strokeWidth="10"/>
           
-          {/* Red cross (foreground) */}
-          <div className="absolute w-full h-1 bg-red-600 top-1/2 transform -translate-y-0.5"></div>
-          <div className="absolute h-full w-1 bg-red-600 left-1/2 transform -translate-x-0.5"></div>
-        </div>
+          {/* Red cross (St. George's Cross) */}
+          <path d="M30,0 V30 M0,15 H60" stroke="#C8102E" strokeWidth="6"/>
+        </svg>
       </button>
     </div>
   );
