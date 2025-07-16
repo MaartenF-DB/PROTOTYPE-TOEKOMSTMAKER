@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { TOPICS } from '@/types/survey';
 
 interface AnimatedResultProps {
@@ -20,64 +20,74 @@ export function AnimatedResult({ finalResult, onComplete }: AnimatedResultProps)
   const [currentIcon, setCurrentIcon] = useState('🔮');
   const [currentColor, setCurrentColor] = useState('#6366f1');
   const [timeRemaining, setTimeRemaining] = useState(10);
-  const [isActive, setIsActive] = useState(true);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const countdownRef = useRef<NodeJS.Timeout | null>(null);
+  const startedRef = useRef(false);
 
   const topicKeys = Object.keys(TOPICS);
   const icons = topicKeys.map(key => TOPICS[key as keyof typeof TOPICS].icon);
   const colors = topicKeys.map(key => TOPICS[key as keyof typeof TOPICS].hexColor);
 
   useEffect(() => {
+    if (startedRef.current) return;
+    startedRef.current = true;
+    
     console.log('🔮 FORTUNE TELLER ANIMATION STARTED - 10 SECONDS COUNTDOWN');
     
-    // Create timers
-    const timers: NodeJS.Timeout[] = [];
-    
     // Animation loop
-    const animationTimer = setInterval(() => {
-      if (isActive) {
-        const shuffledIcons = shuffleArray(icons);
-        const shuffledColors = shuffleArray(colors);
-        setCurrentIcon(shuffledIcons[0]);
-        setCurrentColor(shuffledColors[0]);
-      }
+    intervalRef.current = setInterval(() => {
+      const shuffledIcons = shuffleArray(icons);
+      const shuffledColors = shuffleArray(colors);
+      setCurrentIcon(shuffledIcons[0]);
+      setCurrentColor(shuffledColors[0]);
     }, 100);
-    timers.push(animationTimer);
 
     // Countdown timer
-    const countdownTimer = setInterval(() => {
+    countdownRef.current = setInterval(() => {
       setTimeRemaining(prev => {
         const next = prev - 1;
         console.log(`⏰ Countdown: ${next} seconds remaining`);
+        
+        // Complete when reaching 0
+        if (next <= 0) {
+          console.log('🚀 ANIMATION COMPLETING');
+          
+          // Clear intervals immediately
+          if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+          }
+          if (countdownRef.current) {
+            clearInterval(countdownRef.current);
+            countdownRef.current = null;
+          }
+          
+          // Call completion callback after a brief delay
+          setTimeout(() => {
+            console.log('📞 CALLING onComplete()');
+            onComplete();
+          }, 100);
+          
+          return 0; // Don't go negative
+        }
+        
         return next;
       });
     }, 1000);
-    timers.push(countdownTimer);
-
-    // FORCE COMPLETION after exactly 10 seconds
-    const forceCompleteTimer = setTimeout(() => {
-      console.log('🚀 FORCING COMPLETION AFTER 10 SECONDS');
-      setIsActive(false);
-      
-      // Clear all timers
-      timers.forEach(timer => clearInterval(timer));
-      clearTimeout(forceCompleteTimer);
-      
-      // Call completion callback
-      console.log('📞 CALLING onComplete()');
-      onComplete();
-    }, 10000);
 
     // Cleanup function
     return () => {
       console.log('🧹 Cleaning up animation timers');
-      timers.forEach(timer => clearInterval(timer));
-      clearTimeout(forceCompleteTimer);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      if (countdownRef.current) {
+        clearInterval(countdownRef.current);
+        countdownRef.current = null;
+      }
     };
-  }, [icons, colors, onComplete, isActive]);
-
-  if (!isActive) {
-    return null; // Don't render anything after completion
-  }
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-purple-600 to-indigo-600 text-white">
