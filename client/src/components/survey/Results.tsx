@@ -29,24 +29,21 @@ export function Results({ answers, onRestart }: ResultsProps) {
 
   // Show animated result first
   if (showAnimatedResult) {
-    console.log('Rendering AnimatedResult component');
+    console.log('🎬 Rendering AnimatedResult component');
     return (
       <AnimatedResult 
         finalResult={answers.mostImportantTopic}
         onComplete={() => {
-          console.log('AnimatedResult onComplete called - transitioning to final results');
+          console.log('✅ ANIMATION COMPLETE - SHOWING FINAL RESULTS NOW');
           setShowAnimatedResult(false);
           setAnimationComplete(true);
-          setTimeout(() => {
-            console.log('Speaking result after animation complete');
-            speak(answers.result);
-          }, 500);
+          speak(answers.result);
         }}
       />
     );
   }
 
-  console.log('Rendering final results section');
+  console.log('🎯 Rendering final results section - UITSLAG VAN DE VRAGEN');
 
   const handleStop = () => {
     // Optionally perform any cleanup here

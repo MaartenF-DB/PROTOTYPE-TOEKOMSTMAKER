@@ -6,6 +6,7 @@ interface AnimatedResultProps {
   onComplete: () => void;
 }
 
+// Shuffle function
 const shuffleArray = (array: string[]) => {
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
@@ -18,105 +19,95 @@ const shuffleArray = (array: string[]) => {
 export function AnimatedResult({ finalResult, onComplete }: AnimatedResultProps) {
   const [currentIcon, setCurrentIcon] = useState('🔮');
   const [currentColor, setCurrentColor] = useState('#6366f1');
-  const [isAnimating, setIsAnimating] = useState(true);
   const [timeRemaining, setTimeRemaining] = useState(10);
+  const [isActive, setIsActive] = useState(true);
 
   const topicKeys = Object.keys(TOPICS);
   const icons = topicKeys.map(key => TOPICS[key as keyof typeof TOPICS].icon);
   const colors = topicKeys.map(key => TOPICS[key as keyof typeof TOPICS].hexColor);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
-    let timeout: NodeJS.Timeout;
-    let countdownInterval: NodeJS.Timeout;
-
-    console.log('AnimatedResult started - 10 seconds countdown');
-
-    // Animation interval
-    interval = setInterval(() => {
-      if (isAnimating) {
+    console.log('🔮 FORTUNE TELLER ANIMATION STARTED - 10 SECONDS COUNTDOWN');
+    
+    // Create timers
+    const timers: NodeJS.Timeout[] = [];
+    
+    // Animation loop
+    const animationTimer = setInterval(() => {
+      if (isActive) {
         const shuffledIcons = shuffleArray(icons);
         const shuffledColors = shuffleArray(colors);
         setCurrentIcon(shuffledIcons[0]);
         setCurrentColor(shuffledColors[0]);
       }
     }, 100);
+    timers.push(animationTimer);
 
     // Countdown timer
-    countdownInterval = setInterval(() => {
+    const countdownTimer = setInterval(() => {
       setTimeRemaining(prev => {
         const next = prev - 1;
-        console.log(`Time remaining: ${next} seconds`);
-        
-        // Trigger completion when countdown reaches 0
-        if (next <= 0) {
-          console.log('Countdown reached 0 - triggering completion');
-          setIsAnimating(false);
-          clearInterval(interval);
-          clearInterval(countdownInterval);
-          onComplete();
-          return 0;
-        }
-        
+        console.log(`⏰ Countdown: ${next} seconds remaining`);
         return next;
       });
     }, 1000);
+    timers.push(countdownTimer);
 
-    // Backup timeout in case countdown fails
-    timeout = setTimeout(() => {
-      console.log('Backup timeout triggered - calling onComplete');
-      setIsAnimating(false);
-      clearInterval(interval);
-      clearInterval(countdownInterval);
+    // FORCE COMPLETION after exactly 10 seconds
+    const forceCompleteTimer = setTimeout(() => {
+      console.log('🚀 FORCING COMPLETION AFTER 10 SECONDS');
+      setIsActive(false);
+      
+      // Clear all timers
+      timers.forEach(timer => clearInterval(timer));
+      clearTimeout(forceCompleteTimer);
+      
+      // Call completion callback
+      console.log('📞 CALLING onComplete()');
       onComplete();
-    }, 10500);
+    }, 10000);
 
+    // Cleanup function
     return () => {
-      clearInterval(interval);
-      clearInterval(countdownInterval);
-      clearTimeout(timeout);
+      console.log('🧹 Cleaning up animation timers');
+      timers.forEach(timer => clearInterval(timer));
+      clearTimeout(forceCompleteTimer);
     };
-  }, [isAnimating, finalResult, icons, colors, onComplete]);
+  }, [icons, colors, onComplete, isActive]);
 
-  const handleSkip = () => {
-    console.log('Animation skipped by user');
-    setIsAnimating(false);
-    setTimeRemaining(0);
-    onComplete();
-  };
+  if (!isActive) {
+    return null; // Don't render anything after completion
+  }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-purple-600 to-indigo-600 text-white">
       <div className="text-center max-w-2xl w-full">
         <div className="bg-white bg-opacity-20 rounded-2xl p-8 mb-8 backdrop-blur-sm">
           <h2 className="text-3xl font-bold mb-8">🔮 De waarzegger onthult je persoonlijkheid...</h2>
-          <div className="text-sm opacity-75 mb-4">({timeRemaining} seconden)</div>
+          <div className="text-2xl font-bold mb-4 text-yellow-300">
+            {timeRemaining} seconden
+          </div>
           
           <div className="relative mb-8">
             <div 
               className="w-32 h-32 rounded-full flex items-center justify-center mx-auto mb-6 transition-all duration-300 shadow-2xl border-4 border-white border-opacity-30"
               style={{ 
                 backgroundColor: currentColor,
-                transform: isAnimating ? 'scale(1.1)' : 'scale(1)',
-                boxShadow: isAnimating ? `0 0 40px ${currentColor}60` : `0 0 20px ${currentColor}40`
+                transform: 'scale(1.1)',
+                boxShadow: `0 0 40px ${currentColor}60`
               }}
             >
               <span className="text-6xl animate-pulse">{currentIcon}</span>
             </div>
             
-            {isAnimating && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="animate-spin rounded-full h-40 w-40 border-t-2 border-b-2 border-white border-opacity-30"></div>
-              </div>
-            )}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="animate-spin rounded-full h-40 w-40 border-t-2 border-b-2 border-white border-opacity-30"></div>
+            </div>
           </div>
 
-          <button
-            onClick={handleSkip}
-            className="text-sm opacity-75 hover:opacity-100 underline transition-opacity"
-          >
-            Klik om over te slaan
-          </button>
+          <div className="text-sm opacity-75">
+            Wacht alsjeblieft... De waarzegger werkt zijn magie...
+          </div>
         </div>
       </div>
     </div>
