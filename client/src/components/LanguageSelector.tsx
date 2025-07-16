@@ -33,31 +33,29 @@ export function LanguageSelector({ onLanguageChange, currentLanguage }: Language
         }`}
         title="English"
       >
-        <svg viewBox="0 0 60 30" className="w-full h-full">
+        <svg viewBox="0 0 48 48" className="w-full h-full">
           <defs>
-            <clipPath id="flag">
-              <rect width="60" height="30"/>
+            <clipPath id="circle">
+              <circle cx="24" cy="24" r="24"/>
             </clipPath>
           </defs>
           
-          {/* Blue background */}
-          <rect width="60" height="30" fill="#012169"/>
-          
-          {/* White diagonal stripes (St. Andrew's Cross) */}
-          <g clipPath="url(#flag)">
-            <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" strokeWidth="6"/>
+          <g clipPath="url(#circle)">
+            {/* Blue background */}
+            <rect width="48" height="48" fill="#012169"/>
+            
+            {/* White diagonal stripes (St. Andrew's Cross) */}
+            <path d="M0,0 L48,48 M48,0 L0,48" stroke="#fff" strokeWidth="5"/>
+            
+            {/* Red diagonal stripes (St. Patrick's Cross) */}
+            <path d="M0,0 L48,48 M48,0 L0,48" stroke="#C8102E" strokeWidth="2"/>
+            
+            {/* White cross (St. George's Cross background) */}
+            <path d="M24,0 V48 M0,24 H48" stroke="#fff" strokeWidth="8"/>
+            
+            {/* Red cross (St. George's Cross) */}
+            <path d="M24,0 V48 M0,24 H48" stroke="#C8102E" strokeWidth="5"/>
           </g>
-          
-          {/* Red diagonal stripes (St. Patrick's Cross) */}
-          <g clipPath="url(#flag)">
-            <path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" strokeWidth="2"/>
-          </g>
-          
-          {/* White cross (St. George's Cross background) */}
-          <path d="M30,0 V30 M0,15 H60" stroke="#fff" strokeWidth="10"/>
-          
-          {/* Red cross (St. George's Cross) */}
-          <path d="M30,0 V30 M0,15 H60" stroke="#C8102E" strokeWidth="6"/>
         </svg>
       </button>
     </div>
