@@ -60,9 +60,10 @@ export function RankingQuestion({ ranking, onRankingChange }: RankingQuestionPro
 
   return (
     <div className="w-full">
-      <p className="text-lg mb-6">Sleep de onderwerpen van minst belangrijk naar meest belangrijk!</p>
+      <p className="text-lg mb-4">Sleep de onderwerpen van minst belangrijk naar meest belangrijk!</p>
+      <p className="text-sm mb-6 opacity-75">Klik op de onderwerpen voor meer info.</p>
       
-      <div className="grid grid-cols-6 gap-4 mb-6">
+      <div className="grid grid-cols-6 gap-4 mb-6 p-4 bg-white bg-opacity-10 rounded-xl">
         {ranking.map((topic, index) => {
           const topicData = TOPICS[topic as keyof typeof TOPICS];
           const topicImage = topicImages[topic as keyof typeof topicImages];
@@ -75,8 +76,10 @@ export function RankingQuestion({ ranking, onRankingChange }: RankingQuestionPro
               onDrop={(e) => handleDrop(e, topic)}
               onDragEnd={handleDragEnd}
               onClick={() => setSelectedTopic(selectedTopic === topic ? null : topic)}
-              className={`p-4 rounded-xl cursor-move shadow-lg transform hover:scale-105 transition-all text-white ${
-                draggedItem === topic ? 'opacity-50' : ''
+              className={`p-4 rounded-xl cursor-move shadow-lg transform hover:scale-105 transition-all text-white border-2 ${
+                draggedItem === topic 
+                  ? 'opacity-50 border-yellow-400' 
+                  : 'border-white border-opacity-30 hover:border-opacity-60'
               }`}
               style={{ backgroundColor: topicData?.hexColor || '#6B7280' }}
             >
@@ -84,7 +87,7 @@ export function RankingQuestion({ ranking, onRankingChange }: RankingQuestionPro
                 <img 
                   src={topicImage} 
                   alt={topic} 
-                  className="w-12 h-12 mx-auto mb-2 object-contain"
+                  className="w-16 h-16 mx-auto mb-2 object-contain rounded-[20px]"
                 />
               )}
               <div className="text-2xl mb-2 text-center">{topicData?.icon || '❓'}</div>

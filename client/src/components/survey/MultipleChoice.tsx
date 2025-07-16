@@ -58,14 +58,14 @@ export function MultipleChoice({
           <Button
             key={option.value}
             onClick={() => handleOptionClick(option.value)}
-            className={`p-4 rounded-xl text-xl font-semibold transition-all transform hover:scale-105 ${
+            className={`p-4 rounded-xl text-xl font-semibold transition-all transform hover:scale-105 flex flex-col items-center space-y-2 ${
               value === option.value
                 ? 'bg-blue-600 bg-opacity-70 text-white'
                 : 'bg-white bg-opacity-30 hover:bg-opacity-50 text-white'
             }`}
           >
-            {option.icon && <span className="mr-2 text-2xl">{option.icon}</span>}
-            {option.label}
+            {option.icon && <span className="text-4xl">{option.icon}</span>}
+            <span className="text-center">{option.label}</span>
           </Button>
         ))}
       </div>

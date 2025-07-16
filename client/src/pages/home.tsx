@@ -9,7 +9,24 @@ import { RankingQuestion } from '@/components/survey/RankingQuestion';
 import { LikertScale } from '@/components/survey/LikertScale';
 import { NameVerification } from '@/components/survey/NameVerification';
 import { Input } from '@/components/ui/input';
-import { VISITING_OPTIONS, ACTION_OPTIONS, LIKERT_SCALE, CONFIDENCE_SCALE } from '@/types/survey';
+import { VISITING_OPTIONS, ACTION_OPTIONS, LIKERT_SCALE, CONFIDENCE_SCALE, TOPICS } from '@/types/survey';
+
+// Import topic illustrations
+import vredeImg from '@assets/VREDE_1752670457359.png';
+import gezondheidImg from '@assets/GEZONDHEID_1752670458852.png';
+import rijkdomImg from '@assets/RIJKDOM_1752670460242.png';
+import vrijeTijdImg from '@assets/VRIJE TIJD_1752670475302.png';
+import klimaatImg from '@assets/KLIMAAT_1752670476669.png';
+import wonenImg from '@assets/WONEN_1752670478064.png';
+
+const topicImages = {
+  VREDE: vredeImg,
+  GEZONDHEID: gezondheidImg,
+  RIJKDOM: rijkdomImg,
+  'VRIJE TIJD': vrijeTijdImg,
+  KLIMAAT: klimaatImg,
+  WONEN: wonenImg
+};
 
 export default function Home() {
   const {
@@ -27,6 +44,34 @@ export default function Home() {
   const { currentSection, answers } = state;
 
   const progressPercentage = getCurrentProgress();
+  
+  // Get topic data for theming
+  const topicData = TOPICS[answers.mostImportantTopic as keyof typeof TOPICS];
+  const topicImage = topicImages[answers.mostImportantTopic as keyof typeof topicImages];
+  
+  // Create topic-specific gradient based on hex color
+  const getTopicGradient = (hexColor: string) => {
+    // Create a gradient that transitions from the topic color to a slightly darker version
+    const rgb = hexToRgb(hexColor);
+    if (rgb) {
+      const darkerRgb = {
+        r: Math.max(0, rgb.r - 30),
+        g: Math.max(0, rgb.g - 30),
+        b: Math.max(0, rgb.b - 30)
+      };
+      return `linear-gradient(135deg, ${hexColor} 0%, rgb(${darkerRgb.r}, ${darkerRgb.g}, ${darkerRgb.b}) 100%)`;
+    }
+    return 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)';
+  };
+  
+  const hexToRgb = (hex: string) => {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    } : null;
+  };
 
   const renderCurrentSection = () => {
     switch (currentSection) {
@@ -180,8 +225,33 @@ export default function Home() {
       case 'checkin-closing':
         return (
           <CheckInClosing 
-            onComplete={() => setCurrentSection('checkout-intro')}
+            onComplete={() => setCurrentSection('name-verification')}
           />
+        );
+
+      case 'name-verification':
+        return (
+          <Question
+            questionNumber={0}
+            question="Kun je je naam nog een keer invullen?"
+            bgGradient="from-blue-500 to-teal-500"
+            buttonColor="bg-blue-600 hover:bg-blue-700"
+            onNext={() => setCurrentSection('checkout-intro')}
+            showPrevious={false}
+            isValid={nameVerification.length > 0}
+          >
+            <div className="space-y-4">
+              <Input
+                value={nameVerification}
+                onChange={(e) => setNameVerification(e.target.value)}
+                placeholder="Typ hier je naam..."
+                className="w-full p-4 text-2xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-blue-300 outline-none"
+              />
+              <p className="text-sm text-white opacity-80">
+                Als er meer mensen zijn met dezelfde naam, typ dan je naam met een nummer (bijvoorbeeld: {answers.name} 1)
+              </p>
+            </div>
+          </Question>
         );
 
       case 'checkout-intro':
@@ -194,101 +264,180 @@ export default function Home() {
 
       case 'question-6':
         return (
-          <Question
-            questionNumber={6}
-            question={`Hoe voel je je nu over het onderwerp ${answers.mostImportantTopic}?`}
-            bgGradient="from-pink-500 to-red-500"
-            buttonColor="bg-pink-600 hover:bg-pink-700"
-            onNext={() => setCurrentSection('question-7')}
-            showPrevious={false}
-            isValid={answers.feelingAfter !== null}
+          <div 
+            className="min-h-screen flex flex-col items-center justify-center p-6 text-white"
+            style={{ background: topicData?.hexColor ? getTopicGradient(topicData.hexColor) : 'linear-gradient(135deg, #ec4899 0%, #ef4444 100%)' }}
           >
-            <LikertScale
-              options={LIKERT_SCALE}
-              value={answers.feelingAfter}
-              onValueChange={(value) => updateAnswers({ feelingAfter: value })}
-            />
-          </Question>
+            <div className="text-center max-w-5xl w-full">
+              <div className="bg-white bg-opacity-20 rounded-2xl p-8 mb-8">
+                <h2 className="text-3xl font-bold mb-6">{`Hoe voel je je nu over het onderwerp ${answers.mostImportantTopic}?`}</h2>
+                
+                {topicImage && (
+                  <div className="mb-6">
+                    <img 
+                      src={topicImage} 
+                      alt={answers.mostImportantTopic} 
+                      className="w-24 h-24 mx-auto object-contain rounded-[20px] bg-white bg-opacity-20 p-2"
+                    />
+                  </div>
+                )}
+                
+                <LikertScale
+                  options={LIKERT_SCALE}
+                  value={answers.feelingAfter}
+                  onValueChange={(value) => updateAnswers({ feelingAfter: value })}
+                />
+              </div>
+              
+              <div className="flex justify-center space-x-4">
+                <button 
+                  onClick={() => setCurrentSection('question-7')}
+                  disabled={answers.feelingAfter === null}
+                  className={`px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg ${
+                    answers.feelingAfter !== null 
+                      ? 'bg-white bg-opacity-20 hover:bg-opacity-30 text-white' 
+                      : 'bg-gray-500 bg-opacity-50 text-gray-300 cursor-not-allowed'
+                  }`}
+                >
+                  Volgende
+                </button>
+              </div>
+            </div>
+          </div>
         );
 
       case 'question-7':
         return (
-          <Question
-            questionNumber={7}
-            question={`Wat zou je doen voor ${answers.mostImportantTopic} in de toekomst?`}
-            bgGradient="from-cyan-500 to-blue-500"
-            buttonColor="bg-cyan-600 hover:bg-cyan-700"
-            onNext={() => setCurrentSection('question-8')}
-            onPrevious={() => setCurrentSection('question-6')}
-            isValid={answers.actionChoice.length > 0}
+          <div 
+            className="min-h-screen flex flex-col items-center justify-center p-6 text-white"
+            style={{ background: topicData?.hexColor ? getTopicGradient(topicData.hexColor) : 'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)' }}
           >
-            <div className="flex flex-col space-y-6">
-              <div className="grid grid-cols-3 gap-4">
-                {ACTION_OPTIONS.map((option) => (
-                  <div key={option.value} className="flex flex-col items-center space-y-2">
-                    <div className="text-6xl mb-2">{option.icon}</div>
-                    <p className="text-lg font-semibold text-center mb-2">{option.label}</p>
-                    <label className="flex items-center cursor-pointer">
-                      <input
-                        type="radio"
-                        name="action-choice"
-                        value={option.value}
-                        checked={answers.actionChoice === option.value}
-                        onChange={() => updateAnswers({ actionChoice: option.value })}
-                        className="sr-only"
-                      />
-                      <div className={`w-6 h-6 rounded-full border-2 border-white flex items-center justify-center transition-all ${
-                        answers.actionChoice === option.value 
-                          ? 'bg-white' 
-                          : 'bg-transparent hover:bg-white hover:bg-opacity-20'
-                      }`}>
-                        {answers.actionChoice === option.value && <div className="w-3 h-3 rounded-full bg-cyan-600" />}
-                      </div>
-                    </label>
+            <div className="text-center max-w-5xl w-full">
+              <div className="bg-white bg-opacity-20 rounded-2xl p-8 mb-8">
+                <h2 className="text-3xl font-bold mb-6">{`Wat zou je doen voor ${answers.mostImportantTopic} in de toekomst?`}</h2>
+                
+                {topicImage && (
+                  <div className="mb-6">
+                    <img 
+                      src={topicImage} 
+                      alt={answers.mostImportantTopic} 
+                      className="w-24 h-24 mx-auto object-contain rounded-[20px] bg-white bg-opacity-20 p-2"
+                    />
                   </div>
-                ))}
-              </div>
-              
-              {/* X-axis labels */}
-              <div className="flex justify-between items-center px-4">
-                <span className="text-sm font-medium">{ACTION_OPTIONS[0]?.label}</span>
-                <span className="text-sm font-medium">{ACTION_OPTIONS[ACTION_OPTIONS.length - 1]?.label}</span>
-              </div>
-              
-              {/* Selected option display */}
-              <div className="text-center">
-                {answers.actionChoice && (
-                  <p className="text-lg font-semibold">
-                    {ACTION_OPTIONS.find(opt => opt.value === answers.actionChoice)?.label}
-                  </p>
                 )}
+                
+                <div className="flex flex-col space-y-6">
+                  <div className="grid grid-cols-3 gap-4">
+                    {ACTION_OPTIONS.map((option) => (
+                      <div key={option.value} className="flex flex-col items-center space-y-2">
+                        <div className="text-6xl mb-2">{option.icon}</div>
+                        <p className="text-lg font-semibold text-center mb-2">{option.label}</p>
+                        <label className="flex items-center cursor-pointer">
+                          <input
+                            type="radio"
+                            name="action-choice"
+                            value={option.value}
+                            checked={answers.actionChoice === option.value}
+                            onChange={() => updateAnswers({ actionChoice: option.value })}
+                            className="sr-only"
+                          />
+                          <div className={`w-6 h-6 rounded-full border-2 border-white flex items-center justify-center transition-all ${
+                            answers.actionChoice === option.value 
+                              ? 'bg-white' 
+                              : 'bg-transparent hover:bg-white hover:bg-opacity-20'
+                          }`}>
+                            {answers.actionChoice === option.value && <div className="w-3 h-3 rounded-full" style={{ backgroundColor: topicData?.hexColor || '#06b6d4' }} />}
+                          </div>
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Selected option display */}
+                  <div className="text-center">
+                    {answers.actionChoice && (
+                      <p className="text-lg font-semibold">
+                        {ACTION_OPTIONS.find(opt => opt.value === answers.actionChoice)?.label}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex justify-center space-x-4">
+                <button 
+                  onClick={() => setCurrentSection('question-6')}
+                  className="px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg bg-white bg-opacity-20 hover:bg-opacity-30 text-white"
+                >
+                  Vorige
+                </button>
+                <button 
+                  onClick={() => setCurrentSection('question-8')}
+                  disabled={answers.actionChoice.length === 0}
+                  className={`px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg ${
+                    answers.actionChoice.length > 0 
+                      ? 'bg-white bg-opacity-20 hover:bg-opacity-30 text-white' 
+                      : 'bg-gray-500 bg-opacity-50 text-gray-300 cursor-not-allowed'
+                  }`}
+                >
+                  Volgende
+                </button>
               </div>
             </div>
-          </Question>
+          </div>
         );
 
       case 'question-8':
         return (
-          <Question
-            questionNumber={8}
-            question={`Hoeveel vertrouwen heb je dat je iets kan veranderen aan ${answers.mostImportantTopic} in de toekomst?`}
-            bgGradient="from-violet-500 to-purple-500"
-            buttonColor="bg-purple-600 hover:bg-purple-700"
-            onComplete={() => {
-              completeSurvey();
-              setCurrentSection('results');
-            }}
-            onPrevious={() => setCurrentSection('question-7')}
-            showNext={false}
-            showComplete={true}
-            isValid={answers.confidenceAfter !== null}
+          <div 
+            className="min-h-screen flex flex-col items-center justify-center p-6 text-white"
+            style={{ background: topicData?.hexColor ? getTopicGradient(topicData.hexColor) : 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}
           >
-            <LikertScale
-              options={CONFIDENCE_SCALE}
-              value={answers.confidenceAfter}
-              onValueChange={(value) => updateAnswers({ confidenceAfter: value })}
-            />
-          </Question>
+            <div className="text-center max-w-5xl w-full">
+              <div className="bg-white bg-opacity-20 rounded-2xl p-8 mb-8">
+                <h2 className="text-3xl font-bold mb-6">{`Hoeveel vertrouwen heb je dat je iets kan veranderen aan ${answers.mostImportantTopic} in de toekomst?`}</h2>
+                
+                {topicImage && (
+                  <div className="mb-6">
+                    <img 
+                      src={topicImage} 
+                      alt={answers.mostImportantTopic} 
+                      className="w-24 h-24 mx-auto object-contain rounded-[20px] bg-white bg-opacity-20 p-2"
+                    />
+                  </div>
+                )}
+                
+                <LikertScale
+                  options={CONFIDENCE_SCALE}
+                  value={answers.confidenceAfter}
+                  onValueChange={(value) => updateAnswers({ confidenceAfter: value })}
+                />
+              </div>
+              
+              <div className="flex justify-center space-x-4">
+                <button 
+                  onClick={() => setCurrentSection('question-7')}
+                  className="px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg bg-white bg-opacity-20 hover:bg-opacity-30 text-white"
+                >
+                  Vorige
+                </button>
+                <button 
+                  onClick={() => {
+                    completeSurvey();
+                    setCurrentSection('results');
+                  }}
+                  disabled={answers.confidenceAfter === null}
+                  className={`px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg ${
+                    answers.confidenceAfter !== null 
+                      ? 'bg-white bg-opacity-20 hover:bg-opacity-30 text-white' 
+                      : 'bg-gray-500 bg-opacity-50 text-gray-300 cursor-not-allowed'
+                  }`}
+                >
+                  Voltooien
+                </button>
+              </div>
+            </div>
+          </div>
         );
 
       case 'results':
