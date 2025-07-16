@@ -48,10 +48,6 @@ export function EntryChoice({ onCheckIn, onCheckOut }: EntryChoiceProps) {
             </Button>
           </div>
         </div>
-        
-        <div className="text-sm opacity-75">
-          Kies de optie die het beste bij jou past
-        </div>
       </div>
     </section>
   );
