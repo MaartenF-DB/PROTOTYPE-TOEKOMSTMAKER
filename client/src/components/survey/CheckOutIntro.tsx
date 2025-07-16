@@ -1,13 +1,16 @@
 import { Button } from '@/components/ui/button';
 import { useSpeech } from '@/hooks/useSpeech';
 import { useEffect } from 'react';
+import { translations } from '@/lib/translations';
 
 interface CheckOutIntroProps {
   onStart: () => void;
   mostImportantTopic: string;
+  language?: 'nl' | 'en';
 }
 
-export function CheckOutIntro({ onStart, mostImportantTopic }: CheckOutIntroProps) {
+export function CheckOutIntro({ onStart, mostImportantTopic, language = 'nl' }: CheckOutIntroProps) {
+  const t = translations[language];
   const { speak } = useSpeech();
 
   useEffect(() => {
@@ -18,8 +21,8 @@ export function CheckOutIntro({ onStart, mostImportantTopic }: CheckOutIntroProp
   return (
     <section className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-green-600 to-teal-600 text-white">
       <div className="text-center max-w-2xl">
-        <h2 className="text-4xl font-bold mb-6">Welkom terug!</h2>
-        <p className="text-2xl font-bold mb-8">Dan onderzoeken we verder wat voor toekomstmaker jij bent!</p>
+        <h2 className="text-4xl font-bold mb-6">{t.checkOutIntro.title}</h2>
+        <p className="text-2xl font-bold mb-8">{t.checkOutIntro.subtitle}</p>
         
 
         
@@ -27,7 +30,7 @@ export function CheckOutIntro({ onStart, mostImportantTopic }: CheckOutIntroProp
           onClick={onStart}
           className="bg-teal-500 hover:bg-teal-600 px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg"
         >
-          Verder gaan!
+{t.checkOutIntro.start}
           <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
           </svg>

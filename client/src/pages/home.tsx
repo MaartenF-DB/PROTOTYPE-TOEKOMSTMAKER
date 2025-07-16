@@ -14,6 +14,8 @@ import { Input } from '@/components/ui/input';
 import { VISITING_OPTIONS, ACTION_OPTIONS, LIKERT_SCALE, CONFIDENCE_SCALE, TOPICS } from '@/types/survey';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+import { LanguageSelector } from '@/components/LanguageSelector';
+import { translations, Language } from '@/lib/translations';
 
 export default function Home() {
   const {
@@ -30,6 +32,8 @@ export default function Home() {
 
   const { currentSection, answers } = state;
   const [checkoutOnly, setCheckoutOnly] = useState(false);
+  const [language, setLanguage] = useState<Language>('nl');
+  const t = translations[language];
 
   const progressPercentage = getCurrentProgress();
   
@@ -95,6 +99,7 @@ export default function Home() {
               setCheckoutOnly(false);
               setCurrentSection('checkout-intro');
             }}
+            language={language}
           />
         );
       case 'name-verification':
@@ -117,6 +122,7 @@ export default function Home() {
               updateAnswers({ name: '' });
               setCurrentSection('question-0');
             }}
+            language={language}
           />
         );
 
@@ -382,6 +388,7 @@ export default function Home() {
               setCurrentSection('checkout-name');
             }}
             mostImportantTopic={answers.mostImportantTopic}
+            language={language}
           />
         );
       case 'checkout-name':
@@ -401,14 +408,13 @@ export default function Home() {
               // For regular checkout, check if name exists
               if (similarNames.length > 0) {
                 setCurrentSection('name-matching');
-              } else if (answers.name.length > 0) {
-                // Name entered but no match found - this shouldn't happen now
-                // since we only allow existing names or checkout-only
+              } else {
+                // Name entered but no match found - proceed to questions
                 setCurrentSection('question-6');
               }
             }}
             showPrevious={false}
-            isValid={answers.name.length > 0 || checkoutOnly}
+            isValid={checkoutOnly ? (answers.name.length > 0 && checkoutOnly) : answers.name.length > 0}
           >
             <div className="space-y-4">
               <Input
@@ -420,14 +426,17 @@ export default function Home() {
               />
               
               {/* Show existing names for selection */}
-              {existingResponses.length > 0 && !checkoutOnly && (
+              {existingResponses.length > 0 && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
                   <p className="text-white font-medium mb-2">Of kies je naam uit de lijst:</p>
                   <div className="grid grid-cols-2 gap-2">
                     {existingResponses.map((response: any, index: number) => (
                       <button
                         key={index}
-                        onClick={() => updateAnswers({ name: response.name })}
+                        onClick={() => {
+                          updateAnswers({ name: response.name });
+                          setCheckoutOnly(false);
+                        }}
                         className="p-2 bg-white bg-opacity-30 rounded-lg hover:bg-opacity-50 transition-all text-white text-left"
                       >
                         {response.name}
@@ -445,9 +454,8 @@ export default function Home() {
                     checked={checkoutOnly}
                     onChange={(e) => {
                       setCheckoutOnly(e.target.checked);
-                      if (e.target.checked) {
-                        updateAnswers({ name: `Checkout-${Date.now()}`, isNewCheckoutUser: true });
-                      } else {
+                      if (!e.target.checked) {
+                        // When unchecking, clear name to force selection from list
                         updateAnswers({ name: '', isNewCheckoutUser: false });
                       }
                     }}
@@ -457,17 +465,13 @@ export default function Home() {
                 </label>
               </div>
               
-              {answers.name.length > 0 && !checkoutOnly && (
+              {answers.name.length > 0 && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
                   <p className="text-white font-semibold">Jouw antwoord:</p>
                   <p className="text-white text-lg">{answers.name}</p>
-                </div>
-              )}
-              
-              {checkoutOnly && (
-                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
-                  <p className="text-white font-semibold">Alleen checkout evaluatie</p>
-                  <p className="text-white text-sm opacity-80">Je hebt de eerdere vragen niet beantwoord</p>
+                  {checkoutOnly && (
+                    <p className="text-white text-sm opacity-80 mt-2">Je hebt de eerdere vragen niet beantwoord</p>
+                  )}
                 </div>
               )}
             </div>
@@ -664,6 +668,11 @@ export default function Home() {
       </div>
 
       {renderCurrentSection()}
+      
+      <LanguageSelector 
+        currentLanguage={language} 
+        onLanguageChange={setLanguage}
+      />
     </div>
   );
 }

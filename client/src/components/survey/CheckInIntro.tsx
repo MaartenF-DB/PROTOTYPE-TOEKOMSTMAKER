@@ -1,12 +1,15 @@
 import { Button } from '@/components/ui/button';
 import { useSpeech } from '@/hooks/useSpeech';
 import { useEffect } from 'react';
+import { translations } from '@/lib/translations';
 
 interface CheckInIntroProps {
   onStart: () => void;
+  language?: 'nl' | 'en';
 }
 
-export function CheckInIntro({ onStart }: CheckInIntroProps) {
+export function CheckInIntro({ onStart, language = 'nl' }: CheckInIntroProps) {
+  const t = translations[language];
   const { speak } = useSpeech();
 
   useEffect(() => {
@@ -25,14 +28,14 @@ export function CheckInIntro({ onStart }: CheckInIntroProps) {
           </div>
         </div>
         
-        <h1 className="text-4xl font-bold mb-6">Hé Toekomstmaker!</h1>
-        <p className="text-xl mb-8">Zullen we samen uitvinden wat voor toekomstmaker jij bent?</p>
+        <h1 className="text-4xl font-bold mb-6">{t.checkInIntro.title}</h1>
+        <p className="text-xl mb-8">{t.checkInIntro.subtitle}</p>
         
         <Button 
           onClick={onStart}
           className="bg-white text-purple-600 px-8 py-4 rounded-full text-xl font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg"
         >
-          Beginnen
+          {t.checkInIntro.start}
         </Button>
       </div>
     </section>
