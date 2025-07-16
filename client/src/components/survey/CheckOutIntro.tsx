@@ -11,7 +11,7 @@ export function CheckOutIntro({ onStart, mostImportantTopic }: CheckOutIntroProp
   const { speak } = useSpeech();
 
   useEffect(() => {
-    const text = "Welkom terug! Waar zijn we gebleven? Oh ja!! We zijn op de helft. Wat voor toekomstmaker zou je zijn?!? Tik op het scherm!";
+    const text = "Welkom terug! Waar zijn we gebleven? Oh ja!! We zijn op de helft. Wat voor toekomstmaker zou je zijn?!?";
     speak(text);
   }, [speak]);
 
@@ -22,9 +22,7 @@ export function CheckOutIntro({ onStart, mostImportantTopic }: CheckOutIntroProp
         <p className="text-xl mb-4">Waar zijn we gebleven? Oh ja!!</p>
         <p className="text-2xl font-bold mb-8">We zijn op de helft. Wat voor toekomstmaker zou je zijn?!?</p>
         
-        <div className="bg-white bg-opacity-20 rounded-2xl p-6 mb-8">
-          <p className="text-lg font-semibold">Tik op het scherm!</p>
-        </div>
+
         
         <Button 
           onClick={onStart}

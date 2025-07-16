@@ -83,7 +83,7 @@ export default function Home() {
               onValueChange={(value) => updateAnswers({ age: value })}
               otherValue={answers.age === 'other' ? answers.age : ''}
               onOtherValueChange={(value) => updateAnswers({ age: value })}
-              columns={4}
+              columns={8}
             />
           </Question>
         );
@@ -105,7 +105,7 @@ export default function Home() {
               onValueChange={(value) => updateAnswers({ visitingWith: value })}
               otherValue={answers.visitingWithOther}
               onOtherValueChange={(value) => updateAnswers({ visitingWithOther: value })}
-              columns={2}
+              columns={5}
             />
           </Question>
         );
