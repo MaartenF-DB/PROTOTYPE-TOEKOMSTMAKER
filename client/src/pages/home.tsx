@@ -408,7 +408,7 @@ export default function Home() {
               }
             }}
             showPrevious={false}
-            isValid={(answers.name.length > 0 && !checkoutOnly) || checkoutOnly}
+            isValid={answers.name.length > 0 || checkoutOnly}
           >
             <div className="space-y-4">
               <Input
@@ -416,13 +416,13 @@ export default function Home() {
                 onChange={(e) => updateAnswers({ name: e.target.value })}
                 placeholder="Typ hier je naam..."
                 className="w-full p-4 text-2xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-orange-300 outline-none"
-                disabled={checkoutOnly}
+                disabled={false}
               />
               
               {/* Show existing names for selection */}
               {existingResponses.length > 0 && !checkoutOnly && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
-                  <p className="text-white font-medium mb-2">Kies je naam uit de lijst:</p>
+                  <p className="text-white font-medium mb-2">Of kies je naam uit de lijst:</p>
                   <div className="grid grid-cols-2 gap-2">
                     {existingResponses.map((response: any, index: number) => (
                       <button
@@ -453,7 +453,7 @@ export default function Home() {
                     }}
                     className="w-5 h-5 rounded"
                   />
-                  <span className="text-white text-lg">Ik doe alleen deze evaluatie (geen check-in gedaan)</span>
+                  <span className="text-white text-lg">Ik heb de eerdere vragen niet beantwoord</span>
                 </label>
               </div>
               
@@ -467,7 +467,7 @@ export default function Home() {
               {checkoutOnly && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
                   <p className="text-white font-semibold">Alleen checkout evaluatie</p>
-                  <p className="text-white text-sm opacity-80">Je doet alleen dit onderdeel van de evaluatie</p>
+                  <p className="text-white text-sm opacity-80">Je hebt de eerdere vragen niet beantwoord</p>
                 </div>
               )}
             </div>
@@ -552,12 +552,24 @@ export default function Home() {
                 </div>
               )}
               
-              <MultipleChoice
-                options={ACTION_OPTIONS}
-                value={answers.actionChoice}
-                onValueChange={(value) => updateAnswers({ actionChoice: value })}
-                columns={3}
-              />
+              <div className="space-y-4">
+                {ACTION_OPTIONS.map((option) => (
+                  <label key={option.value} className="flex items-center space-x-4 cursor-pointer p-4 bg-white bg-opacity-10 rounded-xl hover:bg-opacity-20 transition-all">
+                    <input
+                      type="radio"
+                      name="action-choice"
+                      value={option.value}
+                      checked={answers.actionChoice === option.value}
+                      onChange={() => updateAnswers({ actionChoice: option.value })}
+                      className="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2"
+                    />
+                    <div className="flex items-center space-x-3">
+                      <span className="text-3xl">{option.icon}</span>
+                      <span className="text-white text-lg font-medium">{option.label}</span>
+                    </div>
+                  </label>
+                ))}
+              </div>
               
               {answers.actionChoice && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
