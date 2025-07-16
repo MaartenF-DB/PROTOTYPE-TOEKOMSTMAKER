@@ -11,23 +11,6 @@ import { NameVerification } from '@/components/survey/NameVerification';
 import { Input } from '@/components/ui/input';
 import { VISITING_OPTIONS, ACTION_OPTIONS, LIKERT_SCALE, CONFIDENCE_SCALE, TOPICS } from '@/types/survey';
 
-// Import topic illustrations
-import vredeImg from '@assets/VREDE_1752670457359.png';
-import gezondheidImg from '@assets/GEZONDHEID_1752670458852.png';
-import rijkdomImg from '@assets/RIJKDOM_1752670460242.png';
-import vrijeTijdImg from '@assets/VRIJE TIJD_1752670475302.png';
-import klimaatImg from '@assets/KLIMAAT_1752670476669.png';
-import wonenImg from '@assets/WONEN_1752670478064.png';
-
-const topicImages = {
-  VREDE: vredeImg,
-  GEZONDHEID: gezondheidImg,
-  RIJKDOM: rijkdomImg,
-  'VRIJE TIJD': vrijeTijdImg,
-  KLIMAAT: klimaatImg,
-  WONEN: wonenImg
-};
-
 export default function Home() {
   const {
     state,
@@ -47,7 +30,6 @@ export default function Home() {
   
   // Get topic data for theming
   const topicData = TOPICS[answers.mostImportantTopic as keyof typeof TOPICS];
-  const topicImage = topicImages[answers.mostImportantTopic as keyof typeof topicImages];
   
   // Create topic-specific gradient based on hex color
   const getTopicGradient = (hexColor: string) => {
@@ -194,13 +176,13 @@ export default function Home() {
             isValid={answers.feelingBefore !== null}
           >
             <div className="flex flex-col items-center space-y-6">
-              {topicImage && (
-                <div className="mb-4">
-                  <img 
-                    src={topicImage} 
-                    alt={answers.mostImportantTopic} 
-                    className="w-3/4 h-auto max-h-56 object-contain rounded-[20px] bg-white bg-opacity-20 p-4"
-                  />
+              {topicData && (
+                <div className="mb-4 text-center">
+                  <div className="text-8xl mb-4">{topicData.icon}</div>
+                  <div className="text-xl font-semibold text-white mb-2">{answers.mostImportantTopic}</div>
+                  <div className="text-sm text-white opacity-80 max-w-md">
+                    {topicData.description}
+                  </div>
                 </div>
               )}
               <LikertScale
@@ -226,13 +208,13 @@ export default function Home() {
             isValid={answers.confidenceBefore !== null}
           >
             <div className="flex flex-col items-center space-y-6">
-              {topicImage && (
-                <div className="mb-4">
-                  <img 
-                    src={topicImage} 
-                    alt={answers.mostImportantTopic} 
-                    className="w-3/4 h-auto max-h-56 object-contain rounded-[20px] bg-white bg-opacity-20 p-4"
-                  />
+              {topicData && (
+                <div className="mb-4 text-center">
+                  <div className="text-8xl mb-4">{topicData.icon}</div>
+                  <div className="text-xl font-semibold text-white mb-2">{answers.mostImportantTopic}</div>
+                  <div className="text-sm text-white opacity-80 max-w-md">
+                    {topicData.description}
+                  </div>
                 </div>
               )}
               <LikertScale
@@ -294,13 +276,13 @@ export default function Home() {
               <div className="bg-white bg-opacity-20 rounded-2xl p-8 mb-8">
                 <h2 className="text-3xl font-bold mb-6">{`Hoe voel je je nu over het onderwerp ${answers.mostImportantTopic}?`}</h2>
                 
-                {topicImage && (
-                  <div className="mb-6">
-                    <img 
-                      src={topicImage} 
-                      alt={answers.mostImportantTopic} 
-                      className="w-full max-w-lg h-auto max-h-80 mx-auto object-contain rounded-[20px] bg-white bg-opacity-20 p-6"
-                    />
+                {topicData && (
+                  <div className="mb-6 text-center">
+                    <div className="text-9xl mb-4">{topicData.icon}</div>
+                    <div className="text-2xl font-semibold text-white mb-2">{answers.mostImportantTopic}</div>
+                    <div className="text-base text-white opacity-80 max-w-lg mx-auto">
+                      {topicData.description}
+                    </div>
                   </div>
                 )}
                 
@@ -338,13 +320,13 @@ export default function Home() {
               <div className="bg-white bg-opacity-20 rounded-2xl p-8 mb-8">
                 <h2 className="text-3xl font-bold mb-6">{`Wat zou je doen voor ${answers.mostImportantTopic} in de toekomst?`}</h2>
                 
-                {topicImage && (
-                  <div className="mb-6">
-                    <img 
-                      src={topicImage} 
-                      alt={answers.mostImportantTopic} 
-                      className="w-full max-w-lg h-auto max-h-80 mx-auto object-contain rounded-[20px] bg-white bg-opacity-20 p-6"
-                    />
+                {topicData && (
+                  <div className="mb-6 text-center">
+                    <div className="text-9xl mb-4">{topicData.icon}</div>
+                    <div className="text-2xl font-semibold text-white mb-2">{answers.mostImportantTopic}</div>
+                    <div className="text-base text-white opacity-80 max-w-lg mx-auto">
+                      {topicData.description}
+                    </div>
                   </div>
                 )}
                 
@@ -419,13 +401,13 @@ export default function Home() {
               <div className="bg-white bg-opacity-20 rounded-2xl p-8 mb-8">
                 <h2 className="text-3xl font-bold mb-6">{`Hoeveel vertrouwen heb je dat je iets kan veranderen aan ${answers.mostImportantTopic} in de toekomst?`}</h2>
                 
-                {topicImage && (
-                  <div className="mb-6">
-                    <img 
-                      src={topicImage} 
-                      alt={answers.mostImportantTopic} 
-                      className="w-full max-w-lg h-auto max-h-80 mx-auto object-contain rounded-[20px] bg-white bg-opacity-20 p-6"
-                    />
+                {topicData && (
+                  <div className="mb-6 text-center">
+                    <div className="text-9xl mb-4">{topicData.icon}</div>
+                    <div className="text-2xl font-semibold text-white mb-2">{answers.mostImportantTopic}</div>
+                    <div className="text-base text-white opacity-80 max-w-lg mx-auto">
+                      {topicData.description}
+                    </div>
                   </div>
                 )}
                 
