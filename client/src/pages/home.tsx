@@ -379,8 +379,8 @@ export default function Home() {
           <Question
             questionNumber={0}
             question={t.questions.name}
-            bgGradient="from-orange-500 to-red-500"
-            buttonColor="bg-orange-600 hover:bg-orange-700"
+            bgGradient="from-blue-500 to-teal-500"
+            buttonColor="bg-blue-600 hover:bg-blue-700"
             onNext={() => {
               // For checkout, we need to ensure the user has a topic selected
               if (!answers.mostImportantTopic) {
@@ -403,9 +403,13 @@ export default function Home() {
                 value={answers.name}
                 onChange={(e) => updateAnswers({ name: e.target.value })}
                 placeholder={t.placeholders.typeName}
-                className="w-full p-4 text-2xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-orange-300 outline-none"
+                className="w-full p-4 text-2xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-blue-300 outline-none"
               />
-              
+              {hasNameConflict && (
+                <p className="text-sm text-white opacity-80">
+                  {t.validation.nameConflict}
+                </p>
+              )}
               {answers.name.length > 0 && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
                   <p className="text-white font-semibold">{t.yourAnswer}:</p>
@@ -446,7 +450,17 @@ export default function Home() {
             showNext={true}
             isValid={answers.feelingAfter !== null}
           >
-            <div className="space-y-4">
+            <div className="space-y-6">
+              {topicData && (
+                <div className="mb-6 p-8 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
+                  <div className="text-9xl mb-4 text-center">{topicData.icon}</div>
+                  <div className="text-2xl font-semibold text-white mb-2 text-center">{answers.mostImportantTopic}</div>
+                  <div className="text-base text-white opacity-90 max-w-lg mx-auto text-center">
+                    {topicData.description}
+                  </div>
+                </div>
+              )}
+              
               <LikertScale
                 options={LIKERT_SCALE}
                 value={answers.feelingAfter}
@@ -476,7 +490,17 @@ export default function Home() {
             showNext={true}
             isValid={answers.actionChoice.length > 0}
           >
-            <div className="space-y-4">
+            <div className="space-y-6">
+              {topicData && (
+                <div className="mb-6 p-8 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
+                  <div className="text-9xl mb-4 text-center">{topicData.icon}</div>
+                  <div className="text-2xl font-semibold text-white mb-2 text-center">{answers.mostImportantTopic}</div>
+                  <div className="text-base text-white opacity-90 max-w-lg mx-auto text-center">
+                    {topicData.description}
+                  </div>
+                </div>
+              )}
+              
               <MultipleChoice
                 options={ACTION_OPTIONS}
                 value={answers.actionChoice}
@@ -514,7 +538,17 @@ export default function Home() {
             showComplete={true}
             isValid={answers.confidenceAfter !== null}
           >
-            <div className="space-y-4">
+            <div className="space-y-6">
+              {topicData && (
+                <div className="mb-6 p-8 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
+                  <div className="text-9xl mb-4 text-center">{topicData.icon}</div>
+                  <div className="text-2xl font-semibold text-white mb-2 text-center">{answers.mostImportantTopic}</div>
+                  <div className="text-base text-white opacity-90 max-w-lg mx-auto text-center">
+                    {topicData.description}
+                  </div>
+                </div>
+              )}
+              
               <LikertScale
                 options={CONFIDENCE_SCALE}
                 value={answers.confidenceAfter}
