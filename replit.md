@@ -152,4 +152,15 @@ The application follows a modern full-stack architecture with the following comp
   - Maintains design consistency across question types
   - Better visual hierarchy and readability
 
+- **Standardized Checkout Question Format**: Updated checkout questions to match check-in format
+  - All checkout questions now use the standardized Question component
+  - Consistent navigation, styling, and answer display across all questions
+  - Topic-specific theming with dynamic background gradients
+  - Proper Previous/Next button flow for better user experience
+
+- **Entry Choice Flow Update**: Modified post-check-in behavior to return to entry choice
+  - After check-in completion, users return to the initial entry choice page
+  - Allows seamless transition from check-in to check-out within the same session
+  - Improved user workflow for completing both survey parts
+
 The application is designed to be deployment-ready for platforms like Replit, with proper environment variable handling and production optimizations.

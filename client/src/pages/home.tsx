@@ -358,7 +358,7 @@ export default function Home() {
       case 'checkin-closing':
         return (
           <CheckInClosing 
-            onComplete={() => setCurrentSection('checkout-intro')}
+            onComplete={() => setCurrentSection('entry-choice')}
           />
         );
 
