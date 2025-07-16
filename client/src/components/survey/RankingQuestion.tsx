@@ -44,7 +44,7 @@ export function RankingQuestion({ ranking, onRankingChange }: RankingQuestionPro
     <div className="w-full">
       <p className="text-lg mb-6">Sleep de onderwerpen van minst belangrijk naar meest belangrijk!</p>
       
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-6 gap-4 mb-6">
         {ranking.map((topic, index) => {
           const topicData = TOPICS[topic as keyof typeof TOPICS];
           return (
@@ -55,13 +55,12 @@ export function RankingQuestion({ ranking, onRankingChange }: RankingQuestionPro
               onDragOver={handleDragOver}
               onDrop={(e) => handleDrop(e, topic)}
               onDragEnd={handleDragEnd}
-              className={`p-6 rounded-xl cursor-move shadow-lg transform hover:scale-105 transition-all text-white ${
+              className={`p-4 rounded-xl cursor-move shadow-lg transform hover:scale-105 transition-all text-white ${
                 topicData?.color || 'bg-gray-500'
               } ${draggedItem === topic ? 'opacity-50' : ''}`}
             >
-              <div className="text-2xl mb-2">{topicData?.icon || '❓'}</div>
-              <h3 className="text-xl font-bold">{topic}</h3>
-              <div className="text-sm font-semibold mt-2">Rang: {index + 1}</div>
+              <div className="text-2xl mb-2 text-center">{topicData?.icon || '❓'}</div>
+              <h3 className="text-lg font-bold text-center">{topic}</h3>
             </div>
           );
         })}

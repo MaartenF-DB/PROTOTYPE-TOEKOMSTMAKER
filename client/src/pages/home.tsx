@@ -7,6 +7,7 @@ import { Results } from '@/components/survey/Results';
 import { MultipleChoice } from '@/components/survey/MultipleChoice';
 import { RankingQuestion } from '@/components/survey/RankingQuestion';
 import { LikertScale } from '@/components/survey/LikertScale';
+import { NameVerification } from '@/components/survey/NameVerification';
 import { Input } from '@/components/ui/input';
 import { VISITING_OPTIONS, ACTION_OPTIONS, LIKERT_SCALE, CONFIDENCE_SCALE } from '@/types/survey';
 
@@ -16,9 +17,11 @@ export default function Home() {
     updateAnswers,
     setCurrentSection,
     setCurrentQuestion,
-    completesurvey,
+    completeSurvey,
     resetSurvey,
-    getCurrentProgress
+    getCurrentProgress,
+    nameVerification,
+    setNameVerification
   } = useSurvey();
 
   const { currentSection, answers } = state;
@@ -172,7 +175,17 @@ export default function Home() {
       case 'checkin-closing':
         return (
           <CheckInClosing 
-            onComplete={() => setCurrentSection('checkout-intro')}
+            onComplete={() => setCurrentSection('name-verification')}
+          />
+        );
+
+      case 'name-verification':
+        return (
+          <NameVerification 
+            originalName={answers.name}
+            nameVerification={nameVerification}
+            onNameVerificationChange={setNameVerification}
+            onContinue={() => setCurrentSection('checkout-intro')}
           />
         );
 
@@ -214,21 +227,32 @@ export default function Home() {
             onPrevious={() => setCurrentSection('question-6')}
             isValid={answers.actionChoice.length > 0}
           >
-            <div className="space-y-4">
-              {ACTION_OPTIONS.map((option) => (
-                <button
-                  key={option.value}
-                  onClick={() => updateAnswers({ actionChoice: option.value })}
-                  className={`w-full p-4 rounded-xl text-xl font-semibold transition-all transform hover:scale-105 flex items-center justify-center ${
-                    answers.actionChoice === option.value
-                      ? 'bg-cyan-600 bg-opacity-70 text-white'
-                      : 'bg-white bg-opacity-30 hover:bg-opacity-50 text-white'
-                  }`}
-                >
-                  <span className="text-3xl mr-4">{option.icon}</span>
-                  <span>{option.label}</span>
-                </button>
-              ))}
+            <div className="flex flex-col space-y-6">
+              <div className="grid grid-cols-3 gap-4">
+                {ACTION_OPTIONS.map((option) => (
+                  <div key={option.value} className="flex flex-col items-center space-y-2">
+                    <div className="text-4xl">{option.icon}</div>
+                    <p className="text-lg font-semibold text-center">{option.label}</p>
+                    <label className="flex items-center cursor-pointer">
+                      <input
+                        type="radio"
+                        name="action-choice"
+                        value={option.value}
+                        checked={answers.actionChoice === option.value}
+                        onChange={() => updateAnswers({ actionChoice: option.value })}
+                        className="sr-only"
+                      />
+                      <div className={`w-6 h-6 rounded-full border-2 border-white flex items-center justify-center transition-all ${
+                        answers.actionChoice === option.value 
+                          ? 'bg-white' 
+                          : 'bg-transparent hover:bg-white hover:bg-opacity-20'
+                      }`}>
+                        {answers.actionChoice === option.value && <div className="w-3 h-3 rounded-full bg-cyan-600" />}
+                      </div>
+                    </label>
+                  </div>
+                ))}
+              </div>
             </div>
           </Question>
         );

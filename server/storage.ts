@@ -27,6 +27,7 @@ export class MemStorage implements IStorage {
     const response: SurveyResponse = { 
       ...insertResponse, 
       visitingWithOther: insertResponse.visitingWithOther || null,
+      topicRanking: insertResponse.topicRanking as string[],
       id, 
       createdAt: new Date()
     };
