@@ -56,6 +56,16 @@ export const translations = {
       notAnsweredBefore: "Je hebt de eerdere vragen niet beantwoord"
     },
     
+    // Check Out Questions
+    checkOutQuestions: {
+      feeling: "Hoe voel je je nu over het onderwerp",
+      action: "Wat zou je doen voor",
+      confidence: "Hoeveel vertrouwen heb je dat je iets kan veranderen aan",
+      future: "in de toekomst",
+      selectFromList: "Of kies je naam uit de lijst",
+      notAnsweredBefore: "Ik heb de eerdere vragen niet beantwoord"
+    },
+    
     // Results
     results: {
       title: "Jij bent een...",
@@ -81,7 +91,16 @@ export const translations = {
       typeName: "Typ hier je naam...",
       typeAge: "Typ hier je leeftijd...",
       typeOther: "Typ hier je antwoord..."
-    }
+    },
+    
+    // Check-in Questions
+    checkInQuestions: {
+      name: "Wat is je naam?",
+      namePlaceholder: "Typ hier je naam..."
+    },
+    
+    // Common
+    yourAnswer: "Jouw antwoord"
   },
   
   en: {
@@ -166,7 +185,26 @@ export const translations = {
       typeName: "Type your name here...",
       typeAge: "Type your age here...",
       typeOther: "Type your answer here..."
-    }
+    },
+    
+    // Check-in Questions
+    checkInQuestions: {
+      name: "What is your name?",
+      namePlaceholder: "Type your name here..."
+    },
+    
+    // Check Out Questions
+    checkOutQuestions: {
+      feeling: "How do you feel now about the topic",
+      action: "What would you do for",
+      confidence: "How confident are you that you can change something about",
+      future: "in the future",
+      selectFromList: "Or choose your name from the list",
+      notAnsweredBefore: "I haven't answered the previous questions"
+    },
+    
+    // Common
+    yourAnswer: "Your answer"
   }
 };
 

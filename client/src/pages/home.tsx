@@ -32,8 +32,18 @@ export default function Home() {
 
   const { currentSection, answers } = state;
   const [checkoutOnly, setCheckoutOnly] = useState(false);
-  const [language, setLanguage] = useState<Language>('nl');
+  const [language, setLanguage] = useState<Language>(() => {
+    // Check localStorage for saved language preference
+    const savedLanguage = localStorage.getItem('survey-language');
+    return (savedLanguage as Language) || 'nl';
+  });
   const t = translations[language];
+
+  // Save language preference to localStorage whenever it changes
+  const handleLanguageChange = (newLanguage: Language) => {
+    setLanguage(newLanguage);
+    localStorage.setItem('survey-language', newLanguage);
+  };
 
   const progressPercentage = getCurrentProgress();
   
@@ -395,7 +405,7 @@ export default function Home() {
         return (
           <Question
             questionNumber={0}
-            question="Wat is je naam?"
+            question={t.questions.name}
             bgGradient="from-orange-500 to-red-500"
             buttonColor="bg-orange-600 hover:bg-orange-700"
             onNext={() => {
@@ -422,7 +432,7 @@ export default function Home() {
               <Input
                 value={answers.name}
                 onChange={(e) => updateAnswers({ name: e.target.value })}
-                placeholder="Typ hier je naam..."
+                placeholder={t.placeholders.typeName}
                 className="w-full p-4 text-2xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-orange-300 outline-none"
                 disabled={false}
               />
@@ -430,7 +440,7 @@ export default function Home() {
               {/* Show existing names for selection */}
               {existingResponses.length > 0 && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
-                  <p className="text-white font-medium mb-2">Of kies je naam uit de lijst:</p>
+                  <p className="text-white font-medium mb-2">{t.checkOutQuestions.selectFromList}:</p>
                   <div className="grid grid-cols-2 gap-2">
                     {existingResponses.map((response: any, index: number) => (
                       <button
@@ -465,17 +475,17 @@ export default function Home() {
                       }}
                       className="w-5 h-5 rounded"
                     />
-                    <span className="text-white text-lg">Ik heb de eerdere vragen niet beantwoord</span>
+                    <span className="text-white text-lg">{t.checkOutQuestions.notAnsweredBefore}</span>
                   </label>
                 </div>
               )}
               
               {answers.name.length > 0 && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
-                  <p className="text-white font-semibold">Jouw antwoord:</p>
+                  <p className="text-white font-semibold">{t.yourAnswer}:</p>
                   <p className="text-white text-lg">{answers.name}</p>
                   {checkoutOnly && (
-                    <p className="text-white text-sm opacity-80 mt-2">Je hebt de eerdere vragen niet beantwoord</p>
+                    <p className="text-white text-sm opacity-80 mt-2">{t.checkOutQuestions.notAnsweredBefore}</p>
                   )}
                 </div>
               )}
@@ -668,7 +678,7 @@ export default function Home() {
       
       <LanguageSelector 
         currentLanguage={language} 
-        onLanguageChange={setLanguage}
+        onLanguageChange={handleLanguageChange}
       />
     </div>
   );
