@@ -33,17 +33,36 @@ export function LanguageSelector({ onLanguageChange, currentLanguage }: Language
         }`}
         title="English"
       >
-        <div className="w-full h-full relative bg-blue-800">
-          <div className="absolute inset-0 bg-blue-800"></div>
-          <div className="absolute top-0 left-0 w-full h-1/6 bg-white"></div>
-          <div className="absolute top-1/6 left-0 w-full h-1/6 bg-red-600"></div>
-          <div className="absolute top-2/6 left-0 w-full h-1/6 bg-white"></div>
-          <div className="absolute top-3/6 left-0 w-full h-1/6 bg-red-600"></div>
-          <div className="absolute top-4/6 left-0 w-full h-1/6 bg-white"></div>
-          <div className="absolute top-5/6 left-0 w-full h-1/6 bg-red-600"></div>
-          <div className="absolute top-0 left-0 w-2/5 h-2/5 bg-blue-800"></div>
-          <div className="absolute top-1/12 left-1/12 w-1/6 h-1/6 bg-white text-xs flex items-center justify-center">★</div>
-        </div>
+        <svg viewBox="0 0 60 30" className="w-full h-full">
+          {/* Blue background */}
+          <rect width="60" height="30" fill="#012169"/>
+          
+          {/* White diagonals */}
+          <g stroke="#fff" strokeWidth="6">
+            <path d="m0,0 60,30 m0,-30 L0,30"/>
+          </g>
+          <g stroke="#fff" strokeWidth="4">
+            <path d="m0,0 60,30 m0,-30 L0,30"/>
+          </g>
+          
+          {/* Red diagonals */}
+          <g stroke="#C8102E" strokeWidth="2">
+            <path d="m0,0 60,30 m0,-30 L0,30"/>
+          </g>
+          
+          {/* White cross */}
+          <g stroke="#fff" strokeWidth="10">
+            <path d="m30,0 v30 m-30,-15 h60"/>
+          </g>
+          <g stroke="#fff" strokeWidth="6">
+            <path d="m30,0 v30 m-30,-15 h60"/>
+          </g>
+          
+          {/* Red cross */}
+          <g stroke="#C8102E" strokeWidth="4">
+            <path d="m30,0 v30 m-30,-15 h60"/>
+          </g>
+        </svg>
       </button>
     </div>
   );
