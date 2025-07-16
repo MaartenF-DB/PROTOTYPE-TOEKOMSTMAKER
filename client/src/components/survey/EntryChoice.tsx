@@ -38,15 +38,13 @@ export function EntryChoice({ onCheckIn, onCheckOut }: EntryChoiceProps) {
               className="w-full bg-green-600 hover:bg-green-700 text-white text-xl py-6 px-8 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               🚶‍♂️ Ik kom net binnen
-              <div className="text-sm opacity-80 mt-1">Check-in voor de tentoonstelling</div>
             </Button>
             
             <Button
               onClick={onCheckOut}
               className="w-full bg-orange-600 hover:bg-orange-700 text-white text-xl py-6 px-8 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200"
             >
-              🚶‍♀️ Ik heb de tentoonstelling al bezocht
-              <div className="text-sm opacity-80 mt-1">Check-out na de tentoonstelling</div>
+              <span className="inline-block scale-x-[-1]">🚶‍♂️</span> Ik ben net klaar
             </Button>
           </div>
         </div>
