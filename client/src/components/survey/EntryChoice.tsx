@@ -35,16 +35,18 @@ export function EntryChoice({ onCheckIn, onCheckOut }: EntryChoiceProps) {
           <div className="space-y-4">
             <Button
               onClick={onCheckIn}
-              className="w-full bg-green-600 hover:bg-green-700 text-white text-xl py-6 px-8 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200"
+              className="w-full bg-green-600 hover:bg-green-700 text-white text-xl py-6 px-8 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center justify-center gap-3"
             >
-              <span className="inline-block scale-x-[-1]">🚶‍♂️</span> Ik kom net binnen
+              <span className="inline-block scale-x-[-1] text-2xl">🚶‍♂️</span>
+              <span>Ik kom net binnen</span>
             </Button>
             
             <Button
               onClick={onCheckOut}
-              className="w-full bg-orange-600 hover:bg-orange-700 text-white text-xl py-6 px-8 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200"
+              className="w-full bg-orange-600 hover:bg-orange-700 text-white text-xl py-6 px-8 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center justify-center gap-3"
             >
-              🚶‍♂️ Ik ben net klaar
+              <span className="text-2xl">🚶‍♂️</span>
+              <span>Ik ben net klaar</span>
             </Button>
           </div>
         </div>
