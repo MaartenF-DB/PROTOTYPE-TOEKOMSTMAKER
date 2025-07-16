@@ -134,6 +134,12 @@ The application follows a modern full-stack architecture with the following comp
   - Multiple choice and Likert scale questions now show all options after selection
   - Ranking questions maintain drag-and-drop interface without white answer boxes
   - Consistent behavior across age, companion, and feeling/confidence sections
+  - Ranking question completely hides answer descriptions for cleaner interface
+
+- **Updated Topic Icons**: Changed RIJKDOM icon from money (💰) to sharing/handshake (🤝)
+  - Better represents the concept of sharing over wealth accumulation
+  - Consistent with "Delen is fijner dan hebben!" message
+  - Icon appears throughout ranking, results, and dashboard components
 
 - **Improved Action Choice Display**: Consistent white box styling for all answer types
   - Maintains design consistency across question types
