@@ -199,7 +199,7 @@ export default function Home() {
                   <img 
                     src={topicImage} 
                     alt={answers.mostImportantTopic} 
-                    className="w-1/2 h-auto max-h-48 object-contain rounded-[20px] bg-white bg-opacity-20 p-4"
+                    className="w-3/4 h-auto max-h-56 object-contain rounded-[20px] bg-white bg-opacity-20 p-4"
                   />
                 </div>
               )}
@@ -231,7 +231,7 @@ export default function Home() {
                   <img 
                     src={topicImage} 
                     alt={answers.mostImportantTopic} 
-                    className="w-1/2 h-auto max-h-48 object-contain rounded-[20px] bg-white bg-opacity-20 p-4"
+                    className="w-3/4 h-auto max-h-56 object-contain rounded-[20px] bg-white bg-opacity-20 p-4"
                   />
                 </div>
               )}
@@ -299,7 +299,7 @@ export default function Home() {
                     <img 
                       src={topicImage} 
                       alt={answers.mostImportantTopic} 
-                      className="w-1/2 h-auto max-h-48 mx-auto object-contain rounded-[20px] bg-white bg-opacity-20 p-4"
+                      className="w-full max-w-lg h-auto max-h-80 mx-auto object-contain rounded-[20px] bg-white bg-opacity-20 p-6"
                     />
                   </div>
                 )}
@@ -343,7 +343,7 @@ export default function Home() {
                     <img 
                       src={topicImage} 
                       alt={answers.mostImportantTopic} 
-                      className="w-1/2 h-auto max-h-48 mx-auto object-contain rounded-[20px] bg-white bg-opacity-20 p-4"
+                      className="w-full max-w-lg h-auto max-h-80 mx-auto object-contain rounded-[20px] bg-white bg-opacity-20 p-6"
                     />
                   </div>
                 )}
@@ -424,7 +424,7 @@ export default function Home() {
                     <img 
                       src={topicImage} 
                       alt={answers.mostImportantTopic} 
-                      className="w-1/2 h-auto max-h-48 mx-auto object-contain rounded-[20px] bg-white bg-opacity-20 p-4"
+                      className="w-full max-w-lg h-auto max-h-80 mx-auto object-contain rounded-[20px] bg-white bg-opacity-20 p-6"
                     />
                   </div>
                 )}

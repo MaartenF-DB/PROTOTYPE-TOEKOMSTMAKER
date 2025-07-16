@@ -14,8 +14,8 @@ interface LikertScaleProps {
 
 export function LikertScale({ options, value, onValueChange }: LikertScaleProps) {
   return (
-    <div className="flex flex-col space-y-6">
-      <div className="grid grid-cols-5 gap-4">
+    <div className="flex flex-col space-y-6 w-full max-w-4xl mx-auto">
+      <div className="flex justify-between items-center px-8">
         {options.map((option) => (
           <div key={option.value} className="flex flex-col items-center space-y-2">
             <div className="text-4xl">{option.emoji}</div>
@@ -41,7 +41,7 @@ export function LikertScale({ options, value, onValueChange }: LikertScaleProps)
       </div>
       
       {/* X-axis labels */}
-      <div className="flex justify-between items-center px-4">
+      <div className="flex justify-between items-center px-8">
         <span className="text-sm font-medium">{options[0]?.label}</span>
         <span className="text-sm font-medium">{options[options.length - 1]?.label}</span>
       </div>
