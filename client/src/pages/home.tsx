@@ -226,7 +226,8 @@ export default function Home() {
               <div className="grid grid-cols-3 gap-4">
                 {ACTION_OPTIONS.map((option) => (
                   <div key={option.value} className="flex flex-col items-center space-y-2">
-                    <div className="text-4xl">{option.icon}</div>
+                    <div className="text-6xl mb-2">{option.icon}</div>
+                    <p className="text-lg font-semibold text-center mb-2">{option.label}</p>
                     <label className="flex items-center cursor-pointer">
                       <input
                         type="radio"
