@@ -5,8 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { exportToCSV } from '@/lib/csvExport';
 import { SurveyResponse } from '@shared/schema';
 import { TOPICS, ACTION_OPTIONS } from '@/types/survey';
-import { Download, Users, TrendingUp, BarChart3, PieChart, Calendar } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart as RechartsPieChart, Cell, LineChart, Line, Pie } from 'recharts';
+import { Download, Users, TrendingUp, BarChart3 } from 'lucide-react';
 
 export default function Dashboard() {
   const { data: responses = [], isLoading } = useQuery<SurveyResponse[]>({
@@ -25,55 +24,42 @@ export default function Dashboard() {
       acc[r.actionChoice] = (acc[r.actionChoice] || 0) + 1;
       return acc;
     }, {} as Record<string, number>),
-    beforeAfterStats: responses.reduce((acc, r) => {
-      if (r.feelingBefore !== null && r.feelingAfter !== null) {
-        acc.feelingChange.push({
-          topic: r.mostImportantTopic,
-          before: r.feelingBefore,
-          after: r.feelingAfter,
-          change: r.feelingAfter - r.feelingBefore
-        });
-      }
-      if (r.confidenceBefore !== null && r.confidenceAfter !== null) {
-        acc.confidenceChange.push({
-          topic: r.mostImportantTopic,
-          before: r.confidenceBefore,
-          after: r.confidenceAfter,
-          change: r.confidenceAfter - r.confidenceBefore
-        });
-      }
-      return acc;
-    }, {
-      feelingChange: [] as Array<{topic: string, before: number, after: number, change: number}>,
-      confidenceChange: [] as Array<{topic: string, before: number, after: number, change: number}>
-    })
+    feelingChanges: responses.filter(r => r.feelingBefore !== null && r.feelingAfter !== null).map(r => ({
+      topic: r.mostImportantTopic,
+      before: r.feelingBefore!,
+      after: r.feelingAfter!,
+      change: r.feelingAfter! - r.feelingBefore!
+    })),
+    confidenceChanges: responses.filter(r => r.confidenceBefore !== null && r.confidenceAfter !== null).map(r => ({
+      topic: r.mostImportantTopic,
+      before: r.confidenceBefore!,
+      after: r.confidenceAfter!,
+      change: r.confidenceAfter! - r.confidenceBefore!
+    }))
   };
 
-  // Data for charts
-  const topicChartData = Object.entries(stats.topTopics).map(([topic, count]) => ({
-    topic,
-    count,
-    color: TOPICS[topic as keyof typeof TOPICS]?.hexColor || '#6366f1'
-  }));
+  const mostPopularTopic = Object.entries(stats.topTopics).sort(([,a], [,b]) => b - a)[0]?.[0];
+  const topicData = mostPopularTopic ? TOPICS[mostPopularTopic as keyof typeof TOPICS] : null;
 
-  const actionChartData = Object.entries(stats.topActions).map(([action, count]) => ({
-    action: ACTION_OPTIONS.find(opt => opt.value === action)?.label || action,
-    count
-  }));
-
-  const feelingComparisonData = stats.beforeAfterStats.feelingChange.map(item => ({
-    topic: item.topic,
-    voor: item.before,
-    na: item.after,
-    verandering: item.change
-  }));
-
-  const confidenceComparisonData = stats.beforeAfterStats.confidenceChange.map(item => ({
-    topic: item.topic,
-    voor: item.before,
-    na: item.after,
-    verandering: item.change
-  }));
+  const handleExportAll = () => {
+    if (responses.length === 0) return;
+    
+    const csvData = responses.map(response => ({
+      naam: response.name,
+      leeftijd: response.age,
+      bezoek_met: response.visitingWith,
+      belangrijkste_onderwerp: response.mostImportantTopic,
+      gevoel_voor: response.feelingBefore,
+      vertrouwen_voor: response.confidenceBefore,
+      gevoel_na: response.feelingAfter,
+      actie_keuze: response.actionChoice,
+      vertrouwen_na: response.confidenceAfter,
+      resultaat: response.result,
+      datum: new Date(response.createdAt).toLocaleDateString('nl-NL')
+    }));
+    
+    exportToCSV({ name: 'alle_responses', ...csvData[0] }, 'alle_survey_responses.csv');
+  };
 
   const exportAllData = () => {
     if (responses.length === 0) return;
@@ -148,7 +134,7 @@ export default function Dashboard() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Gemiddelde Leeftijd</CardTitle>
-              <Calendar className="h-4 w-4 text-muted-foreground" />
+              <BarChart3 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats.averageAge} jaar</div>
@@ -162,8 +148,8 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {stats.beforeAfterStats.feelingChange.length > 0 ? 
-                  `${Math.round(stats.beforeAfterStats.feelingChange.reduce((acc, item) => acc + item.change, 0) / stats.beforeAfterStats.feelingChange.length * 100) / 100}` : 
+                {stats.feelingChanges.length > 0 ? 
+                  `${Math.round(stats.feelingChanges.reduce((acc, item) => acc + item.change, 0) / stats.feelingChanges.length * 100) / 100}` : 
                   '0'
                 }
               </div>
@@ -178,8 +164,8 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {stats.beforeAfterStats.confidenceChange.length > 0 ? 
-                  `${Math.round(stats.beforeAfterStats.confidenceChange.reduce((acc, item) => acc + item.change, 0) / stats.beforeAfterStats.confidenceChange.length * 100) / 100}` : 
+                {stats.confidenceChanges.length > 0 ? 
+                  `${Math.round(stats.confidenceChanges.reduce((acc, item) => acc + item.change, 0) / stats.confidenceChanges.length * 100) / 100}` : 
                   '0'
                 }
               </div>
@@ -188,57 +174,62 @@ export default function Dashboard() {
           </Card>
         </div>
 
-        {/* Chart Section */}
+        {/* Topic Distribution */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          {/* Most Important Topics Chart */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <PieChart className="h-5 w-5" />
-                Belangrijkste Onderwerpen
-              </CardTitle>
+              <CardTitle>Meest Populaire Onderwerpen</CardTitle>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <RechartsPieChart>
-                  <Pie
-                    data={topicChartData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={({ topic, percent }) => `${topic} (${(percent * 100).toFixed(0)}%)`}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="count"
-                  >
-                    {topicChartData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </RechartsPieChart>
-              </ResponsiveContainer>
+              <div className="space-y-4">
+                {Object.entries(stats.topTopics)
+                  .sort(([,a], [,b]) => b - a)
+                  .map(([topic, count]) => {
+                    const topicData = TOPICS[topic as keyof typeof TOPICS];
+                    return (
+                      <div key={topic} className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
+                        <div 
+                          className="w-12 h-12 rounded-full flex items-center justify-center text-2xl"
+                          style={{ backgroundColor: topicData?.hexColor || '#6B7280' }}
+                        >
+                          {topicData?.icon || '❓'}
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-medium">{topic}</div>
+                          <div className="text-sm text-gray-500">{count} keer gekozen</div>
+                        </div>
+                        <Badge variant="secondary">{count}</Badge>
+                      </div>
+                    );
+                  })}
+              </div>
             </CardContent>
           </Card>
 
-          {/* Action Choices Chart */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <BarChart3 className="h-5 w-5" />
-                Actie Keuzes
-              </CardTitle>
+              <CardTitle>Actie Keuzes</CardTitle>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={actionChartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="action" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="count" fill="#6366f1" />
-                </BarChart>
-              </ResponsiveContainer>
+              <div className="space-y-4">
+                {Object.entries(stats.topActions)
+                  .sort(([,a], [,b]) => b - a)
+                  .map(([action, count]) => {
+                    const actionData = ACTION_OPTIONS.find(opt => opt.value === action);
+                    return (
+                      <div key={action} className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
+                        <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-2xl">
+                          {actionData?.icon || '❓'}
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-medium">{actionData?.label || action}</div>
+                          <div className="text-sm text-gray-500">{count} keer gekozen</div>
+                        </div>
+                        <Badge variant="secondary">{count}</Badge>
+                      </div>
+                    );
+                  })}
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -247,43 +238,69 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="h-5 w-5" />
-                Gevoel: Voor vs Na Tentoonstelling
-              </CardTitle>
+              <CardTitle>Gevoel Verandering</CardTitle>
+              <CardDescription>Voor vs Na tentoonstelling</CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={feelingComparisonData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="topic" />
-                  <YAxis />
-                  <Tooltip />
-                  <Line type="monotone" dataKey="voor" stroke="#ef4444" strokeWidth={2} name="Voor" />
-                  <Line type="monotone" dataKey="na" stroke="#22c55e" strokeWidth={2} name="Na" />
-                </LineChart>
-              </ResponsiveContainer>
+              <div className="space-y-4">
+                {stats.feelingChanges.map((change, index) => {
+                  const topicData = TOPICS[change.topic as keyof typeof TOPICS];
+                  const changeColor = change.change >= 0 ? 'text-green-600' : 'text-red-600';
+                  return (
+                    <div key={index} className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
+                      <div 
+                        className="w-10 h-10 rounded-full flex items-center justify-center text-lg"
+                        style={{ backgroundColor: topicData?.hexColor || '#6B7280' }}
+                      >
+                        {topicData?.icon || '❓'}
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-medium">{change.topic}</div>
+                        <div className="text-sm text-gray-500">
+                          {change.before} → {change.after}
+                        </div>
+                      </div>
+                      <div className={`font-bold ${changeColor}`}>
+                        {change.change >= 0 ? '+' : ''}{change.change}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <BarChart3 className="h-5 w-5" />
-                Vertrouwen: Voor vs Na Tentoonstelling
-              </CardTitle>
+              <CardTitle>Vertrouwen Verandering</CardTitle>
+              <CardDescription>Voor vs Na tentoonstelling</CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={confidenceComparisonData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="topic" />
-                  <YAxis />
-                  <Tooltip />
-                  <Line type="monotone" dataKey="voor" stroke="#ef4444" strokeWidth={2} name="Voor" />
-                  <Line type="monotone" dataKey="na" stroke="#22c55e" strokeWidth={2} name="Na" />
-                </LineChart>
-              </ResponsiveContainer>
+              <div className="space-y-4">
+                {stats.confidenceChanges.map((change, index) => {
+                  const topicData = TOPICS[change.topic as keyof typeof TOPICS];
+                  const changeColor = change.change >= 0 ? 'text-green-600' : 'text-red-600';
+                  return (
+                    <div key={index} className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
+                      <div 
+                        className="w-10 h-10 rounded-full flex items-center justify-center text-lg"
+                        style={{ backgroundColor: topicData?.hexColor || '#6B7280' }}
+                      >
+                        {topicData?.icon || '❓'}
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-medium">{change.topic}</div>
+                        <div className="text-sm text-gray-500">
+                          {change.before} → {change.after}
+                        </div>
+                      </div>
+                      <div className={`font-bold ${changeColor}`}>
+                        {change.change >= 0 ? '+' : ''}{change.change}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </CardContent>
           </Card>
         </div>

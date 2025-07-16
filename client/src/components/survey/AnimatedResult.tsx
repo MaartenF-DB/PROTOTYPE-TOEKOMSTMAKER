@@ -29,27 +29,28 @@ export function AnimatedResult({ finalResult, onComplete }: AnimatedResultProps)
     let interval: NodeJS.Timeout;
     let timeout: NodeJS.Timeout;
 
-    if (isAnimating) {
-      interval = setInterval(() => {
-        const shuffledIcons = shuffleArray(icons);
-        const shuffledColors = shuffleArray(colors);
-        setCurrentIcon(shuffledIcons[0]);
-        setCurrentColor(shuffledColors[0]);
-      }, 100);
+    console.log('AnimatedResult started');
 
-      // Stop animation after 10 seconds and immediately go to final results
-      timeout = setTimeout(() => {
-        setIsAnimating(false);
-        clearInterval(interval);
-        onComplete();
-      }, 10000);
-    }
+    interval = setInterval(() => {
+      const shuffledIcons = shuffleArray(icons);
+      const shuffledColors = shuffleArray(colors);
+      setCurrentIcon(shuffledIcons[0]);
+      setCurrentColor(shuffledColors[0]);
+    }, 100);
+
+    // Stop animation after 10 seconds and immediately go to final results
+    timeout = setTimeout(() => {
+      console.log('AnimatedResult completing after 10 seconds');
+      setIsAnimating(false);
+      clearInterval(interval);
+      onComplete();
+    }, 10000);
 
     return () => {
       clearInterval(interval);
       clearTimeout(timeout);
     };
-  }, [isAnimating, finalResult, icons, colors, onComplete]);
+  }, [finalResult, icons, colors, onComplete]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-purple-600 to-indigo-600 text-white">

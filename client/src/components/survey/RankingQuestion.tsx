@@ -84,7 +84,7 @@ export function RankingQuestion({ ranking, onRankingChange }: RankingQuestionPro
               onDragOver={handleDragOver}
               onDrop={(e) => handleDrop(e, topic)}
               onDragEnd={handleDragEnd}
-
+              onClick={() => setSelectedTopic(selectedTopic === topic ? null : topic)}
               className={`p-4 rounded-xl cursor-move shadow-lg transform hover:scale-105 transition-all text-white border-2 ${
                 draggedItem === topic 
                   ? 'opacity-50 border-yellow-400' 
@@ -95,6 +95,11 @@ export function RankingQuestion({ ranking, onRankingChange }: RankingQuestionPro
               <div className="text-5xl mb-2 text-center">{topicData?.icon || '❓'}</div>
               <h3 className="text-sm font-bold text-center">{topic}</h3>
               
+              {selectedTopic === topic && (
+                <div className="mt-3 p-2 bg-white bg-opacity-20 rounded text-xs text-white text-center">
+                  {topicData?.description}
+                </div>
+              )}
 
             </div>
           );

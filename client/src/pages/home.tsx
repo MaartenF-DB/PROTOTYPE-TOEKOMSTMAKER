@@ -84,7 +84,11 @@ export default function Home() {
       case 'checkin-intro':
         return (
           <CheckInIntro 
-            onStart={() => setCurrentSection('question-0')}
+            onStart={() => {
+              // Clear name to force re-entry
+              updateAnswers({ name: '' });
+              setCurrentSection('question-0');
+            }}
           />
         );
 
