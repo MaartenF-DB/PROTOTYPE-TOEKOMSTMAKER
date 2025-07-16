@@ -6,9 +6,36 @@ interface RankingQuestionProps {
   onRankingChange: (ranking: string[]) => void;
 }
 
+// Shuffle function to randomize topic order
+const shuffleArray = (array: string[]) => {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
+
 export function RankingQuestion({ ranking, onRankingChange }: RankingQuestionProps) {
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
+  const [shuffledTopics, setShuffledTopics] = useState<string[]>([]);
+
+  // Initialize shuffled topics once
+  useEffect(() => {
+    if (shuffledTopics.length === 0) {
+      const topicKeys = Object.keys(TOPICS);
+      const shuffled = shuffleArray(topicKeys);
+      setShuffledTopics(shuffled);
+      // Initialize ranking with shuffled order if not already set
+      if (ranking.length === 0) {
+        onRankingChange(shuffled);
+      }
+    }
+  }, [ranking, onRankingChange, shuffledTopics.length]);
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
+
+  // Use the existing ranking or shuffled topics
+  const displayRanking = ranking.length > 0 ? ranking : shuffledTopics;
 
   const handleDragStart = (e: React.DragEvent, topic: string) => {
     setDraggedItem(topic);
@@ -25,7 +52,7 @@ export function RankingQuestion({ ranking, onRankingChange }: RankingQuestionPro
     
     if (!draggedItem || draggedItem === targetTopic) return;
 
-    const newRanking = [...ranking];
+    const newRanking = [...displayRanking];
     const draggedIndex = newRanking.indexOf(draggedItem);
     const targetIndex = newRanking.indexOf(targetTopic);
 
@@ -47,7 +74,7 @@ export function RankingQuestion({ ranking, onRankingChange }: RankingQuestionPro
       <p className="text-sm mb-6 opacity-75">Klik op de onderwerpen voor meer info.</p>
       
       <div className="grid grid-cols-6 gap-4 mb-6 p-4 bg-white bg-opacity-10 rounded-xl">
-        {ranking.map((topic, index) => {
+        {displayRanking.map((topic, index) => {
           const topicData = TOPICS[topic as keyof typeof TOPICS];
           return (
             <div

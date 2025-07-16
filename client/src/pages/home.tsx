@@ -69,6 +69,18 @@ export default function Home() {
 
   const renderCurrentSection = () => {
     switch (currentSection) {
+      case 'name-verification':
+        return (
+          <NameVerification
+            originalName={answers.name}
+            nameVerification={nameVerification}
+            onNameVerificationChange={setNameVerification}
+            onContinue={() => {
+              updateAnswers({ name: nameVerification });
+              setCurrentSection('checkout-intro');
+            }}
+          />
+        );
       case 'checkin-intro':
         return (
           <CheckInIntro 
@@ -335,33 +347,8 @@ export default function Home() {
       case 'checkin-closing':
         return (
           <CheckInClosing 
-            onComplete={() => setCurrentSection('name-verification')}
+            onComplete={() => setCurrentSection('checkout-intro')}
           />
-        );
-
-      case 'name-verification':
-        return (
-          <Question
-            questionNumber={0}
-            question="Kun je je naam nog een keer invullen?"
-            bgGradient="from-blue-500 to-teal-500"
-            buttonColor="bg-blue-600 hover:bg-blue-700"
-            onNext={() => setCurrentSection('checkout-intro')}
-            showPrevious={false}
-            isValid={nameVerification.length > 0}
-          >
-            <div className="space-y-4">
-              <Input
-                value={nameVerification}
-                onChange={(e) => setNameVerification(e.target.value)}
-                placeholder="Typ hier je naam..."
-                className="w-full p-4 text-2xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-blue-300 outline-none"
-              />
-              <p className="text-sm text-white opacity-80">
-                Als er meer mensen zijn met dezelfde naam, typ dan je naam met een nummer (bijvoorbeeld: {answers.name} 1)
-              </p>
-            </div>
-          </Question>
         );
 
       case 'checkout-intro':

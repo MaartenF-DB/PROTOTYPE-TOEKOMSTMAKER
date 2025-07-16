@@ -102,4 +102,36 @@ The application follows a modern full-stack architecture with the following comp
 - **Validation**: Zod schemas ensure data integrity
 - **Migrations**: Drizzle handles database schema changes
 
+## Recent Changes
+
+### July 16, 2025 - Major Survey Experience Improvements
+- **Enhanced Dashboard**: Added comprehensive charts and analytics with Recharts integration
+  - Interactive pie charts for topic distribution
+  - Line charts showing before/after feeling and confidence comparisons
+  - Improved KPI cards with calculated metrics
+  - Better visualization of visitor response patterns
+
+- **Randomized Topic Ordering**: Implemented random topic shuffling in ranking questions to prevent order bias
+  - Topics are shuffled once per session using Fisher-Yates algorithm
+  - Maintains user selections while preventing position-based preference bias
+
+- **Streamlined Answer Display**: Updated question components to show minimal answer display
+  - LikertScale: Shows only selected option in white box when answered
+  - MultipleChoice: Shows only selected option in white box when answered
+  - Removes explanatory text above answers for cleaner UI
+
+- **Name Verification System**: Added verification for returning visitors
+  - Detects duplicate names in existing responses
+  - Prompts for name verification with number suffix option
+  - Seamless integration with survey flow
+
+- **Animated Result Reveal**: Created engaging result presentation
+  - 3-second shuffling animation of icons and colors
+  - Smooth transition to final personality result
+  - Enhanced visual feedback with topic-specific styling
+
+- **Improved Action Choice Display**: Consistent white box styling for all answer types
+  - Maintains design consistency across question types
+  - Better visual hierarchy and readability
+
 The application is designed to be deployment-ready for platforms like Replit, with proper environment variable handling and production optimizations.

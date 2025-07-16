@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { TOPICS } from '@/types/survey';
 import { exportToCSV } from '@/lib/csvExport';
 import { SurveyAnswers } from '@/types/survey';
+import { AnimatedResult } from './AnimatedResult';
 
 interface ResultsProps {
   answers: SurveyAnswers;
@@ -12,23 +13,28 @@ interface ResultsProps {
 
 export function Results({ answers, onRestart }: ResultsProps) {
   const { speak } = useSpeech();
+  const [showAnimatedResult, setShowAnimatedResult] = useState(true);
   const [animationComplete, setAnimationComplete] = useState(false);
 
   const topicData = TOPICS[answers.mostImportantTopic as keyof typeof TOPICS];
 
   useEffect(() => {
-    speak(answers.result);
-    
     // Automatically export to CSV
     exportToCSV(answers);
-    
-    // Start color animation
-    const timer = setTimeout(() => {
-      setAnimationComplete(true);
-    }, 3000);
+  }, [answers]);
 
-    return () => clearTimeout(timer);
-  }, [speak, answers.result]);
+  // Show animated result first
+  if (showAnimatedResult) {
+    return (
+      <AnimatedResult 
+        finalResult={answers.mostImportantTopic}
+        onComplete={() => {
+          setShowAnimatedResult(false);
+          speak(answers.result);
+        }}
+      />
+    );
+  }
 
   const handleStop = () => {
     // Optionally perform any cleanup here

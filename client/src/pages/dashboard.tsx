@@ -2,11 +2,11 @@ import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import { exportToCSV } from '@/lib/csvExport';
 import { SurveyResponse } from '@shared/schema';
 import { TOPICS, ACTION_OPTIONS } from '@/types/survey';
 import { Download, Users, TrendingUp, BarChart3, PieChart, Calendar } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart as RechartsPieChart, Cell, LineChart, Line, Pie } from 'recharts';
 
 export default function Dashboard() {
   const { data: responses = [], isLoading } = useQuery<SurveyResponse[]>({
@@ -25,11 +25,6 @@ export default function Dashboard() {
       acc[r.actionChoice] = (acc[r.actionChoice] || 0) + 1;
       return acc;
     }, {} as Record<string, number>),
-    visitingWithStats: responses.reduce((acc, r) => {
-      acc[r.visitingWith] = (acc[r.visitingWith] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>),
-    // Check-in vs Check-out comparison
     beforeAfterStats: responses.reduce((acc, r) => {
       if (r.feelingBefore !== null && r.feelingAfter !== null) {
         acc.feelingChange.push({
@@ -53,6 +48,32 @@ export default function Dashboard() {
       confidenceChange: [] as Array<{topic: string, before: number, after: number, change: number}>
     })
   };
+
+  // Data for charts
+  const topicChartData = Object.entries(stats.topTopics).map(([topic, count]) => ({
+    topic,
+    count,
+    color: TOPICS[topic as keyof typeof TOPICS]?.hexColor || '#6366f1'
+  }));
+
+  const actionChartData = Object.entries(stats.topActions).map(([action, count]) => ({
+    action: ACTION_OPTIONS.find(opt => opt.value === action)?.label || action,
+    count
+  }));
+
+  const feelingComparisonData = stats.beforeAfterStats.feelingChange.map(item => ({
+    topic: item.topic,
+    voor: item.before,
+    na: item.after,
+    verandering: item.change
+  }));
+
+  const confidenceComparisonData = stats.beforeAfterStats.confidenceChange.map(item => ({
+    topic: item.topic,
+    voor: item.before,
+    na: item.after,
+    verandering: item.change
+  }));
 
   const exportAllData = () => {
     if (responses.length === 0) return;
@@ -123,38 +144,146 @@ export default function Dashboard() {
               <div className="text-2xl font-bold">{stats.totalResponses}</div>
             </CardContent>
           </Card>
-
+          
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Gemiddelde Leeftijd</CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+              <Calendar className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats.averageAge} jaar</div>
             </CardContent>
           </Card>
-
+          
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Populairste Onderwerp</CardTitle>
+              <CardTitle className="text-sm font-medium">Gevoel Verbetering</CardTitle>
+              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {stats.beforeAfterStats.feelingChange.length > 0 ? 
+                  `${Math.round(stats.beforeAfterStats.feelingChange.reduce((acc, item) => acc + item.change, 0) / stats.beforeAfterStats.feelingChange.length * 100) / 100}` : 
+                  '0'
+                }
+              </div>
+              <p className="text-xs text-muted-foreground">gemiddeld verschil</p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Vertrouwen Verbetering</CardTitle>
               <BarChart3 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {Object.entries(stats.topTopics).sort(([,a], [,b]) => b - a)[0]?.[0] || 'Geen data'}
+                {stats.beforeAfterStats.confidenceChange.length > 0 ? 
+                  `${Math.round(stats.beforeAfterStats.confidenceChange.reduce((acc, item) => acc + item.change, 0) / stats.beforeAfterStats.confidenceChange.length * 100) / 100}` : 
+                  '0'
+                }
               </div>
+              <p className="text-xs text-muted-foreground">gemiddeld verschil</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Chart Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          {/* Most Important Topics Chart */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <PieChart className="h-5 w-5" />
+                Belangrijkste Onderwerpen
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <RechartsPieChart>
+                  <Pie
+                    data={topicChartData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={({ topic, percent }) => `${topic} (${(percent * 100).toFixed(0)}%)`}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="count"
+                  >
+                    {topicChartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </RechartsPieChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+
+          {/* Action Choices Chart */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <BarChart3 className="h-5 w-5" />
+                Actie Keuzes
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={actionChartData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="action" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="count" fill="#6366f1" />
+                </BarChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Before vs After Comparison */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TrendingUp className="h-5 w-5" />
+                Gevoel: Voor vs Na Tentoonstelling
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={feelingComparisonData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="topic" />
+                  <YAxis />
+                  <Tooltip />
+                  <Line type="monotone" dataKey="voor" stroke="#ef4444" strokeWidth={2} name="Voor" />
+                  <Line type="monotone" dataKey="na" stroke="#22c55e" strokeWidth={2} name="Na" />
+                </LineChart>
+              </ResponsiveContainer>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Meest Gekozen Actie</CardTitle>
-              <PieChart className="h-4 w-4 text-muted-foreground" />
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <BarChart3 className="h-5 w-5" />
+                Vertrouwen: Voor vs Na Tentoonstelling
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
-                {Object.entries(stats.topActions).sort(([,a], [,b]) => b - a)[0]?.[0] || 'Geen data'}
-              </div>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={confidenceComparisonData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="topic" />
+                  <YAxis />
+                  <Tooltip />
+                  <Line type="monotone" dataKey="voor" stroke="#ef4444" strokeWidth={2} name="Voor" />
+                  <Line type="monotone" dataKey="na" stroke="#22c55e" strokeWidth={2} name="Na" />
+                </LineChart>
+              </ResponsiveContainer>
             </CardContent>
           </Card>
         </div>
@@ -171,178 +300,6 @@ export default function Dashboard() {
           </Button>
         </div>
 
-        {/* Topic Distribution */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          <Card>
-            <CardHeader>
-              <CardTitle>Onderwerp Verdeling</CardTitle>
-              <CardDescription>Hoe belangrijk vinden bezoekers elk onderwerp</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {Object.entries(stats.topTopics)
-                  .sort(([,a], [,b]) => b - a)
-                  .map(([topic, count]) => (
-                    <div key={topic} className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <span className="text-xl">{TOPICS[topic as keyof typeof TOPICS]?.icon || '❓'}</span>
-                        <span className="font-medium">{topic}</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Badge variant="secondary">{count}</Badge>
-                        <div className="text-sm text-gray-500">
-                          {Math.round((count / responses.length) * 100)}%
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Actie Keuzes</CardTitle>
-              <CardDescription>Welke actie bezoekers willen ondernemen</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {Object.entries(stats.topActions)
-                  .sort(([,a], [,b]) => b - a)
-                  .map(([action, count]) => (
-                    <div key={action} className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <span className="text-xl">{ACTION_OPTIONS.find(opt => opt.value === action)?.icon || '❓'}</span>
-                        <span className="font-medium">{ACTION_OPTIONS.find(opt => opt.value === action)?.label || action}</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Badge variant="secondary">{count}</Badge>
-                        <div className="text-sm text-gray-500">
-                          {Math.round((count / responses.length) * 100)}%
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Check-in vs Check-out Comparison */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <TrendingUp className="h-5 w-5 text-blue-600" />
-                <span>Gevoel Verandering</span>
-              </CardTitle>
-              <CardDescription>Check-in vs Check-out gevoelens per onderwerp</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {stats.beforeAfterStats.feelingChange.length > 0 ? (
-                  <>
-                    <div className="grid grid-cols-3 gap-2 text-sm font-medium text-gray-600 border-b pb-2">
-                      <div>Onderwerp</div>
-                      <div>Voor → Na</div>
-                      <div>Verandering</div>
-                    </div>
-                    {stats.beforeAfterStats.feelingChange.map((change, index) => (
-                      <div key={index} className="grid grid-cols-3 gap-2 text-sm">
-                        <div className="flex items-center space-x-1">
-                          <span className="text-lg">{TOPICS[change.topic as keyof typeof TOPICS]?.icon || '❓'}</span>
-                          <span className="font-medium text-xs">{change.topic}</span>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <Badge variant="outline" className="text-xs">{change.before}</Badge>
-                          <span>→</span>
-                          <Badge variant="outline" className="text-xs">{change.after}</Badge>
-                        </div>
-                        <div className="flex items-center">
-                          <Badge 
-                            variant={change.change > 0 ? "default" : change.change < 0 ? "destructive" : "secondary"}
-                            className="text-xs"
-                          >
-                            {change.change > 0 ? '+' : ''}{change.change}
-                          </Badge>
-                        </div>
-                      </div>
-                    ))}
-                    <div className="pt-2 border-t">
-                      <div className="text-sm text-gray-600">
-                        Gemiddelde verandering: {stats.beforeAfterStats.feelingChange.length > 0 ? 
-                          (stats.beforeAfterStats.feelingChange.reduce((acc, c) => acc + c.change, 0) / stats.beforeAfterStats.feelingChange.length).toFixed(1) : 
-                          '0'
-                        }
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <div className="text-center text-gray-500 py-8">
-                    Nog geen complete voor/na data beschikbaar
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <BarChart3 className="h-5 w-5 text-green-600" />
-                <span>Vertrouwen Verandering</span>
-              </CardTitle>
-              <CardDescription>Check-in vs Check-out vertrouwen per onderwerp</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {stats.beforeAfterStats.confidenceChange.length > 0 ? (
-                  <>
-                    <div className="grid grid-cols-3 gap-2 text-sm font-medium text-gray-600 border-b pb-2">
-                      <div>Onderwerp</div>
-                      <div>Voor → Na</div>
-                      <div>Verandering</div>
-                    </div>
-                    {stats.beforeAfterStats.confidenceChange.map((change, index) => (
-                      <div key={index} className="grid grid-cols-3 gap-2 text-sm">
-                        <div className="flex items-center space-x-1">
-                          <span className="text-lg">{TOPICS[change.topic as keyof typeof TOPICS]?.icon || '❓'}</span>
-                          <span className="font-medium text-xs">{change.topic}</span>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <Badge variant="outline" className="text-xs">{change.before}</Badge>
-                          <span>→</span>
-                          <Badge variant="outline" className="text-xs">{change.after}</Badge>
-                        </div>
-                        <div className="flex items-center">
-                          <Badge 
-                            variant={change.change > 0 ? "default" : change.change < 0 ? "destructive" : "secondary"}
-                            className="text-xs"
-                          >
-                            {change.change > 0 ? '+' : ''}{change.change}
-                          </Badge>
-                        </div>
-                      </div>
-                    ))}
-                    <div className="pt-2 border-t">
-                      <div className="text-sm text-gray-600">
-                        Gemiddelde verandering: {stats.beforeAfterStats.confidenceChange.length > 0 ? 
-                          (stats.beforeAfterStats.confidenceChange.reduce((acc, c) => acc + c.change, 0) / stats.beforeAfterStats.confidenceChange.length).toFixed(1) : 
-                          '0'
-                        }
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <div className="text-center text-gray-500 py-8">
-                    Nog geen complete voor/na data beschikbaar
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
         {/* Recent Responses */}
         <Card>
           <CardHeader>
@@ -352,26 +309,20 @@ export default function Dashboard() {
           <CardContent>
             <div className="space-y-4">
               {responses.slice(0, 10).map((response, index) => (
-                <div key={response.id} className="border rounded-lg p-4 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <Badge variant="outline">{index + 1}</Badge>
-                      <div className="font-medium">{response.name}</div>
-                      <div className="text-sm text-gray-500">{response.age} jaar</div>
+                <div key={index} className="p-4 border rounded-lg">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <span className="font-medium">{response.name}</span>
+                      <span className="text-sm text-gray-500 ml-2">{response.age} jaar</span>
                     </div>
-                    <div className="flex items-center space-x-2 text-sm text-gray-500">
-                      <Calendar className="h-4 w-4" />
-                      {new Date(response.createdAt).toLocaleDateString('nl-NL')} om {new Date(response.createdAt).toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })}
+                    <div className="text-sm text-gray-500">
+                      {new Date(response.createdAt).toLocaleDateString('nl-NL')}
                     </div>
                   </div>
                   
-                  <div className="flex flex-wrap gap-2">
-                    <Badge style={{ backgroundColor: TOPICS[response.mostImportantTopic as keyof typeof TOPICS]?.hexColor || '#6366f1' }}>
-                      {TOPICS[response.mostImportantTopic as keyof typeof TOPICS]?.icon || '❓'} {response.mostImportantTopic}
-                    </Badge>
-                    <Badge variant="outline">
-                      {ACTION_OPTIONS.find(opt => opt.value === response.actionChoice)?.icon || '❓'} {ACTION_OPTIONS.find(opt => opt.value === response.actionChoice)?.label || response.actionChoice}
-                    </Badge>
+                  <div className="flex items-center space-x-2 mb-2">
+                    <span className="text-2xl">{TOPICS[response.mostImportantTopic as keyof typeof TOPICS]?.icon || '❓'}</span>
+                    <span className="font-medium">{response.mostImportantTopic}</span>
                   </div>
                   
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
