@@ -16,6 +16,7 @@ interface QuestionProps {
   bgGradient?: string;
   buttonColor?: string;
   isValid?: boolean;
+  style?: React.CSSProperties;
 }
 
 export function Question({
@@ -30,7 +31,8 @@ export function Question({
   showComplete = false,
   bgGradient = "from-blue-500 to-teal-500",
   buttonColor = "bg-blue-600 hover:bg-blue-700",
-  isValid = true
+  isValid = true,
+  style
 }: QuestionProps) {
   const { speak } = useSpeech();
 
@@ -55,7 +57,10 @@ export function Question({
   };
 
   return (
-    <section className={`min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br ${bgGradient} text-white`}>
+    <section 
+      className={`min-h-screen flex flex-col items-center justify-center p-6 text-white ${style ? '' : `bg-gradient-to-br ${bgGradient}`}`}
+      style={style}
+    >
       <div className="text-center max-w-5xl w-full">
         <div className="bg-white bg-opacity-20 rounded-2xl p-8 mb-8">
           <h2 className="text-3xl font-bold mb-6">{question}</h2>

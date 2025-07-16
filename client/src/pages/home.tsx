@@ -430,193 +430,126 @@ export default function Home() {
 
       case 'question-6':
         return (
-          <div 
-            className="min-h-screen flex flex-col items-center justify-center p-6 text-white"
-            style={{ background: topicData?.hexColor ? getTopicGradient(topicData.hexColor) : 'linear-gradient(135deg, #ec4899 0%, #ef4444 100%)' }}
+          <Question
+            questionNumber={6}
+            question={`Hoe voel je je nu over het onderwerp ${answers.mostImportantTopic}?`}
+            bgGradient={topicData?.hexColor ? '' : 'from-pink-500 to-red-500'}
+            buttonColor={topicData?.hexColor ? '' : 'bg-pink-600 hover:bg-pink-700'}
+            style={topicData?.hexColor ? { background: getTopicGradient(topicData.hexColor) } : {}}
+            onNext={() => setCurrentSection('question-7')}
+            showPrevious={false}
+            isValid={answers.feelingAfter !== null}
           >
-            <div className="text-center max-w-5xl w-full">
-              <div className="bg-white bg-opacity-20 rounded-2xl p-8 mb-8">
-                <h2 className="text-3xl font-bold mb-6">{`Hoe voel je je nu over het onderwerp ${answers.mostImportantTopic}?`}</h2>
-                
-                {topicData && (
-                  <div className="mb-6 p-8 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
-                    <div className="text-9xl mb-4 text-center">{topicData.icon}</div>
-                    <div className="text-2xl font-semibold text-white mb-2 text-center">{answers.mostImportantTopic}</div>
-                    <div className="text-base text-white opacity-90 max-w-lg mx-auto text-center">
-                      {topicData.description}
-                    </div>
+            <div className="space-y-6">
+              {topicData && (
+                <div className="mb-6 p-8 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
+                  <div className="text-9xl mb-4 text-center">{topicData.icon}</div>
+                  <div className="text-2xl font-semibold text-white mb-2 text-center">{answers.mostImportantTopic}</div>
+                  <div className="text-base text-white opacity-90 max-w-lg mx-auto text-center">
+                    {topicData.description}
                   </div>
-                )}
-                
-                <LikertScale
-                  options={LIKERT_SCALE}
-                  value={answers.feelingAfter}
-                  onValueChange={(value) => updateAnswers({ feelingAfter: value })}
-                />
-                {answers.feelingAfter !== null && (
-                  <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
-                    <p className="text-white font-semibold">Jouw antwoord:</p>
-                    <p className="text-white text-lg">{LIKERT_SCALE.find(opt => opt.value === answers.feelingAfter)?.label}</p>
-                  </div>
-                )}
-              </div>
+                </div>
+              )}
               
-              <div className="flex justify-center space-x-4">
-                <button 
-                  onClick={() => setCurrentSection('question-7')}
-                  disabled={answers.feelingAfter === null}
-                  className={`px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg ${
-                    answers.feelingAfter !== null 
-                      ? 'bg-white bg-opacity-20 hover:bg-opacity-30 text-white' 
-                      : 'bg-gray-500 bg-opacity-50 text-gray-300 cursor-not-allowed'
-                  }`}
-                >
-                  Volgende
-                </button>
-              </div>
+              <LikertScale
+                options={LIKERT_SCALE}
+                value={answers.feelingAfter}
+                onValueChange={(value) => updateAnswers({ feelingAfter: value })}
+              />
+              {answers.feelingAfter !== null && (
+                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
+                  <p className="text-white font-semibold">Jouw antwoord:</p>
+                  <p className="text-white text-lg">{LIKERT_SCALE.find(opt => opt.value === answers.feelingAfter)?.label}</p>
+                </div>
+              )}
             </div>
-          </div>
+          </Question>
         );
 
       case 'question-7':
         return (
-          <div 
-            className="min-h-screen flex flex-col items-center justify-center p-6 text-white"
-            style={{ background: topicData?.hexColor ? getTopicGradient(topicData.hexColor) : 'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)' }}
+          <Question
+            questionNumber={7}
+            question={`Wat zou je doen voor ${answers.mostImportantTopic} in de toekomst?`}
+            bgGradient={topicData?.hexColor ? '' : 'from-cyan-500 to-blue-500'}
+            buttonColor={topicData?.hexColor ? '' : 'bg-cyan-600 hover:bg-cyan-700'}
+            style={topicData?.hexColor ? { background: getTopicGradient(topicData.hexColor) } : {}}
+            onNext={() => setCurrentSection('question-8')}
+            onPrevious={() => setCurrentSection('question-6')}
+            showPrevious={true}
+            isValid={answers.actionChoice.length > 0}
           >
-            <div className="text-center max-w-5xl w-full">
-              <div className="bg-white bg-opacity-20 rounded-2xl p-8 mb-8">
-                <h2 className="text-3xl font-bold mb-6">{`Wat zou je doen voor ${answers.mostImportantTopic} in de toekomst?`}</h2>
-                
-                {topicData && (
-                  <div className="mb-6 p-8 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
-                    <div className="text-9xl mb-4 text-center">{topicData.icon}</div>
-                    <div className="text-2xl font-semibold text-white mb-2 text-center">{answers.mostImportantTopic}</div>
-                    <div className="text-base text-white opacity-90 max-w-lg mx-auto text-center">
-                      {topicData.description}
-                    </div>
+            <div className="space-y-6">
+              {topicData && (
+                <div className="mb-6 p-8 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
+                  <div className="text-9xl mb-4 text-center">{topicData.icon}</div>
+                  <div className="text-2xl font-semibold text-white mb-2 text-center">{answers.mostImportantTopic}</div>
+                  <div className="text-base text-white opacity-90 max-w-lg mx-auto text-center">
+                    {topicData.description}
                   </div>
-                )}
-                
-                <div className="flex flex-col space-y-6">
-                  <div className="grid grid-cols-3 gap-4">
-                    {ACTION_OPTIONS.map((option) => (
-                      <div key={option.value} className="flex flex-col items-center space-y-2">
-                        <div className="text-6xl mb-2">{option.icon}</div>
-                        <p className="text-lg font-semibold text-center mb-2">{option.label}</p>
-                        <label className="flex items-center cursor-pointer">
-                          <input
-                            type="radio"
-                            name="action-choice"
-                            value={option.value}
-                            checked={answers.actionChoice === option.value}
-                            onChange={() => updateAnswers({ actionChoice: option.value })}
-                            className="sr-only"
-                          />
-                          <div className={`w-6 h-6 rounded-full border-2 border-white flex items-center justify-center transition-all ${
-                            answers.actionChoice === option.value 
-                              ? 'bg-white' 
-                              : 'bg-transparent hover:bg-white hover:bg-opacity-20'
-                          }`}>
-                            {answers.actionChoice === option.value && <div className="w-3 h-3 rounded-full" style={{ backgroundColor: topicData?.hexColor || '#06b6d4' }} />}
-                          </div>
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  {/* Selected option display */}
-                  {answers.actionChoice && (
-                    <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
-                      <p className="text-white font-semibold">Jouw antwoord:</p>
-                      <p className="text-white text-lg">
-                        {ACTION_OPTIONS.find(opt => opt.value === answers.actionChoice)?.label}
-                      </p>
-                    </div>
-                  )}
                 </div>
-              </div>
+              )}
               
-              <div className="flex justify-center space-x-4">
-                <button 
-                  onClick={() => setCurrentSection('question-6')}
-                  className="px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg bg-white bg-opacity-20 hover:bg-opacity-30 text-white"
-                >
-                  Vorige
-                </button>
-                <button 
-                  onClick={() => setCurrentSection('question-8')}
-                  disabled={answers.actionChoice.length === 0}
-                  className={`px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg ${
-                    answers.actionChoice.length > 0 
-                      ? 'bg-white bg-opacity-20 hover:bg-opacity-30 text-white' 
-                      : 'bg-gray-500 bg-opacity-50 text-gray-300 cursor-not-allowed'
-                  }`}
-                >
-                  Volgende
-                </button>
-              </div>
+              <MultipleChoice
+                options={ACTION_OPTIONS}
+                value={answers.actionChoice}
+                onValueChange={(value) => updateAnswers({ actionChoice: value })}
+                columns={3}
+              />
+              
+              {answers.actionChoice && (
+                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
+                  <p className="text-white font-semibold">Jouw antwoord:</p>
+                  <p className="text-white text-lg">
+                    {ACTION_OPTIONS.find(opt => opt.value === answers.actionChoice)?.label}
+                  </p>
+                </div>
+              )}
             </div>
-          </div>
+          </Question>
         );
 
       case 'question-8':
         return (
-          <div 
-            className="min-h-screen flex flex-col items-center justify-center p-6 text-white"
-            style={{ background: topicData?.hexColor ? getTopicGradient(topicData.hexColor) : 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}
+          <Question
+            questionNumber={8}
+            question={`Hoeveel vertrouwen heb je dat je iets kan veranderen aan ${answers.mostImportantTopic} in de toekomst?`}
+            bgGradient={topicData?.hexColor ? '' : 'from-green-500 to-emerald-600'}
+            buttonColor={topicData?.hexColor ? '' : 'bg-green-600 hover:bg-green-700'}
+            style={topicData?.hexColor ? { background: getTopicGradient(topicData.hexColor) } : {}}
+            onComplete={() => {
+              completeSurvey();
+              setCurrentSection('results');
+            }}
+            onPrevious={() => setCurrentSection('question-7')}
+            showPrevious={true}
+            showComplete={true}
+            isValid={answers.confidenceAfter !== null}
           >
-            <div className="text-center max-w-5xl w-full">
-              <div className="bg-white bg-opacity-20 rounded-2xl p-8 mb-8">
-                <h2 className="text-3xl font-bold mb-6">{`Hoeveel vertrouwen heb je dat je iets kan veranderen aan ${answers.mostImportantTopic} in de toekomst?`}</h2>
-                
-                {topicData && (
-                  <div className="mb-6 p-8 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
-                    <div className="text-9xl mb-4 text-center">{topicData.icon}</div>
-                    <div className="text-2xl font-semibold text-white mb-2 text-center">{answers.mostImportantTopic}</div>
-                    <div className="text-base text-white opacity-90 max-w-lg mx-auto text-center">
-                      {topicData.description}
-                    </div>
+            <div className="space-y-6">
+              {topicData && (
+                <div className="mb-6 p-8 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
+                  <div className="text-9xl mb-4 text-center">{topicData.icon}</div>
+                  <div className="text-2xl font-semibold text-white mb-2 text-center">{answers.mostImportantTopic}</div>
+                  <div className="text-base text-white opacity-90 max-w-lg mx-auto text-center">
+                    {topicData.description}
                   </div>
-                )}
-                
-                <LikertScale
-                  options={CONFIDENCE_SCALE}
-                  value={answers.confidenceAfter}
-                  onValueChange={(value) => updateAnswers({ confidenceAfter: value })}
-                />
-                {answers.confidenceAfter !== null && (
-                  <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
-                    <p className="text-white font-semibold">Jouw antwoord:</p>
-                    <p className="text-white text-lg">{CONFIDENCE_SCALE.find(opt => opt.value === answers.confidenceAfter)?.label}</p>
-                  </div>
-                )}
-              </div>
+                </div>
+              )}
               
-              <div className="flex justify-center space-x-4">
-                <button 
-                  onClick={() => setCurrentSection('question-7')}
-                  className="px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg bg-white bg-opacity-20 hover:bg-opacity-30 text-white"
-                >
-                  Vorige
-                </button>
-                <button 
-                  onClick={() => {
-                    completeSurvey();
-                    setCurrentSection('results');
-                  }}
-                  disabled={answers.confidenceAfter === null}
-                  className={`px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg ${
-                    answers.confidenceAfter !== null 
-                      ? 'bg-white bg-opacity-20 hover:bg-opacity-30 text-white' 
-                      : 'bg-gray-500 bg-opacity-50 text-gray-300 cursor-not-allowed'
-                  }`}
-                >
-                  Voltooien
-                </button>
-              </div>
+              <LikertScale
+                options={CONFIDENCE_SCALE}
+                value={answers.confidenceAfter}
+                onValueChange={(value) => updateAnswers({ confidenceAfter: value })}
+              />
+              {answers.confidenceAfter !== null && (
+                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
+                  <p className="text-white font-semibold">Jouw antwoord:</p>
+                  <p className="text-white text-lg">{CONFIDENCE_SCALE.find(opt => opt.value === answers.confidenceAfter)?.label}</p>
+                </div>
+              )}
             </div>
-          </div>
+          </Question>
         );
 
       case 'results':
