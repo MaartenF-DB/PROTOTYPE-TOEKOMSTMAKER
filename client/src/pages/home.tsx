@@ -177,10 +177,10 @@ export default function Home() {
           >
             <div className="flex flex-col items-center space-y-6">
               {topicData && (
-                <div className="mb-4 text-center">
-                  <div className="text-8xl mb-4">{topicData.icon}</div>
-                  <div className="text-xl font-semibold text-white mb-2">{answers.mostImportantTopic}</div>
-                  <div className="text-sm text-white opacity-80 max-w-md">
+                <div className="mb-4 p-6 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
+                  <div className="text-8xl mb-4 text-center">{topicData.icon}</div>
+                  <div className="text-xl font-semibold text-white mb-2 text-center">{answers.mostImportantTopic}</div>
+                  <div className="text-sm text-white opacity-90 max-w-md mx-auto text-center">
                     {topicData.description}
                   </div>
                 </div>
@@ -209,10 +209,10 @@ export default function Home() {
           >
             <div className="flex flex-col items-center space-y-6">
               {topicData && (
-                <div className="mb-4 text-center">
-                  <div className="text-8xl mb-4">{topicData.icon}</div>
-                  <div className="text-xl font-semibold text-white mb-2">{answers.mostImportantTopic}</div>
-                  <div className="text-sm text-white opacity-80 max-w-md">
+                <div className="mb-4 p-6 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
+                  <div className="text-8xl mb-4 text-center">{topicData.icon}</div>
+                  <div className="text-xl font-semibold text-white mb-2 text-center">{answers.mostImportantTopic}</div>
+                  <div className="text-sm text-white opacity-90 max-w-md mx-auto text-center">
                     {topicData.description}
                   </div>
                 </div>
@@ -277,10 +277,10 @@ export default function Home() {
                 <h2 className="text-3xl font-bold mb-6">{`Hoe voel je je nu over het onderwerp ${answers.mostImportantTopic}?`}</h2>
                 
                 {topicData && (
-                  <div className="mb-6 text-center">
-                    <div className="text-9xl mb-4">{topicData.icon}</div>
-                    <div className="text-2xl font-semibold text-white mb-2">{answers.mostImportantTopic}</div>
-                    <div className="text-base text-white opacity-80 max-w-lg mx-auto">
+                  <div className="mb-6 p-8 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
+                    <div className="text-9xl mb-4 text-center">{topicData.icon}</div>
+                    <div className="text-2xl font-semibold text-white mb-2 text-center">{answers.mostImportantTopic}</div>
+                    <div className="text-base text-white opacity-90 max-w-lg mx-auto text-center">
                       {topicData.description}
                     </div>
                   </div>
@@ -321,10 +321,10 @@ export default function Home() {
                 <h2 className="text-3xl font-bold mb-6">{`Wat zou je doen voor ${answers.mostImportantTopic} in de toekomst?`}</h2>
                 
                 {topicData && (
-                  <div className="mb-6 text-center">
-                    <div className="text-9xl mb-4">{topicData.icon}</div>
-                    <div className="text-2xl font-semibold text-white mb-2">{answers.mostImportantTopic}</div>
-                    <div className="text-base text-white opacity-80 max-w-lg mx-auto">
+                  <div className="mb-6 p-8 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
+                    <div className="text-9xl mb-4 text-center">{topicData.icon}</div>
+                    <div className="text-2xl font-semibold text-white mb-2 text-center">{answers.mostImportantTopic}</div>
+                    <div className="text-base text-white opacity-90 max-w-lg mx-auto text-center">
                       {topicData.description}
                     </div>
                   </div>
@@ -402,10 +402,10 @@ export default function Home() {
                 <h2 className="text-3xl font-bold mb-6">{`Hoeveel vertrouwen heb je dat je iets kan veranderen aan ${answers.mostImportantTopic} in de toekomst?`}</h2>
                 
                 {topicData && (
-                  <div className="mb-6 text-center">
-                    <div className="text-9xl mb-4">{topicData.icon}</div>
-                    <div className="text-2xl font-semibold text-white mb-2">{answers.mostImportantTopic}</div>
-                    <div className="text-base text-white opacity-80 max-w-lg mx-auto">
+                  <div className="mb-6 p-8 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
+                    <div className="text-9xl mb-4 text-center">{topicData.icon}</div>
+                    <div className="text-2xl font-semibold text-white mb-2 text-center">{answers.mostImportantTopic}</div>
+                    <div className="text-base text-white opacity-90 max-w-lg mx-auto text-center">
                       {topicData.description}
                     </div>
                   </div>

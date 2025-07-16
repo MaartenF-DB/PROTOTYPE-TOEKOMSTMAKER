@@ -11,7 +11,7 @@ export function CheckOutIntro({ onStart, mostImportantTopic }: CheckOutIntroProp
   const { speak } = useSpeech();
 
   useEffect(() => {
-    const text = "Welkom terug! Waar zijn we gebleven? Oh ja!! We zijn op de helft. Wat voor toekomstmaker zou je zijn?!?";
+    const text = "Dan onderzoeken we verder wat voor toekomstmaker jij bent!";
     speak(text);
   }, [speak]);
 
@@ -19,8 +19,7 @@ export function CheckOutIntro({ onStart, mostImportantTopic }: CheckOutIntroProp
     <section className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-green-600 to-teal-600 text-white">
       <div className="text-center max-w-2xl">
         <h2 className="text-4xl font-bold mb-6">Welkom terug!</h2>
-        <p className="text-xl mb-4">Waar zijn we gebleven? Oh ja!!</p>
-        <p className="text-2xl font-bold mb-8">We zijn op de helft. Wat voor toekomstmaker zou je zijn?!?</p>
+        <p className="text-2xl font-bold mb-8">Dan onderzoeken we verder wat voor toekomstmaker jij bent!</p>
         
 
         

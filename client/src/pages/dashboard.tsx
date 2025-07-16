@@ -28,7 +28,30 @@ export default function Dashboard() {
     visitingWithStats: responses.reduce((acc, r) => {
       acc[r.visitingWith] = (acc[r.visitingWith] || 0) + 1;
       return acc;
-    }, {} as Record<string, number>)
+    }, {} as Record<string, number>),
+    // Check-in vs Check-out comparison
+    beforeAfterStats: responses.reduce((acc, r) => {
+      if (r.feelingBefore !== null && r.feelingAfter !== null) {
+        acc.feelingChange.push({
+          topic: r.mostImportantTopic,
+          before: r.feelingBefore,
+          after: r.feelingAfter,
+          change: r.feelingAfter - r.feelingBefore
+        });
+      }
+      if (r.confidenceBefore !== null && r.confidenceAfter !== null) {
+        acc.confidenceChange.push({
+          topic: r.mostImportantTopic,
+          before: r.confidenceBefore,
+          after: r.confidenceAfter,
+          change: r.confidenceAfter - r.confidenceBefore
+        });
+      }
+      return acc;
+    }, {
+      feelingChange: [] as Array<{topic: string, before: number, after: number, change: number}>,
+      confidenceChange: [] as Array<{topic: string, before: number, after: number, change: number}>
+    })
   };
 
   const exportAllData = () => {
@@ -200,6 +223,121 @@ export default function Dashboard() {
                       </div>
                     </div>
                   ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Check-in vs Check-out Comparison */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <TrendingUp className="h-5 w-5 text-blue-600" />
+                <span>Gevoel Verandering</span>
+              </CardTitle>
+              <CardDescription>Check-in vs Check-out gevoelens per onderwerp</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {stats.beforeAfterStats.feelingChange.length > 0 ? (
+                  <>
+                    <div className="grid grid-cols-3 gap-2 text-sm font-medium text-gray-600 border-b pb-2">
+                      <div>Onderwerp</div>
+                      <div>Voor → Na</div>
+                      <div>Verandering</div>
+                    </div>
+                    {stats.beforeAfterStats.feelingChange.map((change, index) => (
+                      <div key={index} className="grid grid-cols-3 gap-2 text-sm">
+                        <div className="flex items-center space-x-1">
+                          <span className="text-lg">{TOPICS[change.topic as keyof typeof TOPICS]?.icon || '❓'}</span>
+                          <span className="font-medium text-xs">{change.topic}</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <Badge variant="outline" className="text-xs">{change.before}</Badge>
+                          <span>→</span>
+                          <Badge variant="outline" className="text-xs">{change.after}</Badge>
+                        </div>
+                        <div className="flex items-center">
+                          <Badge 
+                            variant={change.change > 0 ? "default" : change.change < 0 ? "destructive" : "secondary"}
+                            className="text-xs"
+                          >
+                            {change.change > 0 ? '+' : ''}{change.change}
+                          </Badge>
+                        </div>
+                      </div>
+                    ))}
+                    <div className="pt-2 border-t">
+                      <div className="text-sm text-gray-600">
+                        Gemiddelde verandering: {stats.beforeAfterStats.feelingChange.length > 0 ? 
+                          (stats.beforeAfterStats.feelingChange.reduce((acc, c) => acc + c.change, 0) / stats.beforeAfterStats.feelingChange.length).toFixed(1) : 
+                          '0'
+                        }
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-center text-gray-500 py-8">
+                    Nog geen complete voor/na data beschikbaar
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <BarChart3 className="h-5 w-5 text-green-600" />
+                <span>Vertrouwen Verandering</span>
+              </CardTitle>
+              <CardDescription>Check-in vs Check-out vertrouwen per onderwerp</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {stats.beforeAfterStats.confidenceChange.length > 0 ? (
+                  <>
+                    <div className="grid grid-cols-3 gap-2 text-sm font-medium text-gray-600 border-b pb-2">
+                      <div>Onderwerp</div>
+                      <div>Voor → Na</div>
+                      <div>Verandering</div>
+                    </div>
+                    {stats.beforeAfterStats.confidenceChange.map((change, index) => (
+                      <div key={index} className="grid grid-cols-3 gap-2 text-sm">
+                        <div className="flex items-center space-x-1">
+                          <span className="text-lg">{TOPICS[change.topic as keyof typeof TOPICS]?.icon || '❓'}</span>
+                          <span className="font-medium text-xs">{change.topic}</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <Badge variant="outline" className="text-xs">{change.before}</Badge>
+                          <span>→</span>
+                          <Badge variant="outline" className="text-xs">{change.after}</Badge>
+                        </div>
+                        <div className="flex items-center">
+                          <Badge 
+                            variant={change.change > 0 ? "default" : change.change < 0 ? "destructive" : "secondary"}
+                            className="text-xs"
+                          >
+                            {change.change > 0 ? '+' : ''}{change.change}
+                          </Badge>
+                        </div>
+                      </div>
+                    ))}
+                    <div className="pt-2 border-t">
+                      <div className="text-sm text-gray-600">
+                        Gemiddelde verandering: {stats.beforeAfterStats.confidenceChange.length > 0 ? 
+                          (stats.beforeAfterStats.confidenceChange.reduce((acc, c) => acc + c.change, 0) / stats.beforeAfterStats.confidenceChange.length).toFixed(1) : 
+                          '0'
+                        }
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-center text-gray-500 py-8">
+                    Nog geen complete voor/na data beschikbaar
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
