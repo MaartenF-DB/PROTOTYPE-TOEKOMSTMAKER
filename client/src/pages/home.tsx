@@ -508,7 +508,9 @@ export default function Home() {
             buttonColor={topicData?.hexColor ? '' : 'bg-pink-600 hover:bg-pink-700'}
             style={topicData?.hexColor ? { background: getTopicGradient(topicData.hexColor) } : {}}
             onNext={() => setCurrentSection('question-7')}
-            showPrevious={false}
+            onPrevious={() => setCurrentSection('checkout-name')}
+            showPrevious={true}
+            showNext={true}
             isValid={answers.feelingAfter !== null}
           >
             <div className="space-y-6">
@@ -548,6 +550,7 @@ export default function Home() {
             onNext={() => setCurrentSection('question-8')}
             onPrevious={() => setCurrentSection('question-6')}
             showPrevious={true}
+            showNext={true}
             isValid={answers.actionChoice.length > 0}
           >
             <div className="space-y-6">
@@ -561,31 +564,20 @@ export default function Home() {
                 </div>
               )}
               
-              <div className="space-y-4">
-                {ACTION_OPTIONS.map((option) => (
-                  <label key={option.value} className="flex items-center space-x-4 cursor-pointer p-4 bg-white bg-opacity-10 rounded-xl hover:bg-opacity-20 transition-all">
-                    <input
-                      type="radio"
-                      name="action-choice"
-                      value={option.value}
-                      checked={answers.actionChoice === option.value}
-                      onChange={() => updateAnswers({ actionChoice: option.value })}
-                      className="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2"
-                    />
-                    <div className="flex items-center space-x-3">
-                      <span className="text-3xl">{option.icon}</span>
-                      <span className="text-white text-lg font-medium">{option.label}</span>
-                    </div>
-                  </label>
-                ))}
-              </div>
+              <MultipleChoice
+                options={ACTION_OPTIONS}
+                value={answers.actionChoice}
+                onValueChange={(value) => updateAnswers({ actionChoice: value })}
+                columns={1}
+              />
               
               {answers.actionChoice && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
                   <p className="text-white font-semibold">Jouw antwoord:</p>
-                  <p className="text-white text-lg">
-                    {ACTION_OPTIONS.find(opt => opt.value === answers.actionChoice)?.label}
-                  </p>
+                  <div className="flex items-center space-x-3">
+                    <span className="text-2xl">{ACTION_OPTIONS.find(opt => opt.value === answers.actionChoice)?.icon}</span>
+                    <span className="text-white text-lg">{ACTION_OPTIONS.find(opt => opt.value === answers.actionChoice)?.label}</span>
+                  </div>
                 </div>
               )}
             </div>
