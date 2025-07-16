@@ -382,24 +382,21 @@ export default function Home() {
             bgGradient="from-orange-500 to-red-500"
             buttonColor="bg-orange-600 hover:bg-orange-700"
             onNext={() => {
-              // Check if name exists in check-in responses
-              const nameExists = existingResponses.some((r: any) => r.name === answers.name);
-              
-              if (nameExists) {
-                // Name exists from check-in, proceed normally
-                setCurrentSection('question-6');
-              } else {
-                // Name doesn't exist - user must check the box to confirm checkout-only
-                if (checkoutOnly) {
-                  setCurrentSection('question-6');
-                } else {
-                  // Show validation message or force checkbox
-                  return;
+              // For checkout, we need to ensure the user has a topic selected
+              if (!answers.mostImportantTopic) {
+                // If no topic is selected, user must be checkout-only
+                setCheckoutOnly(true);
+                updateAnswers({ isNewCheckoutUser: true });
+                // Set a default topic if none exists
+                if (!answers.mostImportantTopic) {
+                  updateAnswers({ mostImportantTopic: 'GEZONDHEID' });
                 }
               }
+              setCurrentSection('question-6');
             }}
             showPrevious={false}
-            isValid={answers.name.length > 0 && (existingResponses.some((r: any) => r.name === answers.name) || checkoutOnly)}
+            showNext={true}
+            isValid={answers.name.length > 0}
           >
             <div className="space-y-4">
               <Input
@@ -407,59 +404,12 @@ export default function Home() {
                 onChange={(e) => updateAnswers({ name: e.target.value })}
                 placeholder={t.placeholders.typeName}
                 className="w-full p-4 text-2xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-orange-300 outline-none"
-                disabled={false}
               />
-              
-              {/* Show existing names for selection */}
-              {existingResponses.length > 0 && (
-                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
-                  <p className="text-white font-medium mb-2">{t.checkOutQuestions.selectFromList}:</p>
-                  <div className="grid grid-cols-2 gap-2">
-                    {existingResponses.map((response: any, index: number) => (
-                      <button
-                        key={index}
-                        onClick={() => {
-                          updateAnswers({ name: response.name });
-                          setCheckoutOnly(false);
-                        }}
-                        className="p-2 bg-white bg-opacity-30 rounded-lg hover:bg-opacity-50 transition-all text-white text-left"
-                      >
-                        {response.name}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-              
-              {/* Checkbox for checkout only - only show if name is not from existing list */}
-              {!existingResponses.some((r: any) => r.name === answers.name) && (
-                <div className="border-t border-white border-opacity-30 pt-4">
-                  <label className="flex items-center space-x-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={checkoutOnly}
-                      onChange={(e) => {
-                        setCheckoutOnly(e.target.checked);
-                        if (e.target.checked) {
-                          updateAnswers({ isNewCheckoutUser: true });
-                        } else {
-                          updateAnswers({ isNewCheckoutUser: false });
-                        }
-                      }}
-                      className="w-5 h-5 rounded"
-                    />
-                    <span className="text-white text-lg">{t.checkOutQuestions.notAnsweredBefore}</span>
-                  </label>
-                </div>
-              )}
               
               {answers.name.length > 0 && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
                   <p className="text-white font-semibold">{t.yourAnswer}:</p>
                   <p className="text-white text-lg">{answers.name}</p>
-                  {checkoutOnly && (
-                    <p className="text-white text-sm opacity-80 mt-2">{t.checkOutQuestions.notAnsweredBefore}</p>
-                  )}
                 </div>
               )}
             </div>
@@ -496,17 +446,7 @@ export default function Home() {
             showNext={true}
             isValid={answers.feelingAfter !== null}
           >
-            <div className="space-y-6">
-              {topicData && (
-                <div className="mb-6 p-8 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
-                  <div className="text-9xl mb-4 text-center">{topicData.icon}</div>
-                  <div className="text-2xl font-semibold text-white mb-2 text-center">{answers.mostImportantTopic}</div>
-                  <div className="text-base text-white opacity-90 max-w-lg mx-auto text-center">
-                    {topicData.description}
-                  </div>
-                </div>
-              )}
-              
+            <div className="space-y-4">
               <LikertScale
                 options={LIKERT_SCALE}
                 value={answers.feelingAfter}
@@ -536,17 +476,7 @@ export default function Home() {
             showNext={true}
             isValid={answers.actionChoice.length > 0}
           >
-            <div className="space-y-6">
-              {topicData && (
-                <div className="mb-6 p-8 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
-                  <div className="text-9xl mb-4 text-center">{topicData.icon}</div>
-                  <div className="text-2xl font-semibold text-white mb-2 text-center">{answers.mostImportantTopic}</div>
-                  <div className="text-base text-white opacity-90 max-w-lg mx-auto text-center">
-                    {topicData.description}
-                  </div>
-                </div>
-              )}
-              
+            <div className="space-y-4">
               <MultipleChoice
                 options={ACTION_OPTIONS}
                 value={answers.actionChoice}
@@ -556,7 +486,7 @@ export default function Home() {
               
               {answers.actionChoice && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
-                  <p className="text-white font-semibold">Jouw antwoord:</p>
+                  <p className="text-white font-semibold">{t.yourAnswer}:</p>
                   <div className="flex items-center space-x-3">
                     <span className="text-2xl">{ACTION_OPTIONS.find(opt => opt.value === answers.actionChoice)?.icon}</span>
                     <span className="text-white text-lg">{ACTION_OPTIONS.find(opt => opt.value === answers.actionChoice)?.label}</span>
@@ -584,17 +514,7 @@ export default function Home() {
             showComplete={true}
             isValid={answers.confidenceAfter !== null}
           >
-            <div className="space-y-6">
-              {topicData && (
-                <div className="mb-6 p-8 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
-                  <div className="text-9xl mb-4 text-center">{topicData.icon}</div>
-                  <div className="text-2xl font-semibold text-white mb-2 text-center">{answers.mostImportantTopic}</div>
-                  <div className="text-base text-white opacity-90 max-w-lg mx-auto text-center">
-                    {topicData.description}
-                  </div>
-                </div>
-              )}
-              
+            <div className="space-y-4">
               <LikertScale
                 options={CONFIDENCE_SCALE}
                 value={answers.confidenceAfter}

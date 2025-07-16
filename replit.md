@@ -163,4 +163,13 @@ The application follows a modern full-stack architecture with the following comp
   - Allows seamless transition from check-in to check-out within the same session
   - Improved user workflow for completing both survey parts
 
+- **Comprehensive Formatting Consistency (July 16, 2025)**: Standardized all question layouts
+  - Converted questions 4 and 5 from custom layouts to Question component format
+  - Updated NameMatching component to use Question component format
+  - Simplified checkout name question to match check-in format (removed complex lists and checkboxes)
+  - Removed topic data blocks from checkout questions 6, 7, 8 for consistency
+  - Standardized all "Jouw antwoord:" displays to use translation system
+  - All checkout questions now have identical formatting to check-in questions
+  - Consistent spacing (space-y-4) across all question types
+
 The application is designed to be deployment-ready for platforms like Replit, with proper environment variable handling and production optimizations.
