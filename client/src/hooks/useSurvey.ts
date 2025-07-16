@@ -21,7 +21,7 @@ const initialAnswers: SurveyAnswers = {
 export function useSurvey() {
   const queryClient = useQueryClient();
   const [state, setState] = useState<SurveyState>({
-    currentSection: 'checkin-intro',
+    currentSection: 'entry-choice',
     currentQuestion: 0,
     answers: initialAnswers,
     isComplete: false
@@ -91,11 +91,12 @@ export function useSurvey() {
 
   const resetSurvey = useCallback(() => {
     setState({
-      currentSection: 'checkin-intro',
+      currentSection: 'entry-choice',
       currentQuestion: 0,
       answers: initialAnswers,
       isComplete: false
     });
+    setNameVerification('');
   }, []);
 
   const getTopicColor = useCallback((topic: string) => {
@@ -108,19 +109,21 @@ export function useSurvey() {
 
   const getCurrentProgress = useCallback(() => {
     const sectionProgress = {
-      'checkin-intro': 0,
-      'question-0': 8,
-      'question-1': 16,
-      'question-2': 24,
-      'question-3': 32,
-      'question-4': 40,
-      'question-5': 48,
-      'checkin-closing': 56,
-      'name-verification': 64,
-      'checkout-intro': 72,
-      'question-6': 80,
-      'question-7': 88,
-      'question-8': 96,
+      'entry-choice': 0,
+      'checkin-intro': 5,
+      'question-0': 10,
+      'question-1': 18,
+      'question-2': 26,
+      'question-3': 34,
+      'question-4': 42,
+      'question-5': 50,
+      'checkin-closing': 58,
+      'name-verification': 66,
+      'checkout-intro': 74,
+      'checkout-name': 76,
+      'question-6': 82,
+      'question-7': 90,
+      'question-8': 98,
       'results': 100
     };
     return sectionProgress[state.currentSection as keyof typeof sectionProgress] || 0;

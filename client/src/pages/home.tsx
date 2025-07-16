@@ -1,4 +1,5 @@
 import { useSurvey } from '@/hooks/useSurvey';
+import { EntryChoice } from '@/components/survey/EntryChoice';
 import { CheckInIntro } from '@/components/survey/CheckInIntro';
 import { Question } from '@/components/survey/Question';
 import { CheckInClosing } from '@/components/survey/CheckInClosing';
@@ -69,6 +70,13 @@ export default function Home() {
 
   const renderCurrentSection = () => {
     switch (currentSection) {
+      case 'entry-choice':
+        return (
+          <EntryChoice
+            onCheckIn={() => setCurrentSection('checkin-intro')}
+            onCheckOut={() => setCurrentSection('checkout-intro')}
+          />
+        );
       case 'name-verification':
         return (
           <NameVerification
@@ -77,7 +85,7 @@ export default function Home() {
             onNameVerificationChange={setNameVerification}
             onContinue={() => {
               updateAnswers({ name: nameVerification });
-              setCurrentSection('checkout-intro');
+              setCurrentSection('question-6');
             }}
           />
         );
@@ -345,9 +353,51 @@ export default function Home() {
       case 'checkout-intro':
         return (
           <CheckOutIntro 
-            onStart={() => setCurrentSection('question-6')}
+            onStart={() => {
+              // For checkout, go directly to name input
+              updateAnswers({ name: '' });
+              setCurrentSection('checkout-name');
+            }}
             mostImportantTopic={answers.mostImportantTopic}
           />
+        );
+      case 'checkout-name':
+        return (
+          <Question
+            questionNumber={0}
+            question="Wat is je naam?"
+            bgGradient="from-orange-500 to-red-500"
+            buttonColor="bg-orange-600 hover:bg-orange-700"
+            onNext={() => {
+              // Check if name exists for checkout flow
+              if (hasNameConflict) {
+                setCurrentSection('name-verification');
+              } else {
+                setCurrentSection('question-6');
+              }
+            }}
+            showPrevious={false}
+            isValid={answers.name.length > 0}
+          >
+            <div className="space-y-4">
+              <Input
+                value={answers.name}
+                onChange={(e) => updateAnswers({ name: e.target.value })}
+                placeholder="Typ hier je naam..."
+                className="w-full p-4 text-2xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-orange-300 outline-none"
+              />
+              {hasNameConflict && (
+                <p className="text-sm text-white opacity-80">
+                  Er bestaat al een antwoord met deze naam. Klik verder om te bevestigen dat jij dit bent.
+                </p>
+              )}
+              {answers.name.length > 0 && (
+                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
+                  <p className="text-white font-medium">✓ {answers.name}</p>
+                </div>
+              )}
+            </div>
+          </Question>
         );
 
       case 'question-6':
