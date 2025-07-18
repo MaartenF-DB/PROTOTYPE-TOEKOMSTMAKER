@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { useSpeech } from '@/hooks/useSpeech';
 
 interface LikertOption {
   value: number;
@@ -10,9 +11,20 @@ interface LikertScaleProps {
   options: LikertOption[];
   value: number | null;
   onValueChange: (value: number) => void;
+  language?: 'nl' | 'en';
 }
 
-export function LikertScale({ options, value, onValueChange }: LikertScaleProps) {
+export function LikertScale({ options, value, onValueChange, language = 'nl' }: LikertScaleProps) {
+  const { speak } = useSpeech();
+  
+  const handleValueChange = (newValue: number) => {
+    onValueChange(newValue);
+    const selectedOption = options.find(opt => opt.value === newValue);
+    if (selectedOption) {
+      speak(selectedOption.label, language);
+    }
+  };
+  
   // Keep all options visible - no simplified display
 
   return (
@@ -27,7 +39,7 @@ export function LikertScale({ options, value, onValueChange }: LikertScaleProps)
                 name="likert-scale"
                 value={option.value}
                 checked={value === option.value}
-                onChange={() => onValueChange(option.value)}
+                onChange={() => handleValueChange(option.value)}
                 className="sr-only"
               />
               <div className={`w-6 h-6 rounded-full border-2 border-white flex items-center justify-center transition-all ${

@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useState, useEffect } from 'react';
+import { useSpeech } from '@/hooks/useSpeech';
 
 interface Option {
   value: string;
@@ -16,6 +17,7 @@ interface MultipleChoiceProps {
   onOtherValueChange?: (value: string) => void;
   allowOther?: boolean;
   columns?: number;
+  language?: 'nl' | 'en';
 }
 
 export function MultipleChoice({
@@ -25,20 +27,24 @@ export function MultipleChoice({
   otherValue = '',
   onOtherValueChange,
   allowOther = false,
-  columns = 2
+  columns = 2,
+  language = 'nl'
 }: MultipleChoiceProps) {
   const [showOtherInput, setShowOtherInput] = useState(false);
+  const { speak } = useSpeech();
 
   useEffect(() => {
     setShowOtherInput(value === 'other');
   }, [value]);
 
-  const handleOptionClick = (optionValue: string) => {
+  const handleOptionClick = (optionValue: string, optionLabel: string) => {
     onValueChange(optionValue);
     if (optionValue === 'other') {
       setShowOtherInput(true);
     } else {
       setShowOtherInput(false);
+      // Read the selected answer aloud
+      speak(optionLabel, language);
     }
   };
 
@@ -59,7 +65,7 @@ export function MultipleChoice({
         {options.map((option) => (
           <Button
             key={option.value}
-            onClick={() => handleOptionClick(option.value)}
+            onClick={() => handleOptionClick(option.value, option.label)}
             className={`p-4 rounded-xl text-xl font-semibold transition-all transform hover:scale-105 flex flex-col items-center space-y-2 ${
               value === option.value
                 ? 'bg-blue-600 bg-opacity-70 text-white'

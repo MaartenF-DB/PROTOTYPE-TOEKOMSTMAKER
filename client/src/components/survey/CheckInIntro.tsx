@@ -13,9 +13,11 @@ export function CheckInIntro({ onStart, language = 'nl' }: CheckInIntroProps) {
   const { speak } = useSpeech();
 
   useEffect(() => {
-    const text = "Hé Toekomstmaker! Zullen we samen uitvinden wat voor toekomstmaker jij bent?";
-    speak(text);
-  }, [speak]);
+    const text = language === 'en' 
+      ? "Hey Future Maker! Shall we discover together what kind of future maker you are?"
+      : "Hé Toekomstmaker! Zullen we samen uitvinden wat voor toekomstmaker jij bent?";
+    speak(text, language);
+  }, [speak, language]);
 
   return (
     <section className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-purple-600 to-blue-600 text-white">
@@ -29,10 +31,7 @@ export function CheckInIntro({ onStart, language = 'nl' }: CheckInIntroProps) {
         </div>
         
         <h1 className="text-4xl font-bold mb-6">{t.checkInIntro.title}</h1>
-        <p className="text-xl mb-4">{t.checkInIntro.subtitle}</p>
-        <p className="text-xl mb-8 font-semibold bg-white bg-opacity-20 p-4 rounded-xl">
-          Dan onderzoeken we verder wat voor toekomstmaker jij bent!
-        </p>
+        <p className="text-xl mb-8">{t.checkInIntro.subtitle}</p>
         
         <Button 
           onClick={onStart}

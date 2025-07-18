@@ -48,11 +48,9 @@ export function Question({
       speak(message, language);
       return;
     }
-    // Play confirmation sound when answer is valid
-    const confirmMessage = language === 'en' ? "Great! Moving to the next question." : "Mooi! Naar de volgende vraag.";
-    speak(confirmMessage, language);
+    // Go to next question without audio confirmation
     if (onNext) {
-      setTimeout(() => onNext(), 1000); // Small delay to let audio play
+      onNext();
     }
   };
 
@@ -62,11 +60,9 @@ export function Question({
       speak(message, language);
       return;
     }
-    // Play completion sound
-    const completeMessage = language === 'en' ? "Excellent! You're all done!" : "Geweldig! Je bent klaar!";
-    speak(completeMessage, language);
+    // Complete without audio confirmation
     if (onComplete) {
-      setTimeout(() => onComplete(), 1000); // Small delay to let audio play
+      onComplete();
     }
   };
 

@@ -123,7 +123,7 @@ export const translations = {
     checkInIntro: {
       title: "Hey Future Maker!",
       subtitle: "Shall we discover together what kind of future maker you are?",
-      start: "Begin"
+      start: "Start"
     },
     
     // Check-out Intro

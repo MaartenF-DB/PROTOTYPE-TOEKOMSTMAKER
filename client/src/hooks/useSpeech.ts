@@ -25,12 +25,16 @@ export function useSpeech() {
       utterance.pitch = 1.3; // Higher pitch for child-friendly voice
       utterance.volume = 1;
       
-      // Try to find a better English voice
+      // Try to find a female English voice
       const voices = speechSynthesis.getVoices();
       const preferredVoice = voices.find(voice => 
         voice.lang.includes('en-US') && 
-        (voice.name.includes('female') || voice.name.includes('Google') || voice.name.includes('Microsoft'))
-      ) || voices.find(voice => voice.lang.includes('en'));
+        (voice.name.toLowerCase().includes('female') || 
+         voice.name.toLowerCase().includes('samantha') || 
+         voice.name.toLowerCase().includes('susan') || 
+         voice.name.toLowerCase().includes('karen') ||
+         voice.name.toLowerCase().includes('zira'))
+      ) || voices.find(voice => voice.lang.includes('en-US')) || voices.find(voice => voice.lang.includes('en'));
       
       if (preferredVoice) {
         utterance.voice = preferredVoice;
@@ -41,12 +45,15 @@ export function useSpeech() {
       utterance.pitch = 1.2; // Slightly higher pitch for children
       utterance.volume = 1;
       
-      // Try to find a better Dutch voice
+      // Try to find a female Dutch voice
       const voices = speechSynthesis.getVoices();
       const preferredVoice = voices.find(voice => 
         voice.lang.includes('nl') && 
-        (voice.name.includes('female') || voice.name.includes('Google') || voice.name.includes('Microsoft'))
-      ) || voices.find(voice => voice.lang.includes('nl'));
+        (voice.name.toLowerCase().includes('female') || 
+         voice.name.toLowerCase().includes('claire') || 
+         voice.name.toLowerCase().includes('xander') ||
+         voice.name.toLowerCase().includes('google'))
+      ) || voices.find(voice => voice.lang.includes('nl-NL')) || voices.find(voice => voice.lang.includes('nl'));
       
       if (preferredVoice) {
         utterance.voice = preferredVoice;

@@ -212,13 +212,14 @@ export default function Home() {
                   { value: '10', label: '10' },
                   { value: '11', label: '11' },
                   { value: '12', label: '12' },
-                  { value: 'other', label: 'Anders...' }
+                  { value: 'other', label: language === 'en' ? 'Other...' : 'Anders...' }
                 ]}
                 value={answers.age}
                 onValueChange={(value) => updateAnswers({ age: value })}
                 otherValue={answers.age === 'other' ? answers.age : ''}
                 onOtherValueChange={(value) => updateAnswers({ age: value })}
                 columns={8}
+                language={language}
               />
               {answers.age.length > 0 && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
@@ -252,6 +253,7 @@ export default function Home() {
                 otherValue={answers.visitingWithOther}
                 onOtherValueChange={(value) => updateAnswers({ visitingWithOther: value })}
                 columns={5}
+                language={language}
               />
               {answers.visitingWith.length > 0 && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
@@ -324,6 +326,7 @@ export default function Home() {
                 options={getLikertScale()}
                 value={answers.feelingBefore}
                 onValueChange={(value) => updateAnswers({ feelingBefore: value })}
+                language={language}
               />
               {answers.feelingBefore !== null && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
@@ -365,6 +368,7 @@ export default function Home() {
                 options={getConfidenceScale()}
                 value={answers.confidenceBefore}
                 onValueChange={(value) => updateAnswers({ confidenceBefore: value })}
+                language={language}
               />
               {answers.confidenceBefore !== null && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
@@ -466,6 +470,7 @@ export default function Home() {
                 options={getLikertScale()}
                 value={answers.feelingAfter}
                 onValueChange={(value) => updateAnswers({ feelingAfter: value })}
+                language={language}
               />
               {answers.feelingAfter !== null && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
@@ -508,6 +513,7 @@ export default function Home() {
                 value={answers.actionChoice}
                 onValueChange={(value) => updateAnswers({ actionChoice: value })}
                 columns={3}
+                language={language}
               />
               
               {answers.actionChoice && (
@@ -556,6 +562,7 @@ export default function Home() {
                 options={getConfidenceScale()}
                 value={answers.confidenceAfter}
                 onValueChange={(value) => updateAnswers({ confidenceAfter: value })}
+                language={language}
               />
               {answers.confidenceAfter !== null && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
