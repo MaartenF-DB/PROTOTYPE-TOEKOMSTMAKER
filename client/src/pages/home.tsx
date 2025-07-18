@@ -419,38 +419,41 @@ export default function Home() {
               console.log('🔍 NAME CONFIRMATION:', { name, isNewUser });
               updateAnswers({ name, isNewCheckoutUser: isNewUser });
               
-              if (isNewUser) {
-                // New user - needs to answer age and visitingWith first, then ranking question
-                console.log('📝 NEW USER: Going to checkout-age');
+              // Check if this name exists in our database (case-insensitive)
+              const existingResponse = existingResponses.find((r: any) => 
+                r.name.toLowerCase() === name.toLowerCase() && 
+                r.feelingAfter === null // Only check-in users (not completed checkout)
+              );
+              
+              console.log('🔍 SEARCHING FOR EXISTING USER:', { 
+                searchName: name.toLowerCase(),
+                existingResponse,
+                allResponses: existingResponses.map(r => ({ name: r.name, feelingAfter: r.feelingAfter }))
+              });
+              
+              if (existingResponse) {
+                // EXISTING USER - Skip ALL preliminary questions and go directly to question-6
+                console.log('✅ EXISTING USER FOUND - SKIPPING ALL PRELIMINARY QUESTIONS');
+                console.log('🚀 LOADING EXISTING USER DATA:', existingResponse);
+                
+                updateAnswers({ 
+                  mostImportantTopic: existingResponse.mostImportantTopic,
+                  topicRanking: existingResponse.topicRanking || [],
+                  age: existingResponse.age,
+                  visitingWith: existingResponse.visitingWith,
+                  visitingWithOther: existingResponse.visitingWithOther || '',
+                  feelingBefore: existingResponse.feelingBefore || null,
+                  confidenceBefore: existingResponse.confidenceBefore || null
+                });
+                
+                console.log('🚀 JUMPING DIRECTLY TO QUESTION-6 (FEELING AFTER)');
+                setCheckoutOnly(false); // They are returning users
+                setCurrentSection('question-6');
+              } else {
+                // NEW USER - Must answer all preliminary questions first
+                console.log('📝 NEW USER - GOING TO PRELIMINARY QUESTIONS');
                 setCheckoutOnly(true);
                 setCurrentSection('checkout-age');
-              } else {
-                // Existing user with complete check-in data - find their previous responses
-                const existingResponse = existingResponses.find((r: any) => r.name.toLowerCase() === name.toLowerCase());
-                console.log('🔍 EXISTING USER LOOKUP:', { name, existingResponse, existingResponses });
-                
-                if (existingResponse) {
-                  // Use their complete check-in data and skip ALL preliminary questions - go directly to question-6
-                  console.log('✅ EXISTING USER DATA FOUND - SKIPPING ALL PRELIMINARY QUESTIONS');
-                  console.log('🚀 SETTING ANSWERS FROM EXISTING RESPONSE');
-                  updateAnswers({ 
-                    mostImportantTopic: existingResponse.mostImportantTopic,
-                    topicRanking: existingResponse.topicRanking || [],
-                    age: existingResponse.age,
-                    visitingWith: existingResponse.visitingWith,
-                    visitingWithOther: existingResponse.visitingWithOther || '',
-                    feelingBefore: existingResponse.feelingBefore || null,
-                    confidenceBefore: existingResponse.confidenceBefore || null
-                  });
-                  console.log('🚀 JUMPING DIRECTLY TO QUESTION-6 (FEELING AFTER)');
-                  // Set checkoutOnly to false to indicate they are returning users who skip all preliminary questions
-                  setCheckoutOnly(false);
-                  setCurrentSection('question-6');
-                } else {
-                  console.log('❌ No existing response found, treating as new user');
-                  setCheckoutOnly(true);
-                  setCurrentSection('checkout-age');
-                }
               }
             }}
             language={language}
