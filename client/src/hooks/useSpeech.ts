@@ -14,6 +14,9 @@ export function useSpeech() {
     // Cancel any ongoing speech
     speechSynthesis.cancel();
 
+    // Force language to be explicit and ensure proper pronunciation
+    const targetLanguage = language || 'nl';
+
     // Add natural pauses and improve text for speech
     const improvedText = text
       .replace(/\?/g, '? ') // Add pause after questions
@@ -27,50 +30,61 @@ export function useSpeech() {
 
     const utterance = new SpeechSynthesisUtterance(improvedText);
     
-    // Detect language from text or use provided language
-    const detectedLanguage = language || (text.match(/[a-zA-Z]/) && text.match(/[a-zA-Z]/g)!.length > text.length / 2 ? 'en' : 'nl');
+    // Use the explicit language parameter
+    const detectedLanguage = targetLanguage;
     
     if (detectedLanguage === 'en') {
       utterance.lang = 'en-US';
-      utterance.rate = 0.9; // Slightly faster for more natural flow
-      utterance.pitch = 1.1; // More natural pitch
-      utterance.volume = 0.9; // Slightly softer volume
+      utterance.rate = 0.85;
+      utterance.pitch = 1.0;
+      utterance.volume = 0.9;
       
-      // Try to find the most natural female English voice
+      // Find the best female English voice with strict language matching
       const voices = speechSynthesis.getVoices();
       const preferredVoice = voices.find(voice => 
-        voice.lang.includes('en-US') && 
+        voice.lang === 'en-US' && 
         (voice.name.toLowerCase().includes('samantha') || 
          voice.name.toLowerCase().includes('susan') || 
          voice.name.toLowerCase().includes('karen') ||
-         voice.name.toLowerCase().includes('zira') ||
-         voice.name.toLowerCase().includes('google') ||
-         voice.name.toLowerCase().includes('microsoft'))
+         voice.name.toLowerCase().includes('female'))
       ) || voices.find(voice => 
-        voice.lang.includes('en-US') && voice.name.toLowerCase().includes('female')
-      ) || voices.find(voice => voice.lang.includes('en-US')) || voices.find(voice => voice.lang.includes('en'));
+        voice.lang === 'en-US' && voice.name.toLowerCase().includes('google')
+      ) || voices.find(voice => 
+        voice.lang === 'en-US' && 
+        (voice.name.toLowerCase().includes('zira') || voice.name.toLowerCase().includes('microsoft'))
+      ) || voices.find(voice => voice.lang === 'en-US') || voices.find(voice => voice.lang.startsWith('en-'));
       
       if (preferredVoice) {
         utterance.voice = preferredVoice;
+        console.log('Selected English voice:', preferredVoice.name, preferredVoice.lang);
       }
     } else {
       utterance.lang = 'nl-NL';
-      utterance.rate = 0.85; // Natural speaking pace
-      utterance.pitch = 1.0; // More natural pitch
-      utterance.volume = 0.9; // Slightly softer volume
+      utterance.rate = 0.8;
+      utterance.pitch = 1.0;
+      utterance.volume = 0.9;
       
-      // Try to find the most natural female Dutch voice
+      // Find the best female Dutch voice with strict language matching
       const voices = speechSynthesis.getVoices();
       const preferredVoice = voices.find(voice => 
-        voice.lang.includes('nl') && 
-        (voice.name.toLowerCase().includes('google') || 
-         voice.name.toLowerCase().includes('microsoft') ||
-         voice.name.toLowerCase().includes('claire') ||
-         voice.name.toLowerCase().includes('female'))
-      ) || voices.find(voice => voice.lang.includes('nl-NL')) || voices.find(voice => voice.lang.includes('nl'));
+        voice.lang === 'nl-NL' && 
+        (voice.name.toLowerCase().includes('claire') || 
+         voice.name.toLowerCase().includes('female') ||
+         voice.name.toLowerCase().includes('saskia') ||
+         voice.name.toLowerCase().includes('lotte'))
+      ) || voices.find(voice => 
+        voice.lang === 'nl-NL' && voice.name.toLowerCase().includes('google')
+      ) || voices.find(voice => 
+        voice.lang === 'nl-NL' && 
+        !voice.name.toLowerCase().includes('frank') && 
+        !voice.name.toLowerCase().includes('male')
+      ) || voices.find(voice => 
+        voice.lang === 'nl-NL'
+      ) || voices.find(voice => voice.lang.startsWith('nl-'));
       
       if (preferredVoice) {
         utterance.voice = preferredVoice;
+        console.log('Selected Dutch voice:', preferredVoice.name, preferredVoice.lang);
       }
     }
 

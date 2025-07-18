@@ -41,11 +41,14 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
     }
   }, [ranking, onRankingChange, shuffledTopics.length]);
 
-  // Speak the instructions when component mounts
+  // Speak the main question when component mounts
   useEffect(() => {
-    const instructions = `${t.ranking.instructions} ${t.ranking.clickForInfo}`;
-    speak(instructions);
-  }, [speak, t.ranking.instructions, t.ranking.clickForInfo]);
+    // For the ranking question, only speak the main question text
+    const mainQuestion = language === 'en' ? 
+      "Which topic do you think is most important?" : 
+      "Welk onderwerp vind jij het meest belangrijk?";
+    speak(mainQuestion, language);
+  }, [speak, language]);
 
   // Use the existing ranking or shuffled topics
   const displayRanking = ranking.length > 0 ? ranking : shuffledTopics;
