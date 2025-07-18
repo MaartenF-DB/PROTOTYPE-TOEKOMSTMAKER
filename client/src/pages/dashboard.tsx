@@ -14,8 +14,22 @@ export default function Dashboard() {
   });
 
   // Separate responses by type
-  const completeResponses = responses.filter(r => r.feelingAfter !== null && r.actionChoice && r.confidenceAfter !== null);
-  const checkInOnlyResponses = responses.filter(r => r.feelingAfter === null || !r.actionChoice || r.confidenceAfter === null);
+  const completeResponses = responses.filter(r => 
+    r.feelingAfter !== null && 
+    r.feelingAfter !== 0 &&
+    r.actionChoice && 
+    r.actionChoice.trim() !== '' &&
+    r.confidenceAfter !== null &&
+    r.confidenceAfter !== 0
+  );
+  const checkInOnlyResponses = responses.filter(r => 
+    r.feelingAfter === null || 
+    r.feelingAfter === 0 ||
+    !r.actionChoice || 
+    r.actionChoice.trim() === '' ||
+    r.confidenceAfter === null ||
+    r.confidenceAfter === 0
+  );
 
   const stats = {
     totalResponses: responses.length,

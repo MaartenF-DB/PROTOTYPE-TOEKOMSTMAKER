@@ -65,10 +65,12 @@ export default function Home() {
   const progressPercentage = getCurrentProgress();
   
   // Query to check for existing names
-  const { data: existingResponses = [] } = useQuery({
+  const { data: existingResponses = [], isLoading: isLoadingResponses } = useQuery({
     queryKey: ['/api/survey-responses'],
     enabled: true
   });
+
+  console.log('🔍 EXISTING RESPONSES QUERY:', { existingResponses, isLoadingResponses });
   
   // Check if current name already exists and get similar names
   const hasNameConflict = existingResponses.some((response: any) => 

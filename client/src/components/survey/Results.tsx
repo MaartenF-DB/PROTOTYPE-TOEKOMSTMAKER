@@ -97,13 +97,39 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
     onRestart();
   };
 
+  // Create topic-specific gradient based on hex color
+  const getTopicGradient = (hexColor: string) => {
+    const rgb = hexToRgb(hexColor);
+    if (rgb) {
+      const darkerRgb = {
+        r: Math.max(0, rgb.r - 30),
+        g: Math.max(0, rgb.g - 30),
+        b: Math.max(0, rgb.b - 30)
+      };
+      return `linear-gradient(135deg, ${hexColor} 0%, rgb(${darkerRgb.r}, ${darkerRgb.g}, ${darkerRgb.b}) 100%)`;
+    }
+    return 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)';
+  };
+
+  const hexToRgb = (hex: string) => {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    } : null;
+  };
+
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-yellow-400 to-orange-400 text-white">
+    <section 
+      className="min-h-screen flex flex-col items-center justify-center p-6 text-white"
+      style={{
+        background: topicData?.hexColor ? getTopicGradient(topicData.hexColor) : 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)'
+      }}
+    >
       <div className="text-center max-w-2xl w-full">
         <div className="mb-8">
-          <div className={`w-32 h-32 mx-auto rounded-full shadow-2xl transition-all duration-1000 ${
-            animationComplete ? topicData?.color || 'bg-gray-500' : 'bg-gray-400 animate-pulse'
-          }`}>
+          <div className="w-32 h-32 mx-auto rounded-full shadow-2xl transition-all duration-1000 bg-white bg-opacity-20 backdrop-blur-sm">
             <div className="w-full h-full rounded-full flex items-center justify-center text-6xl">
               {topicData?.icon || '❓'}
             </div>
