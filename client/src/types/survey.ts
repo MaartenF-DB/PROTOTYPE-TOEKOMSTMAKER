@@ -27,7 +27,7 @@ export const TOPICS = {
   RIJKDOM: { name: 'RIJKDOM', color: 'bg-purple-500', icon: '🤝', description: 'Delen is fijner dan hebben!', hexColor: '#6358A6', nameEn: 'WEALTH', descriptionEn: 'Sharing is better than having!' },
   'VRIJE TIJD': { name: 'VRIJE TIJD', color: 'bg-red-500', icon: '🎮', description: 'Minder werken, meer spelen!', hexColor: '#9E4622', nameEn: 'FREE TIME', descriptionEn: 'Less work, more play!' },
   KLIMAAT: { name: 'KLIMAAT', color: 'bg-cyan-500', icon: '🌱', description: 'We maken de aarde samen groener!', hexColor: '#70C164', nameEn: 'CLIMATE', descriptionEn: 'We make the earth greener together!' },
-  WONEN: { name: 'WONEN', color: 'bg-orange-500', icon: '🏠', description: 'Iedereen woont op een goede plek!', hexColor: '#F59E0B', nameEn: 'HOUSING', descriptionEn: 'Everyone lives in a good place!' }
+  WONEN: { name: 'WONEN', color: 'bg-orange-500', icon: '🏠', description: 'Iedereen woont op een goede plek!', hexColor: '#F59E0B', nameEn: 'LIVING', descriptionEn: 'Everyone lives in a good place!' }
 } as const;
 
 export type TopicKey = keyof typeof TOPICS;

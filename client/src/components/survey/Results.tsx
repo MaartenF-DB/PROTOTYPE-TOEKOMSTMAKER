@@ -94,14 +94,24 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
         </div>
         
         <div className="bg-white bg-opacity-20 rounded-2xl p-8 mb-8">
-          <h2 className="text-4xl font-bold mb-6">Jij bent een...</h2>
+          <h2 className="text-4xl font-bold mb-6">
+            {language === 'en' ? 'You are a...' : 'Jij bent een...'}
+          </h2>
           
           <div className="text-6xl font-bold mb-4">
-            {answers.actionChoice === 'uitvinden' ? 'UITVINDER' :
-             answers.actionChoice === 'actie' ? 'ACTIEVOERDER' :
-             answers.actionChoice === 'veranderen' ? 'VERANDERAAR' : 'TOEKOMSTMAKER'}
+            {language === 'en' ? 
+              (answers.actionChoice === 'uitvinden' ? 'INVENTOR' :
+               answers.actionChoice === 'actie' ? 'ACTIVIST' :
+               answers.actionChoice === 'veranderen' ? 'CHANGEMAKER' : 'FUTURE MAKER')
+              :
+              (answers.actionChoice === 'uitvinden' ? 'UITVINDER' :
+               answers.actionChoice === 'actie' ? 'ACTIEVOERDER' :
+               answers.actionChoice === 'veranderen' ? 'VERANDERAAR' : 'TOEKOMSTMAKER')
+            }
           </div>
-          <div className="text-3xl mb-6">voor</div>
+          <div className="text-3xl mb-6">
+            {language === 'en' ? 'for' : 'voor'}
+          </div>
           <div className="text-5xl font-bold text-yellow-300 mb-8">{getTopicName(answers.mostImportantTopic, language)}</div>
           
           <div className="bg-white bg-opacity-30 rounded-xl p-6 mt-6">
@@ -119,7 +129,7 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
-            Stop
+            {language === 'en' ? 'Stop' : 'Stop'}
           </Button>
         </div>
       </div>

@@ -278,9 +278,23 @@ export default function Home() {
             onNext={() => {
               const mostImportant = answers.topicRanking[answers.topicRanking.length - 1];
               updateAnswers({ mostImportantTopic: mostImportant });
-              setCurrentSection('question-4');
+              if (checkoutOnly) {
+                // For checkout-only users, go to question 6 after topic selection
+                setCurrentSection('question-6');
+              } else {
+                // For regular check-in users, continue to question 4
+                setCurrentSection('question-4');
+              }
             }}
-            onPrevious={() => setCurrentSection('question-2')}
+            onPrevious={() => {
+              if (checkoutOnly) {
+                // For checkout-only users, go back to name input
+                setCurrentSection('checkout-name');
+              } else {
+                // For regular check-in users, go to question 2
+                setCurrentSection('question-2');
+              }
+            }}
             showPrevious={true}
             showNext={true}
             isValid={answers.topicRanking.length === 6}
@@ -315,9 +329,9 @@ export default function Home() {
               {topicData && (
                 <div className="mb-6 p-8 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
                   <div className="text-9xl mb-4 text-center">{topicData.icon}</div>
-                  <div className="text-2xl font-semibold text-white mb-2 text-center">{answers.mostImportantTopic}</div>
+                  <div className="text-2xl font-semibold text-white mb-2 text-center">{language === 'en' ? topicData.nameEn : answers.mostImportantTopic}</div>
                   <div className="text-base text-white opacity-90 max-w-lg mx-auto text-center">
-                    {topicData.description}
+                    {language === 'en' ? topicData.descriptionEn : topicData.description}
                   </div>
                 </div>
               )}
@@ -357,9 +371,9 @@ export default function Home() {
               {topicData && (
                 <div className="mb-6 p-8 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
                   <div className="text-9xl mb-4 text-center">{topicData.icon}</div>
-                  <div className="text-2xl font-semibold text-white mb-2 text-center">{answers.mostImportantTopic}</div>
+                  <div className="text-2xl font-semibold text-white mb-2 text-center">{language === 'en' ? topicData.nameEn : answers.mostImportantTopic}</div>
                   <div className="text-base text-white opacity-90 max-w-lg mx-auto text-center">
-                    {topicData.description}
+                    {language === 'en' ? topicData.descriptionEn : topicData.description}
                   </div>
                 </div>
               )}
@@ -401,16 +415,15 @@ export default function Home() {
             existingNames={existingResponses.map(r => r.name)}
             onNameConfirm={(name, isNewUser) => {
               updateAnswers({ name, isNewCheckoutUser: isNewUser });
-              // For checkout, we need to ensure the user has a topic selected
-              if (!answers.mostImportantTopic) {
-                // If no topic is selected, user must be checkout-only
+              // If this is a new user who hasn't done check-in, they need to select a topic first
+              if (isNewUser) {
                 setCheckoutOnly(true);
-                // Set a default topic if none exists
-                if (!answers.mostImportantTopic) {
-                  updateAnswers({ mostImportantTopic: 'GEZONDHEID' });
-                }
+                // Go to ranking question first
+                setCurrentSection('question-3');
+              } else {
+                // Existing user can proceed to checkout questions
+                setCurrentSection('question-6');
               }
-              setCurrentSection('question-6');
             }}
             language={language}
           />
@@ -436,12 +449,20 @@ export default function Home() {
         return (
           <Question
             questionNumber={6}
-            question={`${t.checkOutQuestions.feeling} ${answers.mostImportantTopic} ${t.checkOutQuestions.future}?`}
+            question={`${t.checkOutQuestions.feeling} ${language === 'en' ? topicData.nameEn : answers.mostImportantTopic} ${t.checkOutQuestions.future}?`}
             bgGradient={topicData?.hexColor ? '' : 'from-pink-500 to-red-500'}
             buttonColor={topicData?.hexColor ? '' : 'bg-pink-600 hover:bg-pink-700'}
             style={topicData?.hexColor ? { background: getTopicGradient(topicData.hexColor) } : {}}
             onNext={() => setCurrentSection('question-7')}
-            onPrevious={() => setCurrentSection('checkout-name')}
+            onPrevious={() => {
+              if (checkoutOnly) {
+                // For checkout-only users, go back to topic selection
+                setCurrentSection('question-3');
+              } else {
+                // For regular users, go to checkout name
+                setCurrentSection('checkout-name');
+              }
+            }}
             showPrevious={true}
             showNext={true}
             isValid={answers.feelingAfter !== null}
@@ -451,9 +472,9 @@ export default function Home() {
               {topicData && (
                 <div className="mb-6 p-8 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
                   <div className="text-9xl mb-4 text-center">{topicData.icon}</div>
-                  <div className="text-2xl font-semibold text-white mb-2 text-center">{answers.mostImportantTopic}</div>
+                  <div className="text-2xl font-semibold text-white mb-2 text-center">{language === 'en' ? topicData.nameEn : answers.mostImportantTopic}</div>
                   <div className="text-base text-white opacity-90 max-w-lg mx-auto text-center">
-                    {topicData.description}
+                    {language === 'en' ? topicData.descriptionEn : topicData.description}
                   </div>
                 </div>
               )}
@@ -486,12 +507,20 @@ export default function Home() {
         return (
           <Question
             questionNumber={7}
-            question={`${t.checkOutQuestions.action} ${answers.mostImportantTopic} ${t.checkOutQuestions.future}?`}
+            question={`${t.checkOutQuestions.action} ${language === 'en' ? topicData.nameEn : answers.mostImportantTopic} ${t.checkOutQuestions.future}?`}
             bgGradient={topicData?.hexColor ? '' : 'from-cyan-500 to-blue-500'}
             buttonColor={topicData?.hexColor ? '' : 'bg-cyan-600 hover:bg-cyan-700'}
             style={topicData?.hexColor ? { background: getTopicGradient(topicData.hexColor) } : {}}
             onNext={() => setCurrentSection('question-8')}
-            onPrevious={() => setCurrentSection('question-6')}
+            onPrevious={() => {
+              if (checkoutOnly) {
+                // For checkout-only users, go back to topic selection
+                setCurrentSection('question-3');
+              } else {
+                // For regular users, go to question 6
+                setCurrentSection('question-6');
+              }
+            }}
             showPrevious={true}
             showNext={true}
             isValid={answers.actionChoice.length > 0}
@@ -501,9 +530,9 @@ export default function Home() {
               {topicData && (
                 <div className="mb-6 p-8 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
                   <div className="text-9xl mb-4 text-center">{topicData.icon}</div>
-                  <div className="text-2xl font-semibold text-white mb-2 text-center">{answers.mostImportantTopic}</div>
+                  <div className="text-2xl font-semibold text-white mb-2 text-center">{language === 'en' ? topicData.nameEn : answers.mostImportantTopic}</div>
                   <div className="text-base text-white opacity-90 max-w-lg mx-auto text-center">
-                    {topicData.description}
+                    {language === 'en' ? topicData.descriptionEn : topicData.description}
                   </div>
                 </div>
               )}
@@ -533,7 +562,7 @@ export default function Home() {
         return (
           <Question
             questionNumber={8}
-            question={`${t.checkOutQuestions.confidence} ${answers.mostImportantTopic} ${t.checkOutQuestions.future}?`}
+            question={`${t.checkOutQuestions.confidence} ${language === 'en' ? topicData.nameEn : answers.mostImportantTopic} ${t.checkOutQuestions.future}?`}
             bgGradient={topicData?.hexColor ? '' : 'from-green-500 to-emerald-600'}
             buttonColor={topicData?.hexColor ? '' : 'bg-green-600 hover:bg-green-700'}
             style={topicData?.hexColor ? { background: getTopicGradient(topicData.hexColor) } : {}}
@@ -551,9 +580,9 @@ export default function Home() {
               {topicData && (
                 <div className="mb-6 p-8 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
                   <div className="text-9xl mb-4 text-center">{topicData.icon}</div>
-                  <div className="text-2xl font-semibold text-white mb-2 text-center">{answers.mostImportantTopic}</div>
+                  <div className="text-2xl font-semibold text-white mb-2 text-center">{language === 'en' ? topicData.nameEn : answers.mostImportantTopic}</div>
                   <div className="text-base text-white opacity-90 max-w-lg mx-auto text-center">
-                    {topicData.description}
+                    {language === 'en' ? topicData.descriptionEn : topicData.description}
                   </div>
                 </div>
               )}

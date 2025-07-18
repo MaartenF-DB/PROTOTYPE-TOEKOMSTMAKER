@@ -61,7 +61,7 @@ export function useSpeech() {
     } else {
       utterance.lang = 'nl-NL';
       utterance.rate = 0.9; // Faster, more natural
-      utterance.pitch = 1.05; // Slightly higher, more pleasant
+      utterance.pitch = 0.95; // Lower, more human-like
       utterance.volume = 0.8; // Softer, more gentle
       
       // Find the best female Dutch voice with strict language matching

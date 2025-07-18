@@ -43,12 +43,14 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
 
   // Speak the main question when component mounts
   useEffect(() => {
-    // For the ranking question, only speak the main question text
+    // Only speak once when component first mounts
+    if (shuffledTopics.length === 0) return;
+    
     const mainQuestion = language === 'en' ? 
       "Which topic do you think is most important?" : 
       "Welk onderwerp vind jij het meest belangrijk?";
     speak(mainQuestion, language);
-  }, [speak, language]);
+  }, [speak, language, shuffledTopics.length]);
 
   // Use the existing ranking or shuffled topics
   const displayRanking = ranking.length > 0 ? ranking : shuffledTopics;
@@ -163,8 +165,7 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
 
   return (
     <div className="w-full">
-      <p className="text-lg mb-4 text-center font-bold">{t.ranking.instructions}</p>
-      <p className="text-sm mb-6 opacity-75 text-center">{t.ranking.clickForInfo}</p>
+      {/* Remove instruction text as requested */}
       
       {/* Interactive Ranking with Drop Zones */}
       <div className="mb-8">
@@ -204,10 +205,7 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
                       onClick={() => {
                         const newSelected = selectedTopic === topicAtPosition ? null : topicAtPosition;
                         setSelectedTopic(newSelected);
-                        if (newSelected) {
-                          const topicName = getTopicName(newSelected);
-                          speak(`${topicName} geselecteerd`, language);
-                        }
+                        // Remove audio when clicking on topics
                       }}
                       className={`p-4 rounded-lg cursor-move shadow-lg transform hover:scale-105 transition-all duration-300 text-white border-2 select-none w-full ${
                         isBeingDragged

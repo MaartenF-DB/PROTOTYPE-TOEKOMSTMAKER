@@ -104,6 +104,16 @@ The application follows a modern full-stack architecture with the following comp
 
 ## Recent Changes
 
+### July 18, 2025 - Major Voice and Translation Updates
+- **Enhanced Dutch Voice Quality**: Updated Dutch voice pitch to 0.95 for more natural, human-like sound
+- **Fixed Ranking Question Audio**: Ranking question now only speaks main question once, removed instruction text and audio feedback on topic clicks
+- **Complete English Translation Implementation**: 
+  - Updated topic names in English (WONEN=LIVING, KLIMAAT=CLIMATE, GEZONDHEID=HEALTH, RIJKDOM=WEALTH, VREDE=PEACE, VRIJE TIJD=FREE TIME)
+  - Fixed Results component to display proper English translations for all text
+  - Updated all topic data displays throughout the app to use language-specific names and descriptions
+- **Fixed Checkout Flow for New Users**: New users who skip check-in questions now properly get the ranking question first before proceeding to other checkout questions
+- **Enhanced Navigation Logic**: Improved navigation flow between questions for checkout-only users to ensure proper sequence
+
 ### July 18, 2025 - Complete English Translation and Enhanced User Experience
 - **Full Bilingual Support**: Added complete English translations for all survey components
   - Created English versions of all scale options (LIKERT_SCALE_EN, CONFIDENCE_SCALE_EN, ACTION_OPTIONS_EN, VISITING_OPTIONS_EN)
