@@ -108,8 +108,9 @@ The application follows a modern full-stack architecture with the following comp
 - **Database Migration**: Replaced in-memory storage with PostgreSQL database to ensure data persistence
 - **Fixed existingResponses Issue**: API now properly returns stored survey responses from database
 - **Enhanced Checkout Logic**: Simplified name matching logic to find exact matches (case-insensitive)
-- **Test Data Creation**: Created test users "anna" and "testkind" with complete check-in data
+- **Test Data Creation**: Created test users "anna", "testkind", and "floor" with complete check-in data
 - **Improved Logging**: Added comprehensive console logging to track checkout flow progression
+- **Name Memory System**: Any name entered in check-in is permanently stored in database and recognized in checkout
 
 ### July 18, 2025 - Complete Checkout Flow Optimization for Existing Users
 - **Removed ALL preliminary questions for existing users**: When existing users (who completed check-in) do checkout, they now skip age, visiting, AND ranking questions completely

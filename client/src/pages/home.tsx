@@ -419,22 +419,33 @@ export default function Home() {
               console.log('🔍 NAME CONFIRMATION:', { name, isNewUser });
               updateAnswers({ name, isNewCheckoutUser: isNewUser });
               
-              // Check if this name exists in our database (case-insensitive)
+              // ALWAYS check if this name exists in our database (case-insensitive)
+              // Look for users who have check-in data (age, visitingWith, mostImportantTopic)
               const existingResponse = existingResponses.find((r: any) => 
                 r.name.toLowerCase() === name.toLowerCase() && 
-                r.feelingAfter === null // Only check-in users (not completed checkout)
+                r.age && r.visitingWith && r.mostImportantTopic && // Has check-in data
+                r.feelingAfter === null // But hasn't completed checkout yet
               );
               
               console.log('🔍 SEARCHING FOR EXISTING USER:', { 
                 searchName: name.toLowerCase(),
                 existingResponse,
-                allResponses: existingResponses.map(r => ({ name: r.name, feelingAfter: r.feelingAfter }))
+                allResponses: existingResponses.map(r => ({ 
+                  name: r.name, 
+                  hasCheckIn: !!(r.age && r.visitingWith && r.mostImportantTopic),
+                  hasCheckOut: r.feelingAfter !== null 
+                }))
               });
               
               if (existingResponse) {
-                // EXISTING USER - Skip ALL preliminary questions and go directly to question-6
+                // EXISTING USER WITH CHECK-IN DATA - Skip ALL preliminary questions
                 console.log('✅ EXISTING USER FOUND - SKIPPING ALL PRELIMINARY QUESTIONS');
-                console.log('🚀 LOADING EXISTING USER DATA:', existingResponse);
+                console.log('🚀 LOADING EXISTING USER DATA:', {
+                  name: existingResponse.name,
+                  age: existingResponse.age,
+                  visitingWith: existingResponse.visitingWith,
+                  mostImportantTopic: existingResponse.mostImportantTopic
+                });
                 
                 updateAnswers({ 
                   mostImportantTopic: existingResponse.mostImportantTopic,
