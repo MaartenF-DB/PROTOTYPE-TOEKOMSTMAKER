@@ -26,17 +26,19 @@ export function CheckoutNameInput({ existingResponses, onNameConfirm, language =
     console.log('🔍 CHECKOUT NAME SUBMIT:', { enteredName, existingResponses });
     
     // Check if this exact name exists and has complete check-in data (age AND visitingWith must be filled)
+    // AND has no checkout data (feelingAfter is null/undefined)
     const exactMatch = existingResponses.find(response => 
       response.name.toLowerCase() === enteredName.toLowerCase() &&
       response.age && response.age.trim() !== '' && 
-      response.visitingWith && response.visitingWith.trim() !== ''
+      response.visitingWith && response.visitingWith.trim() !== '' &&
+      (response.feelingAfter === null || response.feelingAfter === undefined)
     );
     
     console.log('🔍 EXACT MATCH RESULT:', { exactMatch, enteredName });
     
     if (exactMatch) {
-      // Exact match with complete check-in data - use their previous data, skip age/visiting questions
-      console.log('✅ FOUND EXISTING USER - CALLING onNameConfirm with false (existing user)');
+      // Exact match with complete check-in data but no checkout data - use their previous data, skip age/visiting questions
+      console.log('✅ FOUND EXISTING USER WITH CHECK-IN DATA ONLY - CALLING onNameConfirm with false (existing user)');
       speak("Ik heb je naam gevonden! Je hebt al eerder de check-in vragen beantwoord.");
       onNameConfirm(exactMatch.name, false); // false = existing user with complete data
     } else {
