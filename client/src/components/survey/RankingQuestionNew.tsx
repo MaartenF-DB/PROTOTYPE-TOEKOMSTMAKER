@@ -27,6 +27,7 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
   const [touchItem, setTouchItem] = useState<string | null>(null);
   const [touchStartPos, setTouchStartPos] = useState<{ x: number; y: number } | null>(null);
+  const [hasSpoken, setHasSpoken] = useState(false);
 
   // Initialize shuffled topics once
   useEffect(() => {
@@ -41,16 +42,17 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
     }
   }, [ranking, onRankingChange, shuffledTopics.length]);
 
-  // Speak the main question when component mounts
+  // Speak the main question when component mounts - only once
   useEffect(() => {
-    // Only speak once when component first mounts
-    if (shuffledTopics.length === 0) return;
-    
-    const mainQuestion = language === 'en' ? 
-      "Which topic do you think is most important?" : 
-      "Welk onderwerp vind jij het meest belangrijk?";
-    speak(mainQuestion, language);
-  }, [speak, language, shuffledTopics.length]);
+    // Only speak once when component first mounts and has topics
+    if (shuffledTopics.length > 0 && !hasSpoken) {
+      const mainQuestion = language === 'en' ? 
+        "Which topic do you think is most important?" : 
+        "Welk onderwerp vind jij het meest belangrijk?";
+      speak(mainQuestion, language);
+      setHasSpoken(true);
+    }
+  }, [speak, language, shuffledTopics.length, hasSpoken]);
 
   // Use the existing ranking or shuffled topics
   const displayRanking = ranking.length > 0 ? ranking : shuffledTopics;

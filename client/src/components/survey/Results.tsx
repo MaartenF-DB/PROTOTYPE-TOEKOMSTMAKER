@@ -67,7 +67,22 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
           console.log('✅ ANIMATION COMPLETE - SHOWING FINAL RESULTS NOW');
           setShowAnimatedResult(false);
           setAnimationComplete(true);
-          speak(answers.result);
+          
+          // Speak the results in the correct language
+          const resultText = language === 'en' ? 
+            `You are a ${answers.actionChoice === 'uitvinden' ? 'inventor' :
+                        answers.actionChoice === 'actie' ? 'activist' :
+                        answers.actionChoice === 'veranderen' ? 'changemaker' : 'future maker'} for ${getTopicName(answers.mostImportantTopic, language)}` :
+            `Jij bent een ${answers.actionChoice === 'uitvinden' ? 'uitvinder' :
+                           answers.actionChoice === 'actie' ? 'actievoerder' :
+                           answers.actionChoice === 'veranderen' ? 'veranderaar' : 'toekomstmaker'} voor ${getTopicName(answers.mostImportantTopic, language)}`;
+          
+          speak(resultText, language);
+          
+          // Also speak the motivational message after a brief pause
+          setTimeout(() => {
+            speak(motivationalMessage, language);
+          }, 3000);
         }}
       />
     );
