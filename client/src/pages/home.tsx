@@ -427,11 +427,12 @@ export default function Home() {
               } else {
                 // Existing user with complete check-in data - find their previous responses
                 const existingResponse = existingResponses.find((r: any) => r.name.toLowerCase() === name.toLowerCase());
-                console.log('🔍 EXISTING USER LOOKUP:', { name, existingResponse });
+                console.log('🔍 EXISTING USER LOOKUP:', { name, existingResponse, existingResponses });
                 
                 if (existingResponse) {
                   // Use their complete check-in data and skip ALL preliminary questions - go directly to question-6
                   console.log('✅ EXISTING USER DATA FOUND - SKIPPING ALL PRELIMINARY QUESTIONS');
+                  console.log('🚀 SETTING ANSWERS FROM EXISTING RESPONSE');
                   updateAnswers({ 
                     mostImportantTopic: existingResponse.mostImportantTopic,
                     topicRanking: existingResponse.topicRanking || [],
