@@ -11,7 +11,17 @@ import { LikertScale } from '@/components/survey/LikertScale';
 import { NameVerification } from '@/components/survey/NameVerification';
 import { NameMatching } from '@/components/survey/NameMatching';
 import { Input } from '@/components/ui/input';
-import { VISITING_OPTIONS, ACTION_OPTIONS, LIKERT_SCALE, CONFIDENCE_SCALE, TOPICS } from '@/types/survey';
+import { 
+  VISITING_OPTIONS, 
+  ACTION_OPTIONS, 
+  LIKERT_SCALE, 
+  CONFIDENCE_SCALE, 
+  TOPICS,
+  VISITING_OPTIONS_EN,
+  ACTION_OPTIONS_EN,
+  LIKERT_SCALE_EN,
+  CONFIDENCE_SCALE_EN
+} from '@/types/survey';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { LanguageSelector } from '@/components/LanguageSelector';
@@ -44,6 +54,12 @@ export default function Home() {
     setLanguage(newLanguage);
     localStorage.setItem('survey-language', newLanguage);
   };
+
+  // Helper functions to get language-specific options
+  const getVisitingOptions = () => language === 'en' ? VISITING_OPTIONS_EN : VISITING_OPTIONS;
+  const getActionOptions = () => language === 'en' ? ACTION_OPTIONS_EN : ACTION_OPTIONS;
+  const getLikertScale = () => language === 'en' ? LIKERT_SCALE_EN : LIKERT_SCALE;
+  const getConfidenceScale = () => language === 'en' ? CONFIDENCE_SCALE_EN : CONFIDENCE_SCALE;
 
   const progressPercentage = getCurrentProgress();
   
@@ -226,7 +242,7 @@ export default function Home() {
           >
             <div className="space-y-4">
               <MultipleChoice
-                options={VISITING_OPTIONS}
+                options={getVisitingOptions()}
                 value={answers.visitingWith}
                 onValueChange={(value) => updateAnswers({ visitingWith: value })}
                 otherValue={answers.visitingWithOther}
@@ -238,7 +254,7 @@ export default function Home() {
                   <p className="text-white font-semibold">{t.yourAnswer}:</p>
                   <p className="text-white text-lg">
                     {answers.visitingWith === 'other' ? answers.visitingWithOther : 
-                     VISITING_OPTIONS.find(opt => opt.value === answers.visitingWith)?.label}
+                     getVisitingOptions().find(opt => opt.value === answers.visitingWith)?.label}
                   </p>
                 </div>
               )}
@@ -267,6 +283,7 @@ export default function Home() {
               <RankingQuestion
                 ranking={answers.topicRanking}
                 onRankingChange={(ranking) => updateAnswers({ topicRanking: ranking })}
+                language={language}
               />
             </div>
           </Question>
@@ -298,14 +315,14 @@ export default function Home() {
               )}
               
               <LikertScale
-                options={LIKERT_SCALE}
+                options={getLikertScale()}
                 value={answers.feelingBefore}
                 onValueChange={(value) => updateAnswers({ feelingBefore: value })}
               />
               {answers.feelingBefore !== null && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
                   <p className="text-white font-semibold">{t.yourAnswer}:</p>
-                  <p className="text-white text-lg">{LIKERT_SCALE.find(opt => opt.value === answers.feelingBefore)?.label}</p>
+                  <p className="text-white text-lg">{getLikertScale().find(opt => opt.value === answers.feelingBefore)?.label}</p>
                 </div>
               )}
             </div>
@@ -338,14 +355,14 @@ export default function Home() {
               )}
               
               <LikertScale
-                options={CONFIDENCE_SCALE}
+                options={getConfidenceScale()}
                 value={answers.confidenceBefore}
                 onValueChange={(value) => updateAnswers({ confidenceBefore: value })}
               />
               {answers.confidenceBefore !== null && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
                   <p className="text-white font-semibold">{t.yourAnswer}:</p>
-                  <p className="text-white text-lg">{CONFIDENCE_SCALE.find(opt => opt.value === answers.confidenceBefore)?.label}</p>
+                  <p className="text-white text-lg">{getConfidenceScale().find(opt => opt.value === answers.confidenceBefore)?.label}</p>
                 </div>
               )}
             </div>
@@ -440,7 +457,7 @@ export default function Home() {
         return (
           <Question
             questionNumber={6}
-            question={`${t.checkOutQuestions.feeling} ${answers.mostImportantTopic}?`}
+            question={`${t.checkOutQuestions.feeling} ${answers.mostImportantTopic} ${t.checkOutQuestions.future}?`}
             bgGradient={topicData?.hexColor ? '' : 'from-pink-500 to-red-500'}
             buttonColor={topicData?.hexColor ? '' : 'bg-pink-600 hover:bg-pink-700'}
             style={topicData?.hexColor ? { background: getTopicGradient(topicData.hexColor) } : {}}
@@ -461,15 +478,23 @@ export default function Home() {
                 </div>
               )}
               
+              {answers.age && (
+                <div className="mb-4 p-4 bg-white bg-opacity-20 rounded-xl backdrop-blur-sm">
+                  <p className="text-white text-center">
+                    {t.checkOutQuestions.futureContext.replace('{age}', String(parseInt(answers.age) + 10))}
+                  </p>
+                </div>
+              )}
+              
               <LikertScale
-                options={LIKERT_SCALE}
+                options={getLikertScale()}
                 value={answers.feelingAfter}
                 onValueChange={(value) => updateAnswers({ feelingAfter: value })}
               />
               {answers.feelingAfter !== null && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
                   <p className="text-white font-semibold">{t.yourAnswer}:</p>
-                  <p className="text-white text-lg">{LIKERT_SCALE.find(opt => opt.value === answers.feelingAfter)?.label}</p>
+                  <p className="text-white text-lg">{getLikertScale().find(opt => opt.value === answers.feelingAfter)?.label}</p>
                 </div>
               )}
             </div>
@@ -502,18 +527,18 @@ export default function Home() {
               )}
               
               <MultipleChoice
-                options={ACTION_OPTIONS}
+                options={getActionOptions()}
                 value={answers.actionChoice}
                 onValueChange={(value) => updateAnswers({ actionChoice: value })}
-                columns={1}
+                columns={3}
               />
               
               {answers.actionChoice && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
                   <p className="text-white font-semibold">{t.yourAnswer}:</p>
                   <div className="flex items-center space-x-3">
-                    <span className="text-2xl">{ACTION_OPTIONS.find(opt => opt.value === answers.actionChoice)?.icon}</span>
-                    <span className="text-white text-lg">{ACTION_OPTIONS.find(opt => opt.value === answers.actionChoice)?.label}</span>
+                    <span className="text-2xl">{getActionOptions().find(opt => opt.value === answers.actionChoice)?.icon}</span>
+                    <span className="text-white text-lg">{getActionOptions().find(opt => opt.value === answers.actionChoice)?.label}</span>
                   </div>
                 </div>
               )}
@@ -550,14 +575,14 @@ export default function Home() {
               )}
               
               <LikertScale
-                options={CONFIDENCE_SCALE}
+                options={getConfidenceScale()}
                 value={answers.confidenceAfter}
                 onValueChange={(value) => updateAnswers({ confidenceAfter: value })}
               />
               {answers.confidenceAfter !== null && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
                   <p className="text-white font-semibold">{t.yourAnswer}:</p>
-                  <p className="text-white text-lg">{CONFIDENCE_SCALE.find(opt => opt.value === answers.confidenceAfter)?.label}</p>
+                  <p className="text-white text-lg">{getConfidenceScale().find(opt => opt.value === answers.confidenceAfter)?.label}</p>
                 </div>
               )}
             </div>

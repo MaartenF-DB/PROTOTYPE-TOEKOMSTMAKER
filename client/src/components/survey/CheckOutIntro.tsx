@@ -14,14 +14,14 @@ export function CheckOutIntro({ onStart, mostImportantTopic, language = 'nl' }: 
   const { speak } = useSpeech();
 
   useEffect(() => {
-    const text = "Dan onderzoeken we verder wat voor toekomstmaker jij bent!";
+    const text = "Kom je aan het einde van de tentoonstelling terug? Dan onderzoeken we verder wat voor toekomstmaker jij bent!";
     speak(text);
   }, [speak]);
 
   return (
     <section className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-green-600 to-teal-600 text-white">
       <div className="text-center max-w-2xl">
-        <h2 className="text-4xl font-bold mb-6">{t.checkOutIntro.title}</h2>
+        <h2 className="text-4xl font-bold mb-6">Kom je aan het einde van de tentoonstelling terug?</h2>
         <p className="text-2xl font-bold mb-8">{t.checkOutIntro.subtitle}</p>
         
 

@@ -26,11 +26,11 @@ export const translations = {
       name: "Wat is je naam?",
       age: "Hoe oud ben je?",
       visitingWith: "Met wie bezoek je de tentoonstelling?",
-      topicRanking: "Rangschik de onderwerpen van 1 (meest belangrijk) tot 6 (minst belangrijk)",
+      topicRanking: "Welk onderwerp vind jij het meest belangrijk?",
       mostImportant: "Wat vind je het belangrijkste onderwerp?",
       feelingBefore: "Hoe voel je je over het onderwerp {topic}?",
       confidenceBefore: "Hoeveel vertrouwen heb je dat je iets kan veranderen aan {topic}?",
-      feelingAfter: "Hoe voel je je nu over het onderwerp {topic}?",
+      feelingAfter: "Hoe voel je je over het onderwerp {topic} als je kijkt naar de toekomst?",
       actionChoice: "Wat zou je doen voor {topic} in de toekomst?",
       confidenceAfter: "Hoeveel vertrouwen heb je dat je iets kan veranderen aan {topic} in de toekomst?"
     },
@@ -57,12 +57,13 @@ export const translations = {
     
     // Check Out Questions
     checkOutQuestions: {
-      feeling: "Hoe voel je je nu over het onderwerp",
+      feeling: "Hoe voel je je over het onderwerp",
       action: "Wat zou je doen voor",
       confidence: "Hoeveel vertrouwen heb je dat je iets kan veranderen aan",
       future: "in de toekomst",
       selectFromList: "Of kies je naam uit de lijst",
-      notAnsweredBefore: "Ik heb de eerdere vragen niet beantwoord"
+      notAnsweredBefore: "Ik heb de eerdere vragen niet beantwoord",
+      futureContext: "De toekomst is 10 jaar vanaf nu, dan ben jij {age} jaar."
     },
     
     // Results
@@ -99,7 +100,15 @@ export const translations = {
     },
     
     // Common
-    yourAnswer: "Jouw antwoord"
+    yourAnswer: "Jouw antwoord",
+    
+    // Ranking
+    ranking: {
+      instructions: "Sleep de onderwerpen van minst belangrijk naar meest belangrijk!",
+      clickForInfo: "Klik op de onderwerpen voor meer info.",
+      leastImportant: "Minst belangrijk",
+      mostImportant: "Meest belangrijk"
+    }
   },
   
   en: {
@@ -129,11 +138,11 @@ export const translations = {
       name: "What is your name?",
       age: "How old are you?",
       visitingWith: "Who are you visiting the exhibition with?",
-      topicRanking: "Rank the topics from 1 (most important) to 6 (least important)",
+      topicRanking: "Which topic do you think is most important?",
       mostImportant: "What do you think is the most important topic?",
       feelingBefore: "How do you feel about the topic {topic}?",
       confidenceBefore: "How confident are you that you can make a change regarding {topic}?",
-      feelingAfter: "How do you feel now about the topic {topic}?",
+      feelingAfter: "How do you feel about the topic {topic} when you look to the future?",
       actionChoice: "What would you do for {topic} in the future?",
       confidenceAfter: "How confident are you that you can make a change regarding {topic} in the future?"
     },
@@ -193,16 +202,25 @@ export const translations = {
     
     // Check Out Questions
     checkOutQuestions: {
-      feeling: "How do you feel now about the topic",
+      feeling: "How do you feel about the topic",
       action: "What would you do for",
       confidence: "How confident are you that you can change something about",
       future: "in the future",
       selectFromList: "Or choose your name from the list",
-      notAnsweredBefore: "I haven't answered the previous questions"
+      notAnsweredBefore: "I haven't answered the previous questions",
+      futureContext: "The future is 10 years from now, then you will be {age} years old."
     },
     
     // Common
-    yourAnswer: "Your answer"
+    yourAnswer: "Your answer",
+    
+    // Ranking
+    ranking: {
+      instructions: "Drag the topics from least important to most important!",
+      clickForInfo: "Click on the topics for more info.",
+      leastImportant: "Least important",
+      mostImportant: "Most important"
+    }
   }
 };
 

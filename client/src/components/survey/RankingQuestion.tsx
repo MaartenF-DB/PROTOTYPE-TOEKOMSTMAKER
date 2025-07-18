@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { TOPICS } from '@/types/survey';
+import { translations } from '@/lib/translations';
 
 interface RankingQuestionProps {
   ranking: string[];
   onRankingChange: (ranking: string[]) => void;
+  language?: 'nl' | 'en';
 }
 
 // Shuffle function to randomize topic order
@@ -16,9 +18,13 @@ const shuffleArray = (array: string[]) => {
   return shuffled;
 };
 
-export function RankingQuestion({ ranking, onRankingChange }: RankingQuestionProps) {
+export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: RankingQuestionProps) {
+  const t = translations[language];
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
   const [shuffledTopics, setShuffledTopics] = useState<string[]>([]);
+  const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
+  const [touchStartY, setTouchStartY] = useState<number | null>(null);
+  const [touchItem, setTouchItem] = useState<string | null>(null);
 
   // Initialize shuffled topics once
   useEffect(() => {
@@ -32,7 +38,6 @@ export function RankingQuestion({ ranking, onRankingChange }: RankingQuestionPro
       }
     }
   }, [ranking, onRankingChange, shuffledTopics.length]);
-  const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
 
   // Use the existing ranking or shuffled topics
   const displayRanking = ranking.length > 0 ? ranking : shuffledTopics;
@@ -68,10 +73,56 @@ export function RankingQuestion({ ranking, onRankingChange }: RankingQuestionPro
     setDraggedItem(null);
   };
 
+  // Touch event handlers for mobile support
+  const handleTouchStart = (e: React.TouchEvent, topic: string) => {
+    const touch = e.touches[0];
+    setTouchStartY(touch.clientY);
+    setTouchItem(topic);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!touchStartY || !touchItem) return;
+    
+    const touch = e.touches[0];
+    const currentY = touch.clientY;
+    const deltaY = currentY - touchStartY;
+    
+    // Prevent default scroll behavior
+    e.preventDefault();
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent, targetTopic: string) => {
+    if (!touchStartY || !touchItem || touchItem === targetTopic) {
+      setTouchStartY(null);
+      setTouchItem(null);
+      return;
+    }
+
+    const touch = e.changedTouches[0];
+    const currentY = touch.clientY;
+    const deltaY = currentY - touchStartY;
+    
+    // Only trigger swap if there's significant movement
+    if (Math.abs(deltaY) > 50) {
+      const newRanking = [...displayRanking];
+      const draggedIndex = newRanking.indexOf(touchItem);
+      const targetIndex = newRanking.indexOf(targetTopic);
+
+      // Swap the items
+      newRanking[draggedIndex] = targetTopic;
+      newRanking[targetIndex] = touchItem;
+
+      onRankingChange(newRanking);
+    }
+
+    setTouchStartY(null);
+    setTouchItem(null);
+  };
+
   return (
     <div className="w-full">
-      <p className="text-lg mb-4">Sleep de onderwerpen van minst belangrijk naar meest belangrijk!</p>
-      <p className="text-sm mb-6 opacity-75">Klik op de onderwerpen voor meer info.</p>
+      <p className="text-lg mb-4">{t.ranking.instructions}</p>
+      <p className="text-sm mb-6 opacity-75">{t.ranking.clickForInfo}</p>
       
       <div className="grid grid-cols-6 gap-4 mb-6 p-4 bg-white bg-opacity-10 rounded-xl">
         {displayRanking.map((topic, index) => {
@@ -84,9 +135,12 @@ export function RankingQuestion({ ranking, onRankingChange }: RankingQuestionPro
               onDragOver={handleDragOver}
               onDrop={(e) => handleDrop(e, topic)}
               onDragEnd={handleDragEnd}
+              onTouchStart={(e) => handleTouchStart(e, topic)}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={(e) => handleTouchEnd(e, topic)}
               onClick={() => setSelectedTopic(selectedTopic === topic ? null : topic)}
-              className={`p-4 rounded-xl cursor-move shadow-lg transform hover:scale-105 transition-all text-white border-2 ${
-                draggedItem === topic 
+              className={`p-4 rounded-xl cursor-move shadow-lg transform hover:scale-105 transition-all text-white border-2 select-none ${
+                draggedItem === topic || touchItem === topic
                   ? 'opacity-50 border-yellow-400' 
                   : 'border-white border-opacity-30 hover:border-opacity-60'
               }`}
@@ -107,8 +161,8 @@ export function RankingQuestion({ ranking, onRankingChange }: RankingQuestionPro
       </div>
       
       <div className="flex justify-between items-center text-sm">
-        <span className="text-white font-bold">Minst belangrijk</span>
-        <span className="text-white font-bold">Meest belangrijk</span>
+        <span className="text-white font-bold">{t.ranking.leastImportant}</span>
+        <span className="text-white font-bold">{t.ranking.mostImportant}</span>
       </div>
     </div>
   );

@@ -40,10 +40,7 @@ export function Results({ answers, onRestart }: ResultsProps) {
   
   const motivationalMessage = getMotivationalMessage(answers.confidenceAfter);
 
-  useEffect(() => {
-    // Automatically export to CSV
-    exportToCSV(answers);
-  }, [answers]);
+  // Remove automatic CSV export - CSV can be downloaded from dashboard instead
 
   useEffect(() => {
     console.log('Results component mounted, showAnimatedResult:', showAnimatedResult);

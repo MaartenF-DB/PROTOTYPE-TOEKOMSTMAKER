@@ -104,6 +104,34 @@ The application follows a modern full-stack architecture with the following comp
 
 ## Recent Changes
 
+### July 18, 2025 - Complete English Translation and Enhanced User Experience
+- **Full Bilingual Support**: Added complete English translations for all survey components
+  - Created English versions of all scale options (LIKERT_SCALE_EN, CONFIDENCE_SCALE_EN, ACTION_OPTIONS_EN, VISITING_OPTIONS_EN)
+  - Updated all components to use language-specific options based on user selection
+  - Implemented translation system for ranking question instructions and labels
+  - Added future context display with age calculation in checkout questions
+
+- **Enhanced Touch-Screen Support**: Improved ranking question interactions for mobile devices
+  - Added touch event handlers for drag-and-drop ranking on mobile
+  - Implemented swipe gestures for topic reordering with proper touch feedback
+  - Added visual feedback during touch interactions with opacity changes
+  - Prevented default scroll behavior during touch manipulation
+
+- **Horizontal Action Choice Layout**: Updated action choice questions to use horizontal layout
+  - Changed from vertical (columns=1) to horizontal (columns=3) layout
+  - Improved visual balance and touch accessibility on tablets and mobile devices
+  - Maintained consistent styling with other question types
+
+- **Disabled Automatic CSV Download**: Removed automatic CSV export functionality
+  - CSV download now only available through museum staff dashboard
+  - Simplified results flow for better user experience
+  - Maintained data collection for analytics purposes
+
+- **Updated Checkout Message**: Enhanced checkout intro message clarity
+  - Updated message to "Kom je aan het einde van de tentoonstelling terug? Dan onderzoeken we verder wat voor toekomstmaker jij bent!"
+  - Added matching speech synthesis for improved accessibility
+  - Clearer user guidance for post-exhibition survey completion
+
 ### July 16, 2025 - Major Survey Experience Improvements
 - **Enhanced Dashboard**: Added comprehensive charts and analytics with Recharts integration
   - Interactive pie charts for topic distribution

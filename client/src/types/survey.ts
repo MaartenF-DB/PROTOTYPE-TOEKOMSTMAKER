@@ -40,10 +40,24 @@ export const VISITING_OPTIONS = [
   { value: 'other', label: 'Anders...', icon: '❓' }
 ] as const;
 
+export const VISITING_OPTIONS_EN = [
+  { value: 'alone', label: 'Alone', icon: '👤' },
+  { value: 'family', label: 'With my family', icon: '👨‍👩‍👧‍👦' },
+  { value: 'school', label: 'With school', icon: '🏫' },
+  { value: 'babysitter', label: 'With my babysitter', icon: '👶👨' },
+  { value: 'other', label: 'Other...', icon: '❓' }
+] as const;
+
 export const ACTION_OPTIONS = [
   { value: 'uitvinden', label: 'Ik ga iets uitvinden', icon: '🔬' },
   { value: 'actie', label: 'Ik ga in actie komen', icon: '📢' },
   { value: 'veranderen', label: 'Ik ga zelf iets veranderen', icon: '🌟' }
+] as const;
+
+export const ACTION_OPTIONS_EN = [
+  { value: 'uitvinden', label: 'I will invent something', icon: '🔬' },
+  { value: 'actie', label: 'I will take action', icon: '📢' },
+  { value: 'veranderen', label: 'I will change something myself', icon: '🌟' }
 ] as const;
 
 export const LIKERT_SCALE = [
@@ -54,10 +68,26 @@ export const LIKERT_SCALE = [
   { value: 5, label: 'Ik heb er zin in!', emoji: '🤩' }
 ] as const;
 
+export const LIKERT_SCALE_EN = [
+  { value: 1, label: 'I am worried', emoji: '😟' },
+  { value: 2, label: 'I think it\'s okay', emoji: '😐' },
+  { value: 3, label: 'I feel neutral', emoji: '🙂' },
+  { value: 4, label: 'I feel positive', emoji: '😊' },
+  { value: 5, label: 'I am excited!', emoji: '🤩' }
+] as const;
+
 export const CONFIDENCE_SCALE = [
   { value: 1, label: 'Ik heb een ienie mini beetje vertrouwen', emoji: '🤏' },
   { value: 2, label: 'Ik heb een beetje vertrouwen', emoji: '🤔' },
   { value: 3, label: 'Ik heb gewoon vertrouwen', emoji: '😐' },
   { value: 4, label: 'Ik heb veel vertrouwen', emoji: '💪' },
   { value: 5, label: 'Ik heb héééél veel vertrouwen!', emoji: '🚀' }
+] as const;
+
+export const CONFIDENCE_SCALE_EN = [
+  { value: 1, label: 'I have a tiny bit of confidence', emoji: '🤏' },
+  { value: 2, label: 'I have some confidence', emoji: '🤔' },
+  { value: 3, label: 'I have normal confidence', emoji: '😐' },
+  { value: 4, label: 'I have a lot of confidence', emoji: '💪' },
+  { value: 5, label: 'I have sooooo much confidence!', emoji: '🚀' }
 ] as const;
