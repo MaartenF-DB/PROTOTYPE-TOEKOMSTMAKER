@@ -426,7 +426,7 @@ export default function Home() {
                 console.log('Found existing user:', existingResponse);
                 
                 if (existingResponse) {
-                  // Use their complete check-in data and skip to checkout questions
+                  // Use their complete check-in data and skip directly to checkout questions (question-6)
                   updateAnswers({ 
                     mostImportantTopic: existingResponse.mostImportantTopic,
                     topicRanking: existingResponse.topicRanking || [],
@@ -436,7 +436,8 @@ export default function Home() {
                     feelingBefore: existingResponse.feelingBefore || null,
                     confidenceBefore: existingResponse.confidenceBefore || null
                   });
-                  console.log('Updated answers with existing data, going to question-6');
+                  console.log('Updated answers with existing data, skipping ranking question, going to question-6');
+                  // Skip ranking question completely for existing users
                   setCurrentSection('question-6');
                 } else {
                   console.log('No existing response found, treating as new user');
@@ -558,7 +559,7 @@ export default function Home() {
                 // For checkout-only users, go back to topic selection
                 setCurrentSection('question-3');
               } else {
-                // For regular users, go to checkout name
+                // For existing users who skipped ranking, don't allow going back
                 setCurrentSection('checkout-name');
               }
             }}
