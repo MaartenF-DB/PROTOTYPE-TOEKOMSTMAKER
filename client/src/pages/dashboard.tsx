@@ -13,24 +13,30 @@ export default function Dashboard() {
     select: (data) => data.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
   });
 
+  // Separate responses by type
+  const completeResponses = responses.filter(r => r.feelingAfter !== null && r.actionChoice && r.confidenceAfter !== null);
+  const checkInOnlyResponses = responses.filter(r => r.feelingAfter === null || !r.actionChoice || r.confidenceAfter === null);
+
   const stats = {
     totalResponses: responses.length,
+    completeResponses: completeResponses.length,
+    checkInOnlyResponses: checkInOnlyResponses.length,
     averageAge: responses.length > 0 ? Math.round(responses.reduce((acc, r) => acc + parseInt(r.age), 0) / responses.length) : 0,
     topTopics: responses.reduce((acc, r) => {
       acc[r.mostImportantTopic] = (acc[r.mostImportantTopic] || 0) + 1;
       return acc;
     }, {} as Record<string, number>),
-    topActions: responses.reduce((acc, r) => {
+    topActions: completeResponses.reduce((acc, r) => {
       acc[r.actionChoice] = (acc[r.actionChoice] || 0) + 1;
       return acc;
     }, {} as Record<string, number>),
-    feelingChanges: responses.filter(r => r.feelingBefore !== null && r.feelingAfter !== null).map(r => ({
+    feelingChanges: completeResponses.filter(r => r.feelingBefore !== null && r.feelingAfter !== null).map(r => ({
       topic: r.mostImportantTopic,
       before: r.feelingBefore!,
       after: r.feelingAfter!,
       change: r.feelingAfter! - r.feelingBefore!
     })),
-    confidenceChanges: responses.filter(r => r.confidenceBefore !== null && r.confidenceAfter !== null).map(r => ({
+    confidenceChanges: completeResponses.filter(r => r.confidenceBefore !== null && r.confidenceAfter !== null).map(r => ({
       topic: r.mostImportantTopic,
       before: r.confidenceBefore!,
       after: r.confidenceAfter!,
@@ -120,7 +126,7 @@ export default function Dashboard() {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Totaal Antwoorden</CardTitle>
@@ -128,6 +134,26 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats.totalResponses}</div>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Complete Responses</CardTitle>
+              <Badge className="bg-green-100 text-green-800 text-xs px-2 py-1">Check-in + Check-out</Badge>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stats.completeResponses}</div>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Check-in Only</CardTitle>
+              <Badge className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1">Incomplete</Badge>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stats.checkInOnlyResponses}</div>
             </CardContent>
           </Card>
           
@@ -317,65 +343,118 @@ export default function Dashboard() {
           </Button>
         </div>
 
-        {/* Recent Responses */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Recente Antwoorden</CardTitle>
-            <CardDescription>Laatste {Math.min(10, responses.length)} antwoorden</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {responses.slice(0, 10).map((response, index) => (
-                <div key={index} className="p-4 border rounded-lg">
-                  <div className="flex justify-between items-start mb-2">
-                    <div>
-                      <span className="font-medium">{response.name}</span>
-                      <span className="text-sm text-gray-500 ml-2">{response.age} jaar</span>
+        {/* Response Categories */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Complete Responses */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                Complete Responses
+                <Badge className="bg-green-100 text-green-800">{stats.completeResponses}</Badge>
+              </CardTitle>
+              <CardDescription>Volledige check-in + check-out responses</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {completeResponses.slice(0, 8).map((response, index) => (
+                  <div key={index} className="p-4 border rounded-lg border-green-200 bg-green-50">
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <span className="font-medium">{response.name}</span>
+                        <span className="text-sm text-gray-500 ml-2">{response.age} jaar</span>
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {new Date(response.createdAt).toLocaleDateString('nl-NL')}
+                      </div>
                     </div>
-                    <div className="text-sm text-gray-500">
-                      {new Date(response.createdAt).toLocaleDateString('nl-NL')}
+                    
+                    <div className="flex items-center space-x-2 mb-2">
+                      <span className="text-2xl">{TOPICS[response.mostImportantTopic as keyof typeof TOPICS]?.icon || '❓'}</span>
+                      <span className="font-medium">{response.mostImportantTopic}</span>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-2 text-sm">
+                      <div>
+                        <span className="text-gray-500">Gevoel:</span>
+                        <div className="font-medium">{response.feelingBefore || 'N/A'} → {response.feelingAfter || 'N/A'}</div>
+                      </div>
+                      <div>
+                        <span className="text-gray-500">Vertrouwen:</span>
+                        <div className="font-medium">{response.confidenceBefore || 'N/A'} → {response.confidenceAfter || 'N/A'}</div>
+                      </div>
+                    </div>
+                    
+                    <div className="text-sm mt-2">
+                      <span className="text-gray-500">Persoonlijkheid:</span>
+                      <div className="font-medium text-blue-600">{response.result}</div>
                     </div>
                   </div>
-                  
-                  <div className="flex items-center space-x-2 mb-2">
-                    <span className="text-2xl">{TOPICS[response.mostImportantTopic as keyof typeof TOPICS]?.icon || '❓'}</span>
-                    <span className="font-medium">{response.mostImportantTopic}</span>
+                ))}
+                
+                {completeResponses.length === 0 && (
+                  <div className="text-center py-8 text-gray-500">
+                    Nog geen complete responses
                   </div>
-                  
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
-                    <div>
-                      <span className="text-gray-500">Gevoel voor:</span>
-                      <div className="font-medium">{response.feelingBefore || 'N/A'}/5</div>
-                    </div>
-                    <div>
-                      <span className="text-gray-500">Vertrouwen voor:</span>
-                      <div className="font-medium">{response.confidenceBefore || 'N/A'}/5</div>
-                    </div>
-                    <div>
-                      <span className="text-gray-500">Gevoel na:</span>
-                      <div className="font-medium">{response.feelingAfter || 'N/A'}/5</div>
-                    </div>
-                    <div>
-                      <span className="text-gray-500">Vertrouwen na:</span>
-                      <div className="font-medium">{response.confidenceAfter || 'N/A'}/5</div>
-                    </div>
-                  </div>
-                  
-                  <div className="text-sm">
-                    <span className="text-gray-500">Persoonlijkheid:</span>
-                    <div className="font-medium text-blue-600">{response.result}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            
-            {responses.length === 0 && (
-              <div className="text-center py-8 text-gray-500">
-                Nog geen antwoorden ontvangen
+                )}
               </div>
-            )}
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+
+          {/* Check-in Only Responses */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                Check-in Only
+                <Badge className="bg-yellow-100 text-yellow-800">{stats.checkInOnlyResponses}</Badge>
+              </CardTitle>
+              <CardDescription>Alleen check-in ingevuld, nog geen check-out</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {checkInOnlyResponses.slice(0, 8).map((response, index) => (
+                  <div key={index} className="p-4 border rounded-lg border-yellow-200 bg-yellow-50">
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <span className="font-medium">{response.name}</span>
+                        <span className="text-sm text-gray-500 ml-2">{response.age} jaar</span>
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {new Date(response.createdAt).toLocaleDateString('nl-NL')}
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center space-x-2 mb-2">
+                      <span className="text-2xl">{TOPICS[response.mostImportantTopic as keyof typeof TOPICS]?.icon || '❓'}</span>
+                      <span className="font-medium">{response.mostImportantTopic}</span>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-2 text-sm">
+                      <div>
+                        <span className="text-gray-500">Gevoel voor:</span>
+                        <div className="font-medium">{response.feelingBefore || 'N/A'}/5</div>
+                      </div>
+                      <div>
+                        <span className="text-gray-500">Vertrouwen voor:</span>
+                        <div className="font-medium">{response.confidenceBefore || 'N/A'}/5</div>
+                      </div>
+                    </div>
+                    
+                    <div className="text-sm mt-2">
+                      <span className="text-gray-500">Status:</span>
+                      <div className="font-medium text-orange-600">Wacht op check-out</div>
+                    </div>
+                  </div>
+                ))}
+                
+                {checkInOnlyResponses.length === 0 && (
+                  <div className="text-center py-8 text-gray-500">
+                    Alle check-in responses zijn compleet
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );

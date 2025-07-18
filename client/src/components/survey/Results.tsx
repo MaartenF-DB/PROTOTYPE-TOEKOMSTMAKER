@@ -77,12 +77,14 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
                            answers.actionChoice === 'actie' ? 'actievoerder' :
                            answers.actionChoice === 'veranderen' ? 'veranderaar' : 'toekomstmaker'} voor ${getTopicName(answers.mostImportantTopic, language)}`;
           
+          console.log('🎤 Speaking result:', resultText);
           speak(resultText, language);
           
           // Also speak the motivational message after a brief pause
           setTimeout(() => {
+            console.log('🎤 Speaking motivational message:', motivationalMessage);
             speak(motivationalMessage, language);
-          }, 3000);
+          }, 4000);
         }}
       />
     );

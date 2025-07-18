@@ -437,7 +437,8 @@ export default function Home() {
                     confidenceBefore: existingResponse.confidenceBefore || null
                   });
                   console.log('Updated answers with existing data, skipping ranking question, going to question-6');
-                  // Skip ranking question completely for existing users
+                  // Skip ranking question completely for existing users - set checkoutOnly to false to indicate they are returning users
+                  setCheckoutOnly(false);
                   setCurrentSection('question-6');
                 } else {
                   console.log('No existing response found, treating as new user');
@@ -559,7 +560,7 @@ export default function Home() {
                 // For checkout-only users, go back to topic selection
                 setCurrentSection('question-3');
               } else {
-                // For existing users who skipped ranking, don't allow going back
+                // For existing users who skipped ranking, go back to checkout name
                 setCurrentSection('checkout-name');
               }
             }}
@@ -593,6 +594,13 @@ export default function Home() {
                 onValueChange={(value) => updateAnswers({ feelingAfter: value })}
                 language={language}
               />
+              
+              {/* Show read-only notice for existing users */}
+              {!checkoutOnly && answers.feelingBefore !== null && (
+                <div className="mt-4 p-3 bg-blue-100 rounded-lg text-blue-800 text-sm">
+                  Je hebt al eerder de check-in ingevuld. Je antwoorden worden gebruikt voor vergelijking.
+                </div>
+              )}
               {answers.feelingAfter !== null && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
                   <p className="text-white font-semibold">{t.yourAnswer}:</p>
