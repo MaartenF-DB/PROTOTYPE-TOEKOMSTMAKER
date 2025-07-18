@@ -14,17 +14,35 @@ export interface IStorage {
 
 export class DbStorage implements IStorage {
   async getSurveyResponse(id: number): Promise<SurveyResponse | undefined> {
-    const results = await db.select().from(surveyResponses).where(eq(surveyResponses.id, id));
-    return results[0];
+    try {
+      const results = await db.select().from(surveyResponses).where(eq(surveyResponses.id, id));
+      return results[0];
+    } catch (error) {
+      console.error('Error getting survey response:', error);
+      throw error;
+    }
   }
 
   async createSurveyResponse(insertResponse: InsertSurveyResponse): Promise<SurveyResponse> {
-    const results = await db.insert(surveyResponses).values(insertResponse).returning();
-    return results[0];
+    try {
+      const results = await db.insert(surveyResponses).values(insertResponse).returning();
+      return results[0];
+    } catch (error) {
+      console.error('Error creating survey response:', error);
+      throw error;
+    }
   }
 
   async getAllSurveyResponses(): Promise<SurveyResponse[]> {
-    return await db.select().from(surveyResponses);
+    try {
+      console.log('📊 FETCHING ALL SURVEY RESPONSES FROM DATABASE');
+      const results = await db.select().from(surveyResponses);
+      console.log('📊 DATABASE RESULTS:', results);
+      return results;
+    } catch (error) {
+      console.error('Error getting all survey responses:', error);
+      throw error;
+    }
   }
 }
 
