@@ -6,10 +6,11 @@ import { CheckInClosing } from '@/components/survey/CheckInClosing';
 import { CheckOutIntro } from '@/components/survey/CheckOutIntro';
 import { Results } from '@/components/survey/Results';
 import { MultipleChoice } from '@/components/survey/MultipleChoice';
-import { RankingQuestion } from '@/components/survey/RankingQuestion';
+import { RankingQuestion } from '@/components/survey/RankingQuestionNew';
 import { LikertScale } from '@/components/survey/LikertScale';
 import { NameVerification } from '@/components/survey/NameVerification';
 import { NameMatching } from '@/components/survey/NameMatching';
+import { CheckoutNameInput } from '@/components/survey/CheckoutNameInput';
 import { Input } from '@/components/ui/input';
 import { 
   VISITING_OPTIONS, 
@@ -393,17 +394,14 @@ export default function Home() {
         );
       case 'checkout-name':
         return (
-          <Question
-            questionNumber={0}
-            question={t.questions.name}
-            bgGradient="from-blue-500 to-teal-500"
-            buttonColor="bg-blue-600 hover:bg-blue-700"
-            onNext={() => {
+          <CheckoutNameInput
+            existingNames={existingResponses.map(r => r.name)}
+            onNameConfirm={(name, isNewUser) => {
+              updateAnswers({ name, isNewCheckoutUser: isNewUser });
               // For checkout, we need to ensure the user has a topic selected
               if (!answers.mostImportantTopic) {
                 // If no topic is selected, user must be checkout-only
                 setCheckoutOnly(true);
-                updateAnswers({ isNewCheckoutUser: true });
                 // Set a default topic if none exists
                 if (!answers.mostImportantTopic) {
                   updateAnswers({ mostImportantTopic: 'GEZONDHEID' });
@@ -411,30 +409,8 @@ export default function Home() {
               }
               setCurrentSection('question-6');
             }}
-            showPrevious={false}
-            showNext={true}
-            isValid={answers.name.length > 0}
-          >
-            <div className="space-y-4">
-              <Input
-                value={answers.name}
-                onChange={(e) => updateAnswers({ name: e.target.value })}
-                placeholder={t.placeholders.typeName}
-                className="w-full p-4 text-2xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-blue-300 outline-none"
-              />
-              {hasNameConflict && (
-                <p className="text-sm text-white opacity-80">
-                  {t.validation.nameConflict}
-                </p>
-              )}
-              {answers.name.length > 0 && (
-                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
-                  <p className="text-white font-semibold">{t.yourAnswer}:</p>
-                  <p className="text-white text-lg">{answers.name}</p>
-                </div>
-              )}
-            </div>
-          </Question>
+            language={language}
+          />
         );
       case 'name-matching':
         return (
@@ -594,6 +570,7 @@ export default function Home() {
           <Results 
             answers={answers}
             onRestart={resetSurvey}
+            language={language}
           />
         );
 

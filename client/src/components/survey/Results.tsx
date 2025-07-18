@@ -5,13 +5,21 @@ import { TOPICS } from '@/types/survey';
 import { exportToCSV } from '@/lib/csvExport';
 import { SurveyAnswers } from '@/types/survey';
 import { AnimatedResult } from './AnimatedResult';
+import { translations, Language } from '@/lib/translations';
 
 interface ResultsProps {
   answers: SurveyAnswers;
   onRestart: () => void;
+  language?: Language;
 }
 
-export function Results({ answers, onRestart }: ResultsProps) {
+// Utility function to get topic name in correct language
+const getTopicName = (topicKey: string, language: Language) => {
+  const topic = TOPICS[topicKey as keyof typeof TOPICS];
+  return language === 'en' ? topic?.nameEn : topic?.name || topicKey;
+};
+
+export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
   const { speak } = useSpeech();
   const [showAnimatedResult, setShowAnimatedResult] = useState(true);
   const [animationComplete, setAnimationComplete] = useState(false);
@@ -20,22 +28,10 @@ export function Results({ answers, onRestart }: ResultsProps) {
   
   // Confidence-based motivational messages
   const getMotivationalMessage = (confidenceLevel: number | null) => {
-    if (!confidenceLevel) return "Blijf geloven in jezelf en je ideeën!";
+    const t = translations[language];
+    if (!confidenceLevel) return t.results.motivational[1];
     
-    switch (confidenceLevel) {
-      case 1:
-        return "Jouw ideeën betekenen veel voor de rest van de wereld. Hoe klein ze ook zijn!";
-      case 2:
-        return "Met jouw ideeën kom je er wel! Blijf in jezelf en anderen geloven.";
-      case 3:
-        return "Je bent geweldig! Blijf zo denken en doen. Samen geven we vorm aan de toekomst.";
-      case 4:
-        return "Je doet het geweldig! Je zelfvertrouwen zal je helpen de wereld te veranderen.";
-      case 5:
-        return "Je bent een superster! Je zelfvertrouwen is inspirerend, blijf stralen en wijs de weg!";
-      default:
-        return "Blijf geloven in jezelf en je ideeën!";
-    }
+    return t.results.motivational[confidenceLevel] || t.results.motivational[1];
   };
   
   const motivationalMessage = getMotivationalMessage(answers.confidenceAfter);
@@ -91,7 +87,7 @@ export function Results({ answers, onRestart }: ResultsProps) {
              answers.actionChoice === 'veranderen' ? 'VERANDERAAR' : 'TOEKOMSTMAKER'}
           </div>
           <div className="text-3xl mb-6">voor</div>
-          <div className="text-5xl font-bold text-yellow-300 mb-8">{answers.mostImportantTopic}</div>
+          <div className="text-5xl font-bold text-yellow-300 mb-8">{getTopicName(answers.mostImportantTopic, language)}</div>
           
           <div className="bg-white bg-opacity-30 rounded-xl p-6 mt-6">
             <p className="text-xl font-medium text-white leading-relaxed">
