@@ -426,7 +426,7 @@ export default function Home() {
                 console.log('Found existing user:', existingResponse);
                 
                 if (existingResponse) {
-                  // Use their complete check-in data and skip directly to checkout questions (question-6)
+                  // Use their complete check-in data and skip ALL preliminary questions - go directly to question-6
                   updateAnswers({ 
                     mostImportantTopic: existingResponse.mostImportantTopic,
                     topicRanking: existingResponse.topicRanking || [],
@@ -436,8 +436,8 @@ export default function Home() {
                     feelingBefore: existingResponse.feelingBefore || null,
                     confidenceBefore: existingResponse.confidenceBefore || null
                   });
-                  console.log('Updated answers with existing data, skipping ranking question, going to question-6');
-                  // Skip ranking question completely for existing users - set checkoutOnly to false to indicate they are returning users
+                  console.log('EXISTING USER: Skipping ALL preliminary questions (age, visiting, ranking), going directly to question-6');
+                  // Set checkoutOnly to false to indicate they are returning users who skip all preliminary questions
                   setCheckoutOnly(false);
                   setCurrentSection('question-6');
                 } else {
@@ -560,7 +560,7 @@ export default function Home() {
                 // For checkout-only users, go back to topic selection
                 setCurrentSection('question-3');
               } else {
-                // For existing users who skipped ranking, go back to checkout name
+                // For existing users who skipped ALL preliminary questions, go back to checkout name
                 setCurrentSection('checkout-name');
               }
             }}

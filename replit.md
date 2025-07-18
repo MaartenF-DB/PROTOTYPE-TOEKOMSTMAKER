@@ -104,6 +104,13 @@ The application follows a modern full-stack architecture with the following comp
 
 ## Recent Changes
 
+### July 18, 2025 - Complete Checkout Flow Optimization for Existing Users
+- **Removed ALL preliminary questions for existing users**: When existing users (who completed check-in) do checkout, they now skip age, visiting, AND ranking questions completely
+- **Direct navigation to question-6**: Existing users go directly from name verification to "How do you feel about [TOPIC] in the future?" 
+- **Enhanced audio feedback**: Results component now properly speaks all personality types (UITVINDER, ACTIEVOERDER, VERANDERAAR) with console logging
+- **Dashboard separation**: Complete responses vs check-in only responses clearly separated with color-coded cards (green for complete, yellow for incomplete)
+- **Improved user experience**: Existing users see notice that their previous check-in data is used for comparison, no need to re-enter information
+
 ### July 18, 2025 - Major Voice and Translation Updates
 - **Enhanced Dutch Voice Quality**: Updated Dutch voice pitch to 0.95 for more natural, human-like sound
 - **Fixed Ranking Question Audio**: Ranking question now only speaks main question once using proper state management, removed instruction text and audio feedback on topic clicks
