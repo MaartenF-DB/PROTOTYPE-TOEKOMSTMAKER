@@ -20,8 +20,8 @@ export function CheckoutNameInput({ existingNames, onNameConfirm, language = 'nl
   const { speak } = useSpeech();
 
   useEffect(() => {
-    speak(t.checkOutName.name);
-  }, [speak, t.checkOutName.name]);
+    speak(t.checkOutName?.name || "What is your name?");
+  }, [speak, t.checkOutName]);
 
   const handleNameSubmit = () => {
     if (!enteredName.trim()) return;
@@ -130,13 +130,13 @@ export function CheckoutNameInput({ existingNames, onNameConfirm, language = 'nl
   return (
     <section className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-purple-600 to-pink-600 text-white">
       <div className="text-center max-w-2xl">
-        <h2 className="text-3xl font-bold mb-8">{t.checkOutName.name}</h2>
+        <h2 className="text-3xl font-bold mb-8">{t.checkOutName?.name || "What is your name?"}</h2>
         
         <div className="mb-6">
           <Input
             value={enteredName}
             onChange={(e) => setEnteredName(e.target.value)}
-            placeholder={t.checkOutName.namePlaceholder}
+            placeholder={t.checkOutName?.namePlaceholder || "Type your name here..."}
             className="text-lg p-4 bg-white bg-opacity-20 border-white border-opacity-30 text-white placeholder-white placeholder-opacity-70"
             onKeyPress={(e) => e.key === 'Enter' && handleNameSubmit()}
           />

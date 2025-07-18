@@ -124,7 +124,7 @@ export default function Home() {
             }}
             onCheckOut={() => {
               setCheckoutOnly(false);
-              setCurrentSection('checkout-intro');
+              setCurrentSection('checkout-name');
             }}
             language={language}
           />
@@ -164,6 +164,7 @@ export default function Home() {
             showPrevious={false}
             showNext={true}
             isValid={answers.name.length > 0}
+            language={language}
           >
             <div className="space-y-4">
               <Input
@@ -199,6 +200,7 @@ export default function Home() {
             showPrevious={true}
             showNext={true}
             isValid={answers.age.length > 0}
+            language={language}
           >
             <div className="space-y-4">
               <MultipleChoice
@@ -240,6 +242,7 @@ export default function Home() {
             showPrevious={true}
             showNext={true}
             isValid={answers.visitingWith.length > 0}
+            language={language}
           >
             <div className="space-y-4">
               <MultipleChoice
@@ -279,6 +282,7 @@ export default function Home() {
             showPrevious={true}
             showNext={true}
             isValid={answers.topicRanking.length === 6}
+            language={language}
           >
             <div className="space-y-4">
               <RankingQuestion
@@ -303,6 +307,7 @@ export default function Home() {
             showPrevious={true}
             showNext={true}
             isValid={answers.feelingBefore !== null}
+            language={language}
           >
             <div className="space-y-6">
               {topicData && (
@@ -343,6 +348,7 @@ export default function Home() {
             showPrevious={true}
             showComplete={true}
             isValid={answers.confidenceBefore !== null}
+            language={language}
           >
             <div className="space-y-6">
               {topicData && (
@@ -381,17 +387,10 @@ export default function Home() {
         );
 
       case 'checkout-intro':
-        return (
-          <CheckOutIntro 
-            onStart={() => {
-              // For checkout, go directly to name input
-              updateAnswers({ name: '' });
-              setCurrentSection('checkout-name');
-            }}
-            mostImportantTopic={answers.mostImportantTopic}
-            language={language}
-          />
-        );
+        // Skip checkout intro, go directly to name input
+        updateAnswers({ name: '' });
+        setCurrentSection('checkout-name');
+        return null;
       case 'checkout-name':
         return (
           <CheckoutNameInput
@@ -442,6 +441,7 @@ export default function Home() {
             showPrevious={true}
             showNext={true}
             isValid={answers.feelingAfter !== null}
+            language={language}
           >
             <div className="space-y-6">
               {topicData && (
@@ -490,6 +490,7 @@ export default function Home() {
             showPrevious={true}
             showNext={true}
             isValid={answers.actionChoice.length > 0}
+            language={language}
           >
             <div className="space-y-6">
               {topicData && (
@@ -538,6 +539,7 @@ export default function Home() {
             showPrevious={true}
             showComplete={true}
             isValid={answers.confidenceAfter !== null}
+            language={language}
           >
             <div className="space-y-6">
               {topicData && (

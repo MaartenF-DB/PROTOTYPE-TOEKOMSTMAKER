@@ -17,6 +17,7 @@ interface QuestionProps {
   buttonColor?: string;
   isValid?: boolean;
   style?: React.CSSProperties;
+  language?: 'nl' | 'en';
 }
 
 export function Question({
@@ -32,28 +33,41 @@ export function Question({
   bgGradient = "from-blue-500 to-teal-500",
   buttonColor = "bg-blue-600 hover:bg-blue-700",
   isValid = true,
-  style
+  style,
+  language = 'nl'
 }: QuestionProps) {
   const { speak } = useSpeech();
 
   useEffect(() => {
-    speak(question);
-  }, [speak, question]);
+    speak(question, language);
+  }, [speak, question, language]);
 
   const handleNext = () => {
     if (!isValid) {
-      speak("Vul eerst je antwoord in!");
+      const message = language === 'en' ? "Please fill in your answer first!" : "Vul eerst je antwoord in!";
+      speak(message, language);
       return;
     }
-    if (onNext) onNext();
+    // Play confirmation sound when answer is valid
+    const confirmMessage = language === 'en' ? "Great! Moving to the next question." : "Mooi! Naar de volgende vraag.";
+    speak(confirmMessage, language);
+    if (onNext) {
+      setTimeout(() => onNext(), 1000); // Small delay to let audio play
+    }
   };
 
   const handleComplete = () => {
     if (!isValid) {
-      speak("Vul eerst je antwoord in!");
+      const message = language === 'en' ? "Please fill in your answer first!" : "Vul eerst je antwoord in!";
+      speak(message, language);
       return;
     }
-    if (onComplete) onComplete();
+    // Play completion sound
+    const completeMessage = language === 'en' ? "Excellent! You're all done!" : "Geweldig! Je bent klaar!";
+    speak(completeMessage, language);
+    if (onComplete) {
+      setTimeout(() => onComplete(), 1000); // Small delay to let audio play
+    }
   };
 
   return (

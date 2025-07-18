@@ -183,10 +183,11 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
                 onDragOver={handleDragOver}
                 onDrop={(e) => handleDrop(e, position)}
               >
-                <div className="h-32 border-2 border-dashed border-white border-opacity-50 rounded-xl flex flex-col items-center justify-center bg-white bg-opacity-10 hover:bg-opacity-20 transition-all relative">
+                <div className="h-48 border-2 border-dashed border-white border-opacity-50 rounded-xl flex flex-col items-center justify-center bg-white bg-opacity-10 hover:bg-opacity-20 transition-all relative">
                   {/* Position indicator */}
-                  <div className="absolute top-2 left-2 w-4 h-4 bg-white rounded-full"></div>
-                  <span className="absolute top-2 right-2 text-white text-xs font-bold">{position + 1}</span>
+                  <div className="absolute top-3 left-3 w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                    <span className="text-gray-800 text-lg font-bold">{position + 1}</span>
+                  </div>
                   
                   {/* Topic content */}
                   {topicAtPosition && topicData && (
@@ -197,10 +198,17 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
                       onTouchStart={(e) => handleTouchStart(e, topicAtPosition)}
                       onTouchMove={handleTouchMove}
                       onTouchEnd={handleTouchEnd}
-                      onClick={() => setSelectedTopic(selectedTopic === topicAtPosition ? null : topicAtPosition)}
-                      className={`p-3 rounded-lg cursor-move shadow-lg transform hover:scale-105 transition-all text-white border-2 select-none w-full ${
+                      onClick={() => {
+                        const newSelected = selectedTopic === topicAtPosition ? null : topicAtPosition;
+                        setSelectedTopic(newSelected);
+                        if (newSelected) {
+                          const topicName = getTopicName(newSelected);
+                          speak(`${topicName} geselecteerd`, language);
+                        }
+                      }}
+                      className={`p-4 rounded-lg cursor-move shadow-lg transform hover:scale-105 transition-all duration-300 text-white border-2 select-none w-full ${
                         isBeingDragged
-                          ? 'opacity-50 border-yellow-400 scale-110' 
+                          ? 'opacity-50 border-yellow-400 scale-110 animate-pulse' 
                           : 'border-white border-opacity-30 hover:border-opacity-60'
                       }`}
                       style={{ backgroundColor: topicData.hexColor || '#6B7280' }}
