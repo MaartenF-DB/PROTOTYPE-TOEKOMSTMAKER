@@ -166,27 +166,40 @@ export function CheckoutNameInput({ existingResponses, onNameConfirm, language =
   }
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-purple-600 to-pink-600 text-white">
-      <div className="text-center max-w-2xl">
-        <h2 className="text-3xl font-bold mb-8">{t.checkOutName?.name || "What is your name?"}</h2>
-        
-        <div className="mb-6">
-          <Input
-            value={enteredName}
-            onChange={(e) => setEnteredName(e.target.value)}
-            placeholder={t.checkOutName?.namePlaceholder || "Type your name here..."}
-            className="text-lg p-4 bg-white bg-opacity-20 border-white border-opacity-30 text-white placeholder-white placeholder-opacity-70"
-            onKeyPress={(e) => e.key === 'Enter' && handleNameSubmit()}
-          />
+    <section className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-blue-500 to-teal-500 text-white">
+      <div className="text-center max-w-5xl w-full">
+        <div className="bg-white bg-opacity-20 rounded-2xl p-8 mb-8">
+          <h2 className="text-3xl font-bold mb-6">{t.checkOutName?.name || "What is your name?"}</h2>
+          
+          <div className="space-y-4">
+            <Input
+              value={enteredName}
+              onChange={(e) => setEnteredName(e.target.value)}
+              placeholder={t.checkOutName?.namePlaceholder || "Type your name here..."}
+              className="w-full p-4 text-2xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-blue-300 outline-none"
+              onKeyPress={(e) => e.key === 'Enter' && handleNameSubmit()}
+            />
+            {enteredName.length > 0 && (
+              <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
+                <p className="text-white font-semibold">{t.yourAnswer}:</p>
+                <p className="text-white text-lg">{enteredName}</p>
+              </div>
+            )}
+          </div>
         </div>
-
-        <Button
-          onClick={handleNameSubmit}
-          disabled={!enteredName.trim()}
-          className="w-full bg-white text-purple-600 hover:bg-gray-100 text-xl p-6 font-bold"
-        >
-          Doorgaan
-        </Button>
+        
+        <div className="flex justify-center gap-4">
+          <Button
+            onClick={handleNameSubmit}
+            disabled={!enteredName.trim()}
+            className="bg-blue-600 hover:bg-blue-700 px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg"
+          >
+            Volgende
+            <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </Button>
+        </div>
       </div>
     </section>
   );

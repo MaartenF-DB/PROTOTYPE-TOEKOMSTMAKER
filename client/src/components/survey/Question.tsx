@@ -39,7 +39,9 @@ export function Question({
   const { speak } = useSpeech();
 
   useEffect(() => {
-    speak(question, language);
+    if (question) {
+      speak(question, language);
+    }
   }, [speak, question, language]);
 
   const handleNext = () => {
