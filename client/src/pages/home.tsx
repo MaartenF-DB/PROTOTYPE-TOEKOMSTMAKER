@@ -452,23 +452,34 @@ export default function Home() {
         return (
           <Question
             questionNumber={1}
-            question={t.checkInQuestions.age}
-            bgGradient="from-purple-500 to-pink-500"
-            buttonColor="bg-purple-600 hover:bg-purple-700"
+            question={t.questions.age}
+            bgGradient="from-green-500 to-blue-500"
+            buttonColor="bg-green-600 hover:bg-green-700"
             onNext={() => setCurrentSection('checkout-visiting')}
             showNext={true}
             isValid={answers.age.length > 0}
             language={language}
           >
-            <div className="space-y-6">
-              <input
-                type="text"
-                placeholder={t.placeholders.age}
+            <div className="space-y-4">
+              <MultipleChoice
+                options={[
+                  { value: '6', label: '6' },
+                  { value: '7', label: '7' },
+                  { value: '8', label: '8' },
+                  { value: '9', label: '9' },
+                  { value: '10', label: '10' },
+                  { value: '11', label: '11' },
+                  { value: '12', label: '12' },
+                  { value: 'other', label: language === 'en' ? 'Other...' : 'Anders...' }
+                ]}
                 value={answers.age}
-                onChange={(e) => updateAnswers({ age: e.target.value })}
-                className="w-full p-4 text-lg rounded-xl border-2 border-white border-opacity-30 bg-white bg-opacity-20 text-white placeholder-white placeholder-opacity-70 focus:border-white focus:outline-none backdrop-blur-sm"
+                onValueChange={(value) => updateAnswers({ age: value })}
+                otherValue={answers.age === 'other' ? answers.age : ''}
+                onOtherValueChange={(value) => updateAnswers({ age: value })}
+                columns={8}
+                language={language}
               />
-              {answers.age && (
+              {answers.age.length > 0 && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
                   <p className="text-white font-semibold">{t.yourAnswer}:</p>
                   <p className="text-white text-lg">{answers.age} {language === 'en' ? 'years old' : 'jaar oud'}</p>
@@ -482,9 +493,9 @@ export default function Home() {
         return (
           <Question
             questionNumber={2}
-            question={t.checkInQuestions.visitingWith}
-            bgGradient="from-blue-500 to-cyan-500"
-            buttonColor="bg-blue-600 hover:bg-blue-700"
+            question={t.questions.visitingWith}
+            bgGradient="from-yellow-500 to-orange-500"
+            buttonColor="bg-yellow-600 hover:bg-yellow-700"
             onNext={() => setCurrentSection('question-3')}
             onPrevious={() => setCurrentSection('checkout-age')}
             showPrevious={true}
@@ -492,26 +503,17 @@ export default function Home() {
             isValid={answers.visitingWith.length > 0}
             language={language}
           >
-            <div className="space-y-6">
+            <div className="space-y-4">
               <MultipleChoice
                 options={getVisitingOptions()}
                 value={answers.visitingWith}
                 onValueChange={(value) => updateAnswers({ visitingWith: value })}
+                otherValue={answers.visitingWith === 'anders' ? answers.visitingWithOther : ''}
+                onOtherValueChange={(value) => updateAnswers({ visitingWithOther: value })}
                 columns={1}
                 language={language}
               />
-              
-              {answers.visitingWith === 'anders' && (
-                <input
-                  type="text"
-                  placeholder={t.placeholders.visitingWithOther}
-                  value={answers.visitingWithOther}
-                  onChange={(e) => updateAnswers({ visitingWithOther: e.target.value })}
-                  className="w-full p-4 text-lg rounded-xl border-2 border-white border-opacity-30 bg-white bg-opacity-20 text-white placeholder-white placeholder-opacity-70 focus:border-white focus:outline-none backdrop-blur-sm"
-                />
-              )}
-              
-              {answers.visitingWith && (
+              {answers.visitingWith.length > 0 && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
                   <p className="text-white font-semibold">{t.yourAnswer}:</p>
                   <p className="text-white text-lg">
