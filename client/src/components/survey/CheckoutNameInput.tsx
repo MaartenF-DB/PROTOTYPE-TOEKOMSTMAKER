@@ -25,25 +25,34 @@ export function CheckoutNameInput({ existingResponses, onNameConfirm, language =
     
     console.log('🔍 CHECKOUT NAME SUBMIT:', { enteredName, existingResponses });
     
-    // Check if this exact name exists and has complete check-in data (age AND visitingWith AND mostImportantTopic must be filled)
-    // This means they already did check-in and can skip preliminary questions
+    // Check if this exact name exists and has complete check-in data
+    // BUT has NOT completed checkout (feelingAfter is null)
     const exactMatch = existingResponses.find(response => 
       response.name.toLowerCase() === enteredName.toLowerCase() &&
       response.age && response.age.trim() !== '' && 
       response.visitingWith && response.visitingWith.trim() !== '' &&
-      response.mostImportantTopic && response.mostImportantTopic.trim() !== ''
+      response.mostImportantTopic && response.mostImportantTopic.trim() !== '' &&
+      response.feelingAfter === null // Only check-in users, not completed checkout
     );
     
-    console.log('🔍 EXACT MATCH RESULT:', { exactMatch, enteredName });
+    console.log('🔍 EXACT MATCH RESULT:', { 
+      exactMatch, 
+      enteredName,
+      allUsers: existingResponses.map(r => ({ 
+        name: r.name, 
+        hasCheckIn: !!(r.age && r.visitingWith && r.mostImportantTopic),
+        hasCheckOut: r.feelingAfter !== null
+      }))
+    });
     
     if (exactMatch) {
       // Exact match with complete check-in data - use their previous data, skip age/visiting/ranking questions
-      console.log('✅ FOUND EXISTING USER WITH CHECK-IN DATA - CALLING onNameConfirm with false (existing user)');
+      console.log('✅ FOUND EXISTING USER WITH CHECK-IN DATA - SKIPPING ALL PRELIMINARY QUESTIONS');
       speak("Ik heb je naam gevonden! Je hebt al eerder de check-in vragen beantwoord.");
       onNameConfirm(exactMatch.name, false); // false = existing user with complete check-in data
     } else {
       // No exact match with complete check-in data - this is a new user who needs to answer age/visiting/ranking questions
-      console.log('❌ NO EXACT MATCH - CALLING onNameConfirm with true (new user)');
+      console.log('❌ NO EXACT MATCH - NEW USER NEEDS ALL PRELIMINARY QUESTIONS');
       onNameConfirm(enteredName, true); // true = new user
     }
   };
