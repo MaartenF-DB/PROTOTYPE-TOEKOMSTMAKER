@@ -29,9 +29,9 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
   // Confidence-based motivational messages
   const getMotivationalMessage = (confidenceLevel: number | null) => {
     const t = translations[language];
-    if (!confidenceLevel) return t.results.motivational[1];
+    if (!confidenceLevel) return t.results.motivationalMessages[1];
     
-    return t.results.motivational[confidenceLevel] || t.results.motivational[1];
+    return t.results.motivationalMessages[confidenceLevel] || t.results.motivationalMessages[1];
   };
   
   const motivationalMessage = getMotivationalMessage(answers.confidenceAfter);

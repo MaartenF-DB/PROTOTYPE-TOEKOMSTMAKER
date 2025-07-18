@@ -99,6 +99,12 @@ export const translations = {
       namePlaceholder: "Typ hier je naam..."
     },
     
+    // Check Out Name
+    checkOutName: {
+      name: "Wat is je naam?",
+      namePlaceholder: "Typ hier je naam..."
+    },
+    
     // Common
     yourAnswer: "Jouw antwoord",
     
@@ -173,10 +179,10 @@ export const translations = {
       forTopic: "for",
       motivationalMessages: {
         1: "Your ideas mean a lot to the rest of the world. No matter how small they are!",
-        2: "With your ideas, you'll make it! Keep believing in yourself and others.",
-        3: "You're amazing! Keep thinking and acting this way. Together we shape the future.",
+        2: "With your ideas you'll get there! Keep believing in yourself and others.",
+        3: "You are amazing! Keep thinking and doing like this. Together we shape the future.",
         4: "You're doing great! Your confidence will help you change the world.",
-        5: "You're a superstar! Your confidence is inspiring, keep shining and lead the way!"
+        5: "You are a superstar! Your confidence is inspiring, keep shining and show the way!"
       }
     },
     
@@ -209,6 +215,12 @@ export const translations = {
       selectFromList: "Or choose your name from the list",
       notAnsweredBefore: "I haven't answered the previous questions",
       futureContext: "The future is 10 years from now, then you will be {age} years old."
+    },
+    
+    // Check Out Name
+    checkOutName: {
+      name: "What is your name?",
+      namePlaceholder: "Type your name here..."
     },
     
     // Common

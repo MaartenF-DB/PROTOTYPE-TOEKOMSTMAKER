@@ -26,17 +26,29 @@ export function CheckoutNameInput({ existingNames, onNameConfirm, language = 'nl
   const handleNameSubmit = () => {
     if (!enteredName.trim()) return;
     
-    const matchingNames = existingNames.filter(name => 
-      name.toLowerCase().includes(enteredName.toLowerCase()) || 
-      enteredName.toLowerCase().includes(name.toLowerCase())
+    // Check if this exact name exists in check-in responses
+    const exactMatch = existingNames.find(name => 
+      name.toLowerCase() === enteredName.toLowerCase()
     );
     
-    if (matchingNames.length > 0) {
+    if (exactMatch) {
+      // Exact match found - this person already did check-in
       setShowOptions(true);
-      speak("Ik heb je naam gevonden in de lijst! Kies je naam of ga verder als nieuwe bezoeker.");
+      speak("Ik heb je naam gevonden! Je hebt al eerder de check-in vragen beantwoord.");
     } else {
-      // Name not found, proceed as new user
-      onNameConfirm(enteredName, true);
+      // Check for similar names
+      const similarNames = existingNames.filter(name => 
+        name.toLowerCase().includes(enteredName.toLowerCase()) || 
+        enteredName.toLowerCase().includes(name.toLowerCase())
+      );
+      
+      if (similarNames.length > 0) {
+        setShowOptions(true);
+        speak("Ik vond vergelijkbare namen in de lijst! Kies je naam of ga verder als nieuwe bezoeker.");
+      } else {
+        // Name not found, proceed as new user
+        onNameConfirm(enteredName, true);
+      }
     }
   };
 
@@ -59,19 +71,30 @@ export function CheckoutNameInput({ existingNames, onNameConfirm, language = 'nl
   };
 
   if (showOptions) {
-    const matchingNames = existingNames.filter(name => 
+    const exactMatch = existingNames.find(name => 
+      name.toLowerCase() === enteredName.toLowerCase()
+    );
+    
+    const similarNames = existingNames.filter(name => 
       name.toLowerCase().includes(enteredName.toLowerCase()) || 
       enteredName.toLowerCase().includes(name.toLowerCase())
     );
 
+    const matchingNames = exactMatch ? [exactMatch] : similarNames;
+
     return (
       <section className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-purple-600 to-pink-600 text-white">
         <div className="text-center max-w-2xl">
-          <h2 className="text-3xl font-bold mb-8">Welkom terug!</h2>
+          <h2 className="text-3xl font-bold mb-8">
+            {exactMatch ? "Welkom terug!" : "Vergelijkbare namen gevonden"}
+          </h2>
           
           <div className="mb-6">
             <p className="text-xl mb-4">
-              Je hebt "{enteredName}" ingevuld. Ik vond deze namen:
+              {exactMatch 
+                ? `Perfect! Je hebt al eerder de check-in vragen beantwoord als "${exactMatch}".`
+                : `Je hebt "${enteredName}" ingevuld. Ik vond deze vergelijkbare namen:`
+              }
             </p>
           </div>
           
@@ -109,7 +132,12 @@ export function CheckoutNameInput({ existingNames, onNameConfirm, language = 'nl
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-lg font-semibold">Ik heb de eerdere vragen nog niet beantwoord</span>
+                <span className="text-lg font-semibold">
+                  {exactMatch 
+                    ? "Ik wil alleen de checkout vragen beantwoorden"
+                    : "Ik heb de eerdere vragen nog niet beantwoord"
+                  }
+                </span>
                 {willProceedAsNew && <Check className="w-6 h-6" />}
               </div>
             </button>

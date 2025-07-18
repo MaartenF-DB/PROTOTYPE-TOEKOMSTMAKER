@@ -10,7 +10,7 @@ export function CheckInClosing({ onComplete }: CheckInClosingProps) {
   const { speak } = useSpeech();
 
   useEffect(() => {
-    const text = "Kom je aan het einde van de tentoonstelling terug? Dan krijg je een cadeau en onderzoeken we verder wat voor toekomstmaker jij bent!";
+    const text = "Kom je aan het einde van de tentoonstelling terug? Dan onderzoeken we verder wat voor toekomstmaker jij bent!";
     speak(text);
   }, [speak]);
 
@@ -26,7 +26,7 @@ export function CheckInClosing({ onComplete }: CheckInClosingProps) {
         </div>
         
         <h2 className="text-4xl font-bold mb-6">Kom je aan het einde van de tentoonstelling terug?</h2>
-        <p className="text-xl mb-8">Dan krijg je een cadeau en onderzoeken we verder wat voor toekomstmaker jij bent!</p>
+        <p className="text-xl mb-8">Dan onderzoeken we verder wat voor toekomstmaker jij bent!</p>
         
 
         

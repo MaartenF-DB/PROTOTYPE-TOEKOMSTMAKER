@@ -35,9 +35,9 @@ export function useSpeech() {
     
     if (detectedLanguage === 'en') {
       utterance.lang = 'en-US';
-      utterance.rate = 0.85;
-      utterance.pitch = 1.0;
-      utterance.volume = 0.9;
+      utterance.rate = 0.95; // Faster, more natural
+      utterance.pitch = 1.1; // Slightly higher, more pleasant
+      utterance.volume = 0.8; // Softer, more gentle
       
       // Find the best female English voice with strict language matching
       const voices = speechSynthesis.getVoices();
@@ -60,9 +60,9 @@ export function useSpeech() {
       }
     } else {
       utterance.lang = 'nl-NL';
-      utterance.rate = 0.8;
-      utterance.pitch = 1.0;
-      utterance.volume = 0.9;
+      utterance.rate = 0.9; // Faster, more natural
+      utterance.pitch = 1.05; // Slightly higher, more pleasant
+      utterance.volume = 0.8; // Softer, more gentle
       
       // Find the best female Dutch voice with strict language matching
       const voices = speechSynthesis.getVoices();
