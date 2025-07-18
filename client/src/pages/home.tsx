@@ -415,13 +415,27 @@ export default function Home() {
             existingNames={existingResponses.map(r => r.name)}
             onNameConfirm={(name, isNewUser) => {
               updateAnswers({ name, isNewCheckoutUser: isNewUser });
-              // If this is a new user who hasn't done check-in, they need to select a topic first
+              
               if (isNewUser) {
+                // New user - needs to answer ranking question first
                 setCheckoutOnly(true);
-                // Go to ranking question first
                 setCurrentSection('question-3');
               } else {
-                // Existing user can proceed to checkout questions
+                // Existing user - find their previous responses and use their topic choice
+                const existingResponse = existingResponses.find((r: any) => r.name === name);
+                if (existingResponse) {
+                  // Use their previous topic choice and ranking
+                  updateAnswers({ 
+                    mostImportantTopic: existingResponse.mostImportantTopic,
+                    topicRanking: existingResponse.topicRanking || [],
+                    age: existingResponse.age || '',
+                    visitingWith: existingResponse.visitingWith || '',
+                    visitingWithOther: existingResponse.visitingWithOther || '',
+                    feelingBefore: existingResponse.feelingBefore || null,
+                    confidenceBefore: existingResponse.confidenceBefore || null
+                  });
+                }
+                // Go directly to checkout questions
                 setCurrentSection('question-6');
               }
             }}

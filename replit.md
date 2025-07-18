@@ -112,7 +112,10 @@ The application follows a modern full-stack architecture with the following comp
   - Updated topic names in English (WONEN=LIVING, KLIMAAT=CLIMATE, GEZONDHEID=HEALTH, RIJKDOM=WEALTH, VREDE=PEACE, VRIJE TIJD=FREE TIME)
   - Fixed Results component to display proper English translations for all text
   - Updated all topic data displays throughout the app to use language-specific names and descriptions
-- **Fixed Checkout Flow for New Users**: New users who skip check-in questions now properly get the ranking question first before proceeding to other checkout questions
+- **Fixed Checkout Name Verification Logic**: 
+  - Existing users (who did check-in) now skip the ranking question and use their previous topic choice
+  - New users (who didn't do check-in) must answer the ranking question first
+  - Proper data inheritance from check-in responses for existing users
 - **Enhanced Navigation Logic**: Improved navigation flow between questions for checkout-only users to ensure proper sequence
 
 ### July 18, 2025 - Complete English Translation and Enhanced User Experience

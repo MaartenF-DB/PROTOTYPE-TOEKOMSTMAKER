@@ -32,9 +32,9 @@ export function CheckoutNameInput({ existingNames, onNameConfirm, language = 'nl
     );
     
     if (exactMatch) {
-      // Exact match found - this person already did check-in
-      setShowOptions(true);
+      // Exact match found - this person already did check-in, use their previous data
       speak("Ik heb je naam gevonden! Je hebt al eerder de check-in vragen beantwoord.");
+      onNameConfirm(exactMatch, false); // false = not a new user
     } else {
       // Check for similar names
       const similarNames = existingNames.filter(name => 
@@ -64,9 +64,9 @@ export function CheckoutNameInput({ existingNames, onNameConfirm, language = 'nl
 
   const handleFinalConfirm = () => {
     if (selectedExistingName) {
-      onNameConfirm(selectedExistingName, false);
+      onNameConfirm(selectedExistingName, false); // false = existing user
     } else if (willProceedAsNew) {
-      onNameConfirm(enteredName, true);
+      onNameConfirm(enteredName, true); // true = new user
     }
   };
 
