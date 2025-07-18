@@ -1,7 +1,10 @@
 import { surveyResponses, type SurveyResponse, type InsertSurveyResponse } from "@shared/schema";
+import { neon } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-http";
+import { eq } from "drizzle-orm";
 
-// modify the interface with any CRUD methods
-// you might need
+const sql = neon(process.env.DATABASE_URL!);
+const db = drizzle(sql);
 
 export interface IStorage {
   getSurveyResponse(id: number): Promise<SurveyResponse | undefined>;
@@ -9,36 +12,20 @@ export interface IStorage {
   getAllSurveyResponses(): Promise<SurveyResponse[]>;
 }
 
-export class MemStorage implements IStorage {
-  private responses: Map<number, SurveyResponse>;
-  currentId: number;
-
-  constructor() {
-    this.responses = new Map();
-    this.currentId = 1;
-  }
-
+export class DbStorage implements IStorage {
   async getSurveyResponse(id: number): Promise<SurveyResponse | undefined> {
-    return this.responses.get(id);
+    const results = await db.select().from(surveyResponses).where(eq(surveyResponses.id, id));
+    return results[0];
   }
 
   async createSurveyResponse(insertResponse: InsertSurveyResponse): Promise<SurveyResponse> {
-    const id = this.currentId++;
-    const response: SurveyResponse = { 
-      ...insertResponse, 
-      visitingWithOther: insertResponse.visitingWithOther || null,
-      topicRanking: insertResponse.topicRanking as string[],
-      isNewCheckoutUser: insertResponse.isNewCheckoutUser || false,
-      id, 
-      createdAt: new Date()
-    };
-    this.responses.set(id, response);
-    return response;
+    const results = await db.insert(surveyResponses).values(insertResponse).returning();
+    return results[0];
   }
 
   async getAllSurveyResponses(): Promise<SurveyResponse[]> {
-    return Array.from(this.responses.values());
+    return await db.select().from(surveyResponses);
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DbStorage();

@@ -1,0 +1,124 @@
+{
+  "id": "edbf2c53-3b2d-4174-b047-458a1b117e02",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.survey_responses": {
+      "name": "survey_responses",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "age": {
+          "name": "age",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "visiting_with": {
+          "name": "visiting_with",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "visiting_with_other": {
+          "name": "visiting_with_other",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "topic_ranking": {
+          "name": "topic_ranking",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "most_important_topic": {
+          "name": "most_important_topic",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "feeling_before": {
+          "name": "feeling_before",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "confidence_before": {
+          "name": "confidence_before",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "feeling_after": {
+          "name": "feeling_after",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "action_choice": {
+          "name": "action_choice",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "confidence_after": {
+          "name": "confidence_after",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "result": {
+          "name": "result",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_new_checkout_user": {
+          "name": "is_new_checkout_user",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
