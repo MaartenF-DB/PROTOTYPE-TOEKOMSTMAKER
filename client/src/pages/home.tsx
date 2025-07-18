@@ -412,7 +412,7 @@ export default function Home() {
       case 'checkout-name':
         return (
           <CheckoutNameInput
-            existingNames={existingResponses.map(r => r.name)}
+            existingResponses={existingResponses}
             onNameConfirm={(name, isNewUser) => {
               updateAnswers({ name, isNewCheckoutUser: isNewUser });
               
@@ -423,20 +423,24 @@ export default function Home() {
               } else {
                 // Existing user - find their previous responses and use their topic choice
                 const existingResponse = existingResponses.find((r: any) => r.name === name);
-                if (existingResponse) {
-                  // Use their previous topic choice and ranking
+                if (existingResponse && existingResponse.age && existingResponse.visitingWith) {
+                  // This is a complete check-in user - use their previous data
                   updateAnswers({ 
                     mostImportantTopic: existingResponse.mostImportantTopic,
                     topicRanking: existingResponse.topicRanking || [],
-                    age: existingResponse.age || '',
-                    visitingWith: existingResponse.visitingWith || '',
+                    age: existingResponse.age,
+                    visitingWith: existingResponse.visitingWith,
                     visitingWithOther: existingResponse.visitingWithOther || '',
                     feelingBefore: existingResponse.feelingBefore || null,
                     confidenceBefore: existingResponse.confidenceBefore || null
                   });
+                  // Go directly to checkout questions
+                  setCurrentSection('question-6');
+                } else {
+                  // This name exists but doesn't have complete check-in data
+                  setCheckoutOnly(true);
+                  setCurrentSection('question-3');
                 }
-                // Go directly to checkout questions
-                setCurrentSection('question-6');
               }
             }}
             language={language}

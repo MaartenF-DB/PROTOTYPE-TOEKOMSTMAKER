@@ -6,12 +6,12 @@ import { translations, Language } from '@/lib/translations';
 import { useSpeech } from '@/hooks/useSpeech';
 
 interface CheckoutNameInputProps {
-  existingNames: string[];
+  existingResponses: any[];
   onNameConfirm: (name: string, isNewUser: boolean) => void;
   language?: Language;
 }
 
-export function CheckoutNameInput({ existingNames, onNameConfirm, language = 'nl' }: CheckoutNameInputProps) {
+export function CheckoutNameInput({ existingResponses, onNameConfirm, language = 'nl' }: CheckoutNameInputProps) {
   const [enteredName, setEnteredName] = useState<string>('');
   const [showOptions, setShowOptions] = useState(false);
   const [selectedExistingName, setSelectedExistingName] = useState<string>('');
@@ -26,27 +26,30 @@ export function CheckoutNameInput({ existingNames, onNameConfirm, language = 'nl
   const handleNameSubmit = () => {
     if (!enteredName.trim()) return;
     
-    // Check if this exact name exists in check-in responses
-    const exactMatch = existingNames.find(name => 
-      name.toLowerCase() === enteredName.toLowerCase()
+    // Check if this exact name exists and has complete check-in data
+    const exactMatch = existingResponses.find(response => 
+      response.name.toLowerCase() === enteredName.toLowerCase() &&
+      response.age && response.visitingWith // Must have complete check-in data
     );
     
     if (exactMatch) {
-      // Exact match found - this person already did check-in, use their previous data
+      // Exact match with complete check-in data - use their previous data
       speak("Ik heb je naam gevonden! Je hebt al eerder de check-in vragen beantwoord.");
-      onNameConfirm(exactMatch, false); // false = not a new user
+      onNameConfirm(exactMatch.name, false); // false = not a new user
     } else {
-      // Check for similar names
-      const similarNames = existingNames.filter(name => 
-        name.toLowerCase().includes(enteredName.toLowerCase()) || 
-        enteredName.toLowerCase().includes(name.toLowerCase())
+      // Check for similar names with complete check-in data
+      const similarResponses = existingResponses.filter(response => 
+        response.age && response.visitingWith && (
+          response.name.toLowerCase().includes(enteredName.toLowerCase()) || 
+          enteredName.toLowerCase().includes(response.name.toLowerCase())
+        )
       );
       
-      if (similarNames.length > 0) {
+      if (similarResponses.length > 0) {
         setShowOptions(true);
         speak("Ik vond vergelijkbare namen in de lijst! Kies je naam of ga verder als nieuwe bezoeker.");
       } else {
-        // Name not found, proceed as new user
+        // Name not found or doesn't have complete check-in data, proceed as new user
         onNameConfirm(enteredName, true);
       }
     }
@@ -71,16 +74,19 @@ export function CheckoutNameInput({ existingNames, onNameConfirm, language = 'nl
   };
 
   if (showOptions) {
-    const exactMatch = existingNames.find(name => 
-      name.toLowerCase() === enteredName.toLowerCase()
+    const exactMatch = existingResponses.find(response => 
+      response.name.toLowerCase() === enteredName.toLowerCase() &&
+      response.age && response.visitingWith
     );
     
-    const similarNames = existingNames.filter(name => 
-      name.toLowerCase().includes(enteredName.toLowerCase()) || 
-      enteredName.toLowerCase().includes(name.toLowerCase())
+    const similarResponses = existingResponses.filter(response => 
+      response.age && response.visitingWith && (
+        response.name.toLowerCase().includes(enteredName.toLowerCase()) || 
+        enteredName.toLowerCase().includes(response.name.toLowerCase())
+      )
     );
 
-    const matchingNames = exactMatch ? [exactMatch] : similarNames;
+    const matchingNames = exactMatch ? [exactMatch.name] : similarResponses.map(r => r.name);
 
     return (
       <section className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-purple-600 to-pink-600 text-white">
@@ -92,7 +98,7 @@ export function CheckoutNameInput({ existingNames, onNameConfirm, language = 'nl
           <div className="mb-6">
             <p className="text-xl mb-4">
               {exactMatch 
-                ? `Perfect! Je hebt al eerder de check-in vragen beantwoord als "${exactMatch}".`
+                ? `Perfect! Je hebt al eerder de check-in vragen beantwoord als "${exactMatch.name}".`
                 : `Je hebt "${enteredName}" ingevuld. Ik vond deze vergelijkbare namen:`
               }
             </p>
