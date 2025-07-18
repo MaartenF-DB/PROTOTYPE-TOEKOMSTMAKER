@@ -25,24 +25,24 @@ export function CheckoutNameInput({ existingResponses, onNameConfirm, language =
     
     console.log('🔍 CHECKOUT NAME SUBMIT:', { enteredName, existingResponses });
     
-    // Check if this exact name exists and has complete check-in data (age AND visitingWith must be filled)
-    // AND has no checkout data (feelingAfter is null/undefined)
+    // Check if this exact name exists and has complete check-in data (age AND visitingWith AND mostImportantTopic must be filled)
+    // This means they already did check-in and can skip preliminary questions
     const exactMatch = existingResponses.find(response => 
       response.name.toLowerCase() === enteredName.toLowerCase() &&
       response.age && response.age.trim() !== '' && 
       response.visitingWith && response.visitingWith.trim() !== '' &&
-      (response.feelingAfter === null || response.feelingAfter === undefined)
+      response.mostImportantTopic && response.mostImportantTopic.trim() !== ''
     );
     
     console.log('🔍 EXACT MATCH RESULT:', { exactMatch, enteredName });
     
     if (exactMatch) {
-      // Exact match with complete check-in data but no checkout data - use their previous data, skip age/visiting questions
-      console.log('✅ FOUND EXISTING USER WITH CHECK-IN DATA ONLY - CALLING onNameConfirm with false (existing user)');
+      // Exact match with complete check-in data - use their previous data, skip age/visiting/ranking questions
+      console.log('✅ FOUND EXISTING USER WITH CHECK-IN DATA - CALLING onNameConfirm with false (existing user)');
       speak("Ik heb je naam gevonden! Je hebt al eerder de check-in vragen beantwoord.");
-      onNameConfirm(exactMatch.name, false); // false = existing user with complete data
+      onNameConfirm(exactMatch.name, false); // false = existing user with complete check-in data
     } else {
-      // No exact match with complete data - this is a new user who needs to answer age/visiting questions
+      // No exact match with complete check-in data - this is a new user who needs to answer age/visiting/ranking questions
       console.log('❌ NO EXACT MATCH - CALLING onNameConfirm with true (new user)');
       onNameConfirm(enteredName, true); // true = new user
     }
