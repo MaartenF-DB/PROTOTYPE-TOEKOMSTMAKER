@@ -421,11 +421,12 @@ export default function Home() {
                 setCheckoutOnly(true);
                 setCurrentSection('checkout-age');
               } else {
-                // Existing user - find their previous responses and use their topic choice
-                const existingResponse = existingResponses.find((r: any) => r.name === name);
-                if (existingResponse && existingResponse.age && existingResponse.age.trim() !== '' && 
-                    existingResponse.visitingWith && existingResponse.visitingWith.trim() !== '') {
-                  // This is a complete check-in user - use their previous data
+                // Existing user with complete check-in data - find their previous responses
+                const existingResponse = existingResponses.find((r: any) => r.name.toLowerCase() === name.toLowerCase());
+                console.log('Found existing user:', existingResponse);
+                
+                if (existingResponse) {
+                  // Use their complete check-in data and skip to checkout questions
                   updateAnswers({ 
                     mostImportantTopic: existingResponse.mostImportantTopic,
                     topicRanking: existingResponse.topicRanking || [],
@@ -435,10 +436,10 @@ export default function Home() {
                     feelingBefore: existingResponse.feelingBefore || null,
                     confidenceBefore: existingResponse.confidenceBefore || null
                   });
-                  // Go directly to checkout questions
+                  console.log('Updated answers with existing data, going to question-6');
                   setCurrentSection('question-6');
                 } else {
-                  // This name exists but doesn't have complete check-in data
+                  console.log('No existing response found, treating as new user');
                   setCheckoutOnly(true);
                   setCurrentSection('checkout-age');
                 }
@@ -494,8 +495,8 @@ export default function Home() {
           <Question
             questionNumber={2}
             question={t.questions.visitingWith}
-            bgGradient="from-yellow-500 to-orange-500"
-            buttonColor="bg-yellow-600 hover:bg-yellow-700"
+            bgGradient="from-purple-500 to-pink-500"
+            buttonColor="bg-purple-600 hover:bg-purple-700"
             onNext={() => setCurrentSection('question-3')}
             onPrevious={() => setCurrentSection('checkout-age')}
             showPrevious={true}
@@ -508,19 +509,17 @@ export default function Home() {
                 options={getVisitingOptions()}
                 value={answers.visitingWith}
                 onValueChange={(value) => updateAnswers({ visitingWith: value })}
-                otherValue={answers.visitingWith === 'anders' ? answers.visitingWithOther : ''}
+                otherValue={answers.visitingWithOther}
                 onOtherValueChange={(value) => updateAnswers({ visitingWithOther: value })}
-                columns={1}
+                columns={5}
                 language={language}
               />
               {answers.visitingWith.length > 0 && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
                   <p className="text-white font-semibold">{t.yourAnswer}:</p>
                   <p className="text-white text-lg">
-                    {answers.visitingWith === 'anders' && answers.visitingWithOther 
-                      ? answers.visitingWithOther 
-                      : getVisitingOptions().find(opt => opt.value === answers.visitingWith)?.label
-                    }
+                    {answers.visitingWith === 'other' ? answers.visitingWithOther : 
+                     getVisitingOptions().find(opt => opt.value === answers.visitingWith)?.label}
                   </p>
                 </div>
               )}
