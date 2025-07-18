@@ -35,6 +35,7 @@ export default function Home() {
     setCurrentSection,
     setCurrentQuestion,
     completeSurvey,
+    saveCheckInData,
     resetSurvey,
     getCurrentProgress,
     nameVerification,
@@ -362,7 +363,12 @@ export default function Home() {
             bgGradient={topicData?.hexColor ? '' : 'from-blue-500 to-purple-600'}
             buttonColor={topicData?.hexColor ? '' : 'bg-blue-600 hover:bg-blue-700'}
             style={topicData?.hexColor ? { background: getTopicGradient(topicData.hexColor) } : {}}
-            onComplete={() => setCurrentSection('checkin-closing')}
+            onComplete={() => {
+              // Save check-in data immediately when question-5 is completed
+              console.log('✅ CHECK-IN COMPLETED - SAVING DATA TO DATABASE');
+              saveCheckInData();
+              setCurrentSection('checkin-closing');
+            }}
             onPrevious={() => setCurrentSection('question-4')}
             showPrevious={true}
             showComplete={true}
@@ -400,6 +406,7 @@ export default function Home() {
         return (
           <CheckInClosing 
             onComplete={() => {
+              console.log('✅ CHECK-IN CLOSING - RETURNING TO ENTRY CHOICE');
               setCheckoutOnly(false);
               setCurrentSection('entry-choice');
             }}

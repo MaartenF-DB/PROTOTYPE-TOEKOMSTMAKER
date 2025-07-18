@@ -85,6 +85,23 @@ export function useSurvey() {
     return result;
   }, [state.answers, updateAnswers]);
 
+  const saveCheckInData = useCallback(() => {
+    console.log('💾 SAVING CHECK-IN DATA TO DATABASE:', {
+      name: state.answers.name,
+      age: state.answers.age,
+      visitingWith: state.answers.visitingWith,
+      mostImportantTopic: state.answers.mostImportantTopic
+    });
+    
+    saveResponseMutation.mutate({
+      ...state.answers,
+      feelingAfter: null, // Check-in only, no checkout data yet
+      actionChoice: null,
+      confidenceAfter: null,
+      result: null
+    });
+  }, [saveResponseMutation, state.answers]);
+
   const completeSurvey = useCallback(() => {
     const result = generateResult();
     setState(prev => ({ ...prev, isComplete: true }));
@@ -138,6 +155,7 @@ export function useSurvey() {
     setCurrentQuestion,
     generateResult,
     completeSurvey,
+    saveCheckInData,
     resetSurvey,
     getTopicColor,
     getTopicIcon,
