@@ -116,6 +116,10 @@ The application follows a modern full-stack architecture with the following comp
   - Existing users (who did check-in) now skip the ranking question and use their previous topic choice
   - New users (who didn't do check-in) must answer the ranking question first
   - Proper data inheritance from check-in responses for existing users
+- **Added Checkout-Only User Flow**: 
+  - New checkout users now answer age and visitingWith questions before ranking
+  - Complete data collection for all users regardless of entry point
+  - Proper validation to distinguish between complete check-in users vs. incomplete/new users
 - **Enhanced Navigation Logic**: Improved navigation flow between questions for checkout-only users to ensure proper sequence
 
 ### July 18, 2025 - Complete English Translation and Enhanced User Experience

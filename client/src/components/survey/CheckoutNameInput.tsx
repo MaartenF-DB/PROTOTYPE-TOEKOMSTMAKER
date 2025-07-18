@@ -29,7 +29,8 @@ export function CheckoutNameInput({ existingResponses, onNameConfirm, language =
     // Check if this exact name exists and has complete check-in data
     const exactMatch = existingResponses.find(response => 
       response.name.toLowerCase() === enteredName.toLowerCase() &&
-      response.age && response.visitingWith // Must have complete check-in data
+      response.age && response.age.trim() !== '' && 
+      response.visitingWith && response.visitingWith.trim() !== ''
     );
     
     if (exactMatch) {
@@ -39,7 +40,8 @@ export function CheckoutNameInput({ existingResponses, onNameConfirm, language =
     } else {
       // Check for similar names with complete check-in data
       const similarResponses = existingResponses.filter(response => 
-        response.age && response.visitingWith && (
+        response.age && response.age.trim() !== '' && 
+        response.visitingWith && response.visitingWith.trim() !== '' && (
           response.name.toLowerCase().includes(enteredName.toLowerCase()) || 
           enteredName.toLowerCase().includes(response.name.toLowerCase())
         )
@@ -76,11 +78,13 @@ export function CheckoutNameInput({ existingResponses, onNameConfirm, language =
   if (showOptions) {
     const exactMatch = existingResponses.find(response => 
       response.name.toLowerCase() === enteredName.toLowerCase() &&
-      response.age && response.visitingWith
+      response.age && response.age.trim() !== '' && 
+      response.visitingWith && response.visitingWith.trim() !== ''
     );
     
     const similarResponses = existingResponses.filter(response => 
-      response.age && response.visitingWith && (
+      response.age && response.age.trim() !== '' && 
+      response.visitingWith && response.visitingWith.trim() !== '' && (
         response.name.toLowerCase().includes(enteredName.toLowerCase()) || 
         enteredName.toLowerCase().includes(response.name.toLowerCase())
       )
