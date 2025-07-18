@@ -414,19 +414,22 @@ export default function Home() {
           <CheckoutNameInput
             existingResponses={existingResponses}
             onNameConfirm={(name, isNewUser) => {
+              console.log('🔍 NAME CONFIRMATION:', { name, isNewUser });
               updateAnswers({ name, isNewCheckoutUser: isNewUser });
               
               if (isNewUser) {
                 // New user - needs to answer age and visitingWith first, then ranking question
+                console.log('📝 NEW USER: Going to checkout-age');
                 setCheckoutOnly(true);
                 setCurrentSection('checkout-age');
               } else {
                 // Existing user with complete check-in data - find their previous responses
                 const existingResponse = existingResponses.find((r: any) => r.name.toLowerCase() === name.toLowerCase());
-                console.log('Found existing user:', existingResponse);
+                console.log('🔍 EXISTING USER LOOKUP:', { name, existingResponse });
                 
                 if (existingResponse) {
                   // Use their complete check-in data and skip ALL preliminary questions - go directly to question-6
+                  console.log('✅ EXISTING USER DATA FOUND - SKIPPING ALL PRELIMINARY QUESTIONS');
                   updateAnswers({ 
                     mostImportantTopic: existingResponse.mostImportantTopic,
                     topicRanking: existingResponse.topicRanking || [],
@@ -436,12 +439,12 @@ export default function Home() {
                     feelingBefore: existingResponse.feelingBefore || null,
                     confidenceBefore: existingResponse.confidenceBefore || null
                   });
-                  console.log('EXISTING USER: Skipping ALL preliminary questions (age, visiting, ranking), going directly to question-6');
+                  console.log('🚀 JUMPING DIRECTLY TO QUESTION-6 (FEELING AFTER)');
                   // Set checkoutOnly to false to indicate they are returning users who skip all preliminary questions
                   setCheckoutOnly(false);
                   setCurrentSection('question-6');
                 } else {
-                  console.log('No existing response found, treating as new user');
+                  console.log('❌ No existing response found, treating as new user');
                   setCheckoutOnly(true);
                   setCurrentSection('checkout-age');
                 }

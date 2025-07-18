@@ -23,6 +23,8 @@ export function CheckoutNameInput({ existingResponses, onNameConfirm, language =
   const handleNameSubmit = () => {
     if (!enteredName.trim()) return;
     
+    console.log('🔍 CHECKOUT NAME SUBMIT:', { enteredName, existingResponses });
+    
     // Check if this exact name exists and has complete check-in data (age AND visitingWith must be filled)
     const exactMatch = existingResponses.find(response => 
       response.name.toLowerCase() === enteredName.toLowerCase() &&
@@ -30,12 +32,16 @@ export function CheckoutNameInput({ existingResponses, onNameConfirm, language =
       response.visitingWith && response.visitingWith.trim() !== ''
     );
     
+    console.log('🔍 EXACT MATCH RESULT:', { exactMatch, enteredName });
+    
     if (exactMatch) {
       // Exact match with complete check-in data - use their previous data, skip age/visiting questions
+      console.log('✅ FOUND EXISTING USER - CALLING onNameConfirm with false (existing user)');
       speak("Ik heb je naam gevonden! Je hebt al eerder de check-in vragen beantwoord.");
       onNameConfirm(exactMatch.name, false); // false = existing user with complete data
     } else {
       // No exact match with complete data - this is a new user who needs to answer age/visiting questions
+      console.log('❌ NO EXACT MATCH - CALLING onNameConfirm with true (new user)');
       onNameConfirm(enteredName, true); // true = new user
     }
   };
