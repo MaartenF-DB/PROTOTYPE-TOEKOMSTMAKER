@@ -120,6 +120,10 @@ The application follows a modern full-stack architecture with the following comp
   - New checkout users now answer age and visitingWith questions before ranking
   - Complete data collection for all users regardless of entry point
   - Proper validation to distinguish between complete check-in users vs. incomplete/new users
+- **Simplified and Fixed Checkout Name Input**: 
+  - Checkout name section now matches check-in design exactly (same colors, layout, styling)
+  - Simplified logic: exact name match with complete data = existing user, otherwise = new user
+  - Uses same Question component format as check-in for consistency
 - **Enhanced Navigation Logic**: Improved navigation flow between questions for checkout-only users to ensure proper sequence
 
 ### July 18, 2025 - Complete English Translation and Enhanced User Experience
