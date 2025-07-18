@@ -431,7 +431,7 @@ export default function Home() {
               const existingResponse = existingResponses.find((r: any) => 
                 r.name.toLowerCase() === name.toLowerCase() && 
                 r.age && r.visitingWith && r.mostImportantTopic && // Has check-in data
-                r.feelingAfter === null // But hasn't completed checkout yet
+                (r.feelingAfter === null || r.feelingAfter === 0) 
               );
               
               console.log('🔍 SEARCHING FOR EXISTING USER:', { 
