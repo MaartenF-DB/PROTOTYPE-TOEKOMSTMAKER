@@ -121,6 +121,9 @@ The application follows a modern full-stack architecture with the following comp
 - **Enhanced Text Block Design**: Redesigned main content card with mystical gradient borders, animated sparkle decorations, and improved button hover effects
 - **Audio Loop Implementation**: Added 10-second interval audio loop for welcome messages on homepage with improved speech error handling
 - **CSV Export with Data Clearing**: Added comprehensive CSV download functionality with administrative data clearing using authentication code "HNIlina"
+- **Enhanced Dashboard UI**: Upgraded dashboard with red warning sections, prominent "🚨 DOWNLOAD & WISSEN" button, and detailed step-by-step warnings for data deletion
+- **Fixed API Integration**: Corrected apiRequest calls to use proper format (POST method first, then URL, then data) for successful data clearing functionality
+- **Data Management Security**: All data export and deletion now requires exact "HNIlina" authentication code with comprehensive error handling
 - **Looping Audio System**: Added automatic audio loop on entry page with 10-second intervals between welcome messages
 - **Enhanced Mystical Design**: Upgraded entry page with gradient borders, animated decorations, and premium button styling
 

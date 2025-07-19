@@ -25,11 +25,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
  const clearDataMutation = useMutation({
    mutationFn: async (code: string) => {
      console.log('🗑️ Clearing data with code:', code);
-     const response = await apiRequest('/api/survey-responses/reset', {
-       method: 'POST',
-       body: JSON.stringify({ code }),
-       headers: { 'Content-Type': 'application/json' }
-     });
+     const response = await apiRequest('POST', '/api/survey-responses/reset', { code });
      console.log('✅ Data cleared successfully:', response);
      return response;
    },
@@ -171,10 +167,11 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
  };
 
  const handleClearData = () => {
-   if (!deleteCode.trim()) {
-     setDeleteError('Voer een code in om data te wissen.');
+   if (deleteCode !== 'HNIlina') {
+     setDeleteError('Onjuiste code. Gebruik "HNIlina" om data te wissen.');
      return;
    }
+   setDeleteError('');
    clearDataMutation.mutate(deleteCode);
  };
 
