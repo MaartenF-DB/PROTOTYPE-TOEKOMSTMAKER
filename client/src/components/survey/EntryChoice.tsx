@@ -24,39 +24,39 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
   }, [speak, language]);
 
   return (
-    <section className="min-h-screen flex flex-col items-center p-6 text-white relative bg-gradient-to-br from-purple-900 via-purple-800 to-purple-900">
-      <div className="text-center max-w-4xl w-full">
-        {/* Video positioned above the welcome section */}
-        <div className="mb-8 rounded-2xl overflow-hidden shadow-2xl mt-4">
+    <section className="min-h-screen flex flex-col items-center justify-center p-4 md:p-6 lg:p-8 text-white relative bg-gradient-to-br from-purple-900 via-purple-800 to-purple-900">
+      <div className="text-center w-full max-w-5xl">
+        {/* Video positioned above the welcome section - iPad optimized */}
+        <div className="mb-6 md:mb-8 rounded-2xl overflow-hidden shadow-2xl">
           <video 
             autoPlay 
             loop 
             muted 
             playsInline
-            className="w-full h-72 md:h-96 lg:h-[32rem] object-cover"
+            className="w-full h-48 sm:h-64 md:h-80 lg:h-96 xl:h-[28rem] object-cover"
           >
             <source src={backgroundVideoPath} type="video/mp4" />
           </video>
         </div>
 
-        {/* Welcome Section */}
-        <MysticalCard className="mb-8 bg-black bg-opacity-70 backdrop-blur-sm border border-white border-opacity-30 max-w-2xl mx-auto">
-          <h1 className="text-4xl font-bold mb-6 text-white drop-shadow-lg">{t.entryChoice.title}</h1>
+        {/* Welcome Section - iPad optimized */}
+        <MysticalCard className="mb-6 md:mb-8 bg-black bg-opacity-70 backdrop-blur-sm border border-white border-opacity-30 max-w-3xl mx-auto px-4 md:px-6 lg:px-8">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 md:mb-8 text-white drop-shadow-lg">{t.entryChoice.title}</h1>
           
-          <div className="space-y-6">
+          <div className="space-y-4 md:space-y-6">
             <Button
               onClick={onCheckIn}
-              className="w-full bg-purple-700 bg-opacity-90 hover:bg-purple-600 text-white text-xl py-8 px-8 rounded-xl shadow-2xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 border-2 border-purple-400 hover:border-purple-300"
+              className="w-full bg-purple-700 bg-opacity-90 hover:bg-purple-600 active:bg-purple-800 text-white text-lg md:text-xl lg:text-2xl py-6 md:py-8 lg:py-10 px-6 md:px-8 rounded-xl shadow-2xl transform hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center gap-3 md:gap-4 border-2 border-purple-400 hover:border-purple-300"
             >
-              <span className="inline-block scale-x-[-1] text-3xl">🚶‍♂️</span>
+              <span className="inline-block scale-x-[-1] text-2xl md:text-3xl lg:text-4xl">🚶‍♂️</span>
               <span className="font-bold">{t.entryChoice.checkIn}</span>
             </Button>
             
             <Button
               onClick={onCheckOut}
-              className="w-full bg-yellow-500 bg-opacity-95 hover:bg-yellow-400 text-purple-900 text-xl py-8 px-8 rounded-xl shadow-2xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 border-2 border-yellow-300 hover:border-yellow-200"
+              className="w-full bg-yellow-500 bg-opacity-95 hover:bg-yellow-400 active:bg-yellow-600 text-purple-900 text-lg md:text-xl lg:text-2xl py-6 md:py-8 lg:py-10 px-6 md:px-8 rounded-xl shadow-2xl transform hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center gap-3 md:gap-4 border-2 border-yellow-300 hover:border-yellow-200"
             >
-              <span className="text-3xl">🚶‍♂️</span>
+              <span className="text-2xl md:text-3xl lg:text-4xl">🚶‍♂️</span>
               <span className="font-bold">{t.entryChoice.checkOut}</span>
             </Button>
           </div>
@@ -64,7 +64,7 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
 
         {/* Mystical guidance text */}
         <div className="text-center">
-          <p className="text-yellow-300 text-sm italic">
+          <p className="text-yellow-300 text-sm md:text-base italic">
             {language === 'en' ? "The fortune teller awaits your choice..." : "De waarzegger wacht op jouw keuze..."}
           </p>
         </div>
