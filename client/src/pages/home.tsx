@@ -12,6 +12,8 @@ import { NameVerification } from '@/components/survey/NameVerification';
 import { NameMatching } from '@/components/survey/NameMatching';
 import { CheckoutNameInput } from '@/components/survey/CheckoutNameInput';
 import { Input } from '@/components/ui/input';
+import { FortuneTellerTheme } from '@/components/theme/ThemeCustomizer';
+import { FortuneTellerCharacter, MysticalCard } from '@/components/fortune/FortuneTellerCharacter';
 import { 
   VISITING_OPTIONS, 
   ACTION_OPTIONS, 
@@ -758,24 +760,36 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen">
-      {/* Progress Bar */}
-      <div className="fixed top-0 left-0 w-full h-2 bg-gray-200 z-50">
+    <FortuneTellerTheme language={language}>
+      {/* Progress Bar - mystical style */}
+      <div className="fixed top-0 left-0 w-full h-2 bg-purple-900/50 z-50">
         <div 
-          className="h-full bg-blue-600 transition-all duration-300"
+          className="h-full bg-gradient-to-r from-yellow-400 via-purple-500 to-pink-500 transition-all duration-300 animate-mystical-shimmer"
           style={{ width: `${progressPercentage}%` }}
         />
       </div>
 
-      {/* Dashboard Link for Staff */}
+      {/* Dashboard Link for Staff - mystical style */}
       <div className="fixed top-4 right-4 z-50">
         <a 
           href="/dashboard" 
-          className="bg-gray-800 text-white px-3 py-1 rounded-md text-sm hover:bg-gray-700 transition-colors"
+          className="fortune-bg-primary text-yellow-300 px-4 py-2 rounded-lg text-sm fortune-border-glow hover:fortune-bg-secondary transition-all duration-300 backdrop-blur-sm"
         >
-          Dashboard
+          ✨ Dashboard
         </a>
       </div>
+
+      {/* Fortune Teller Character - appears in certain sections */}
+      {(currentSection === 'entry-choice' || currentSection === 'check-in-intro' || currentSection === 'check-out-intro') && (
+        <div className="fixed top-20 left-4 z-40 hidden lg:block">
+          <FortuneTellerCharacter 
+            language={language}
+            size="normal"
+            mood={currentSection === 'entry-choice' ? 'welcoming' : 'mystical'}
+            showAnimation={true}
+          />
+        </div>
+      )}
 
       {renderCurrentSection()}
       
@@ -783,6 +797,6 @@ export default function Home() {
         currentLanguage={language} 
         onLanguageChange={handleLanguageChange}
       />
-    </div>
+    </FortuneTellerTheme>
   );
 }

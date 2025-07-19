@@ -31,6 +31,14 @@
   --topic-vrije-tijd: hsl(0, 84%, 60%);
   --topic-klimaat: hsl(187, 85%, 46%);
   --topic-wonen: hsl(25, 95%, 53%);
+
+  /* Fortune Teller mystical colors */
+  --fortune-primary: hsl(252, 83%, 28%); /* Deep purple */
+  --fortune-secondary: hsl(252, 83%, 53%); /* Royal purple */
+  --fortune-accent: hsl(43, 96%, 56%); /* Mystical gold */
+  --fortune-mystical: hsl(252, 70%, 62%); /* Magical purple */
+  --fortune-dark: hsl(252, 83%, 11%); /* Dark mystical */
+  --fortune-glow: hsl(43, 100%, 70%); /* Golden glow */
 }
 
 .dark {
@@ -64,6 +72,89 @@
   body {
     @apply font-sans antialiased bg-background text-foreground;
   }
+}
+
+/* Fortune Teller mystical animations */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+@keyframes mystical-glow {
+  0%, 100% { box-shadow: 0 0 20px var(--fortune-glow), 0 0 40px var(--fortune-glow); }
+  50% { box-shadow: 0 0 30px var(--fortune-glow), 0 0 60px var(--fortune-glow); }
+}
+
+@keyframes crystal-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.1); opacity: 1; }
+}
+
+@keyframes floating {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes mystical-shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.animate-twinkle {
+  animation: twinkle 2s ease-in-out infinite;
+}
+
+.animate-mystical-glow {
+  animation: mystical-glow 3s ease-in-out infinite;
+}
+
+.animate-crystal-pulse {
+  animation: crystal-pulse 4s ease-in-out infinite;
+}
+
+.animate-floating {
+  animation: floating 3s ease-in-out infinite;
+}
+
+.animate-mystical-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  background-size: 200% 100%;
+  animation: mystical-shimmer 2s ease-in-out infinite;
+}
+
+/* Fortune Teller theme utility classes */
+.fortune-bg-primary {
+  background-color: var(--fortune-primary);
+}
+
+.fortune-bg-secondary {
+  background-color: var(--fortune-secondary);
+}
+
+.fortune-bg-accent {
+  background-color: var(--fortune-accent);
+}
+
+.fortune-bg-mystical {
+  background-color: var(--fortune-mystical);
+}
+
+.fortune-text-primary {
+  color: var(--fortune-primary);
+}
+
+.fortune-text-accent {
+  color: var(--fortune-accent);
+}
+
+.fortune-text-glow {
+  color: var(--fortune-glow);
+  text-shadow: 0 0 10px var(--fortune-glow);
+}
+
+.fortune-border-glow {
+  border-color: var(--fortune-glow);
+  box-shadow: 0 0 15px var(--fortune-glow);
 }
 
 @layer utilities {

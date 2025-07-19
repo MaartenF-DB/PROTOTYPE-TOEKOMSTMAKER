@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { translations } from '@/lib/translations';
 import { useSpeech } from '@/hooks/useSpeech';
 import { useEffect } from 'react';
+import { MysticalCard } from '@/components/fortune/FortuneTellerCharacter';
 
 interface EntryChoiceProps {
   onCheckIn: () => void;
@@ -21,36 +22,54 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
   }, [speak, language]);
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-indigo-500 to-purple-600 text-white">
-      <div className="text-center max-w-2xl w-full">
+    <section className="min-h-screen flex flex-col items-center justify-center p-6 text-white relative">
+      <div className="text-center max-w-2xl w-full relative z-10">
+        {/* Mystical portal entrance */}
         <div className="mb-8">
-          <div className="w-32 h-32 mx-auto rounded-full bg-white bg-opacity-20 shadow-2xl mb-6">
-            <div className="w-full h-full rounded-full flex items-center justify-center text-6xl">
-              🚪
+          <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-purple-400 via-blue-500 to-purple-600 shadow-2xl mb-6 animate-mystical-glow">
+            <div className="w-full h-full rounded-full flex items-center justify-center text-6xl animate-floating">
+              🔮
             </div>
+          </div>
+          <div className="flex justify-center space-x-4 mb-4">
+            <span className="text-yellow-400 text-2xl animate-twinkle">✨</span>
+            <span className="text-purple-300 text-xl animate-twinkle" style={{ animationDelay: '1s' }}>🌟</span>
+            <span className="text-pink-300 text-lg animate-twinkle" style={{ animationDelay: '2s' }}>💫</span>
           </div>
         </div>
         
-        <div className="bg-white bg-opacity-20 rounded-2xl p-8 mb-8 backdrop-blur-sm">
-          <h1 className="text-4xl font-bold mb-6">{t.entryChoice.title}</h1>
+        <MysticalCard className="mb-8">
+          <h1 className="text-4xl font-bold mb-2 fortune-text-glow">{t.entryChoice.title}</h1>
+          <p className="text-yellow-200 text-lg mb-6 italic">
+            {language === 'en' ? "The crystal ball reveals two paths before you..." : "De kristallen bol toont twee paden voor je..."}
+          </p>
           
           <div className="space-y-4">
             <Button
               onClick={onCheckIn}
-              className="w-full bg-green-600 hover:bg-green-700 text-white text-xl py-6 px-8 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center justify-center gap-3"
+              className="w-full fortune-bg-secondary hover:fortune-bg-mystical text-white text-xl py-6 px-8 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 border-2 border-yellow-400/30 hover:border-yellow-400/60"
             >
-              <span className="inline-block scale-x-[-1] text-2xl">🚶‍♂️</span>
+              <span className="inline-block scale-x-[-1] text-2xl animate-floating">🚶‍♂️</span>
               <span>{t.entryChoice.checkIn}</span>
+              <span className="text-yellow-400">✨</span>
             </Button>
             
             <Button
               onClick={onCheckOut}
-              className="w-full bg-orange-600 hover:bg-orange-700 text-white text-xl py-6 px-8 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center justify-center gap-3"
+              className="w-full fortune-bg-accent hover:bg-yellow-600 text-purple-900 text-xl py-6 px-8 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 border-2 border-purple-400/30 hover:border-purple-400/60"
             >
-              <span className="text-2xl">🚶‍♂️</span>
-              <span>{t.entryChoice.checkOut}</span>
+              <span className="text-2xl animate-floating" style={{ animationDelay: '1s' }}>🚶‍♂️</span>
+              <span className="font-bold">{t.entryChoice.checkOut}</span>
+              <span className="text-purple-600">🔮</span>
             </Button>
           </div>
+        </MysticalCard>
+
+        {/* Mystical guidance text */}
+        <div className="text-center">
+          <p className="text-yellow-300 text-sm italic animate-pulse">
+            {language === 'en' ? "The fortune teller awaits your choice..." : "De waarzegger wacht op jouw keuze..."}
+          </p>
         </div>
       </div>
     </section>
