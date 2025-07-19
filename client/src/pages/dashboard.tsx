@@ -24,15 +24,28 @@ export default function Dashboard() {
 
   const resetMutation = useMutation({
     mutationFn: async (code: string) => {
-      return apiRequest('/api/survey-responses/reset', {
-        method: 'POST',
-        body: JSON.stringify({ code }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      try {
+        const response = await fetch('/api/survey-responses/reset', {
+          method: 'POST',
+          body: JSON.stringify({ code }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Reset failed');
+        }
+        
+        return response.json();
+      } catch (error) {
+        console.error('Reset mutation error:', error);
+        throw error;
+      }
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log('Reset successful:', data);
       queryClient.invalidateQueries({ queryKey: ['/api/survey-responses'] });
       toast({
         title: "Succes",
@@ -41,6 +54,7 @@ export default function Dashboard() {
       setResetCode('');
     },
     onError: (error: any) => {
+      console.error('Reset error:', error);
       toast({
         title: "Fout",
         description: error.message || "Ongeldige code of server fout",
@@ -99,7 +113,7 @@ export default function Dashboard() {
 
 
 
-  const exportAllDataAndReset = () => {
+  const exportAllDataAndReset = async () => {
     if (responses.length === 0) {
       toast({
         title: "Geen data",
@@ -126,40 +140,57 @@ export default function Dashboard() {
       });
       return;
     }
-    
-    // First export the data
-    const csvContent = responses.map(response => ({
-      Naam: response.name,
-      Leeftijd: response.age,
-      'Bezoekt met': response.visitingWith,
-      'Andere begeleiding': response.visitingWithOther || '',
-      'Onderwerp ranking': response.topicRanking.join(', '),
-      'Belangrijkste onderwerp': response.mostImportantTopic,
-      'Gevoel voor (1-5)': response.feelingBefore || '',
-      'Vertrouwen voor (1-5)': response.confidenceBefore || '',
-      'Gevoel na (1-5)': response.feelingAfter || '',
-      'Actie keuze': response.actionChoice,
-      'Vertrouwen na (1-5)': response.confidenceAfter || '',
-      'Persoonlijkheid': response.result,
-      'Datum': new Date(response.createdAt).toLocaleDateString('nl-NL'),
-      'Tijd': new Date(response.createdAt).toLocaleTimeString('nl-NL')
-    }));
-    
-    const csv = [
-      Object.keys(csvContent[0]).join(','),
-      ...csvContent.map(row => Object.values(row).map(val => `"${val}"`).join(','))
-    ].join('\n');
-    
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `museum-responses-${new Date().toISOString().split('T')[0]}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
 
-    // Then reset all data
-    resetMutation.mutate(resetCode);
+    try {
+      // First export the data
+      const csvContent = responses.map(response => ({
+        Naam: response.name,
+        Leeftijd: response.age,
+        'Bezoekt met': response.visitingWith,
+        'Andere begeleiding': response.visitingWithOther || '',
+        'Onderwerp ranking': response.topicRanking.join(', '),
+        'Belangrijkste onderwerp': response.mostImportantTopic,
+        'Gevoel voor (1-5)': response.feelingBefore || '',
+        'Vertrouwen voor (1-5)': response.confidenceBefore || '',
+        'Gevoel na (1-5)': response.feelingAfter || '',
+        'Actie keuze': response.actionChoice,
+        'Vertrouwen na (1-5)': response.confidenceAfter || '',
+        'Persoonlijkheid': response.result,
+        'Datum': new Date(response.createdAt).toLocaleDateString('nl-NL'),
+        'Tijd': new Date(response.createdAt).toLocaleTimeString('nl-NL')
+      }));
+      
+      const csv = [
+        Object.keys(csvContent[0]).join(','),
+        ...csvContent.map(row => Object.values(row).map(val => `"${val}"`).join(','))
+      ].join('\n');
+      
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `museum-responses-${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      toast({
+        title: "CSV Gedownload",
+        description: "CSV bestand is gedownload. Data wordt nu gereset...",
+      });
+
+      // Wait a moment before resetting to ensure download completed
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Then reset all data
+      resetMutation.mutate(resetCode);
+    } catch (error) {
+      console.error('Export error:', error);
+      toast({
+        title: "Export Fout",
+        description: "Er is een fout opgetreden bij het exporteren",
+        variant: "destructive",
+      });
+    }
   };
 
   if (isLoading) {
