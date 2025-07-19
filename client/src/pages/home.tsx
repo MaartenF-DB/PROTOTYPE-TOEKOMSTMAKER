@@ -1,6 +1,6 @@
 import { useSurvey } from '@/hooks/useSurvey';
 import { EntryChoice } from '@/components/survey/EntryChoice';
-import { CheckInIntro } from '@/components/survey/CheckInIntro';
+
 import { Question } from '@/components/survey/Question';
 import { CheckInClosing } from '@/components/survey/CheckInClosing';
 import { CheckOutIntro } from '@/components/survey/CheckOutIntro';
@@ -131,7 +131,9 @@ export default function Home() {
           <EntryChoice
             onCheckIn={() => {
               setCheckoutOnly(false);
-              setCurrentSection('checkin-intro');
+              // Skip checkin-intro and go directly to first question
+              updateAnswers({ name: '' });
+              setCurrentSection('question-0');
             }}
             onCheckOut={() => {
               setCheckoutOnly(false);
@@ -152,17 +154,7 @@ export default function Home() {
             }}
           />
         );
-      case 'checkin-intro':
-        return (
-          <CheckInIntro 
-            onStart={() => {
-              // Clear name to force re-entry
-              updateAnswers({ name: '' });
-              setCurrentSection('question-0');
-            }}
-            language={language}
-          />
-        );
+
 
       case 'question-0':
         return (
