@@ -104,13 +104,13 @@ The application follows a modern full-stack architecture with the following comp
 
 ## Recent Changes
 
-### July 19, 2025 - Enhanced Name Conflict Resolution System
-- **Automatic Name Numbering**: Implemented intelligent name conflict resolution that automatically adds numbers to duplicate names
-- **Smart Check-In Logic**: When entering a name during check-in that already exists, system automatically generates unique variant (e.g., "Anna" becomes "Anna 1")
-- **Improved User Experience**: Clear warning messages show users exactly what their final name will be before proceeding
-- **Bilingual Support**: Added proper Dutch/English translations for name conflict warnings and confirmations
-- **Checkout Flow Enhancement**: CheckoutNameInput now also handles name conflicts automatically for new users
-- **Consistent Behavior**: Both check-in and checkout flows now use identical name conflict resolution logic
+### July 19, 2025 - Enhanced Name Conflict Resolution System (Updated)
+- **Mandatory Unique Names**: Users must manually enter unique names (with numbers) when name conflicts occur - no automatic generation
+- **Blocked Navigation**: Users cannot proceed in check-in or checkout if they enter an existing name
+- **Clear Error Messages**: Red warning boxes show exactly when a name conflict exists with instructions to add numbers (e.g., "Anna 1")
+- **Bilingual Support**: Updated Dutch/English translations for name conflict blocking and user guidance
+- **Consistent Validation**: Both check-in and checkout flows block duplicate names and require manual resolution
+- **User Control**: Users have full control over their naming convention (Anna 1, Anna 2, etc.) rather than system automation
 
 ### July 19, 2025 - Fortune Teller Mystical Theme Implementation
 - **Complete Fortune Teller Theme**: Replaced user theme customization with immersive mystical fortune teller atmosphere
