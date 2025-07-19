@@ -43,6 +43,14 @@ export function AnimatedResult({ finalResult, onComplete, language = 'nl' }: Ani
       'De waarzegster onthult je persoonlijkheid...';
     speak(revealText, language);
     
+    // Speak the waiting message after 3 seconds
+    setTimeout(() => {
+      const waitingText = language === 'en' ? 
+        'Please wait... The fortune teller is working her magic...' : 
+        'Wacht alsjeblieft... De waarzegger werkt haar magie...';
+      speak(waitingText, language);
+    }, 3000);
+    
     // Animation loop
     intervalRef.current = setInterval(() => {
       const shuffledIcons = shuffleArray(icons);

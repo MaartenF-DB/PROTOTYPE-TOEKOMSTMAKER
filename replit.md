@@ -141,6 +141,8 @@ The application follows a modern full-stack architecture with the following comp
 - **Fixed English Name Audio**: Corrected CheckoutNameInput to use proper English audio with language parameter
 - **Crystal Ball Color**: Changed 🔮 emoji from yellow to purple color in fortune teller reveal section
 - **Results Audio Integration**: Added speech synthesis to "De waarzegster onthult" and "De Uitkomst" sections
+- **Enhanced AnimatedResult Audio**: Added speech for waiting message "Wacht alsjeblieft... De waarzegger werkt haar magie..." during fortune teller animation
+- **Complete Results Audio**: Added farewell message speech "De visie van de waarzegger is compleet..." when final results are displayed
 - **English Translation Fix**: Fixed all result text to properly translate to English including "You are a...", "for", and motivational messages with correct audio
 - **Consistent Mystical Experience**: Applied fortune teller theme across all survey components with star-field background including name entry sections
 

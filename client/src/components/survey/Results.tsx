@@ -73,6 +73,18 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
     }
   }, [showAnimatedResult, animationComplete, setLocation]);
 
+  // Speak the farewell message when results are shown
+  useEffect(() => {
+    if (!showAnimatedResult && animationComplete) {
+      setTimeout(() => {
+        const farewellText = language === 'en' ? 
+          "The fortune teller's vision is complete..." : 
+          "De visie van de waarzegger is compleet...";
+        speak(farewellText, language);
+      }, 6000); // Wait 6 seconds after other audio finishes
+    }
+  }, [showAnimatedResult, animationComplete, language, speak]);
+
   // Show animated result first
   if (showAnimatedResult) {
     console.log('🎬 Rendering AnimatedResult component');
