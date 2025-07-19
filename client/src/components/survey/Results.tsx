@@ -86,20 +86,24 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
           setAnimationComplete(true);
           
           // Speak the results in the correct language
+          const actionType = language === 'en' ? 
+            (answers.actionChoice === 'uitvinden' ? 'inventor' :
+             answers.actionChoice === 'actie' ? 'activist' :
+             answers.actionChoice === 'veranderen' ? 'changemaker' : 'future maker') :
+            (answers.actionChoice === 'uitvinden' ? 'uitvinder' :
+             answers.actionChoice === 'actie' ? 'actievoerder' :
+             answers.actionChoice === 'veranderen' ? 'veranderaar' : 'toekomstmaker');
+          
           const resultText = language === 'en' ? 
-            `You are a ${answers.actionChoice === 'uitvinden' ? 'inventor' :
-                        answers.actionChoice === 'actie' ? 'activist' :
-                        answers.actionChoice === 'veranderen' ? 'changemaker' : 'future maker'} for ${getTopicName(answers.mostImportantTopic, language)}` :
-            `Jij bent een ${answers.actionChoice === 'uitvinden' ? 'uitvinder' :
-                           answers.actionChoice === 'actie' ? 'actievoerder' :
-                           answers.actionChoice === 'veranderen' ? 'veranderaar' : 'toekomstmaker'} voor ${getTopicName(answers.mostImportantTopic, language)}`;
+            `${actionType} for ${getTopicName(answers.mostImportantTopic, language)}` :
+            `${actionType} voor ${getTopicName(answers.mostImportantTopic, language)}`;
           
           console.log('🎤 Speaking result:', resultText);
           speak(resultText, language);
           
-          // Speak "De Uitkomst" title after 2 seconds
+          // Speak "You are a..." title after 2 seconds
           setTimeout(() => {
-            const titleText = language === 'en' ? 'The Result' : 'De Uitkomst';
+            const titleText = language === 'en' ? 'You are a' : 'Jij bent een';
             speak(titleText, language);
           }, 2000);
           
@@ -164,7 +168,7 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
         {/* Results card directly under the crystal ball */}
         <div className="bg-white bg-opacity-40 rounded-2xl p-8 mb-8 backdrop-blur-sm border border-white border-opacity-30">
           <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
-            {language === 'en' ? 'The Result' : 'De Uitkomst'}
+            {language === 'en' ? 'You are a...' : 'Jij bent een...'}
           </h2>
           
           <div className="text-5xl font-bold mb-4 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent drop-shadow-lg">
@@ -179,7 +183,7 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
             }
           </div>
           <div className="text-2xl mb-4 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
-            {language === 'en' ? 'voor' : 'voor'}
+            {language === 'en' ? 'for' : 'voor'}
           </div>
           <div className="text-4xl font-bold mb-6 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent drop-shadow-lg">
             {getTopicName(answers.mostImportantTopic, language)}
