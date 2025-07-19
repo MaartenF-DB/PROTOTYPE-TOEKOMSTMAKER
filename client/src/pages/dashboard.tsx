@@ -264,7 +264,6 @@ export default function Dashboard() {
                       '0'
                     }
                   </div>
-                  <p className="text-lg text-muted-foreground">Gemiddelde verbetering in gevoel voor de toekomst</p>
                   <p className="text-sm text-gray-500 mt-2">
                     {stats.feelingChanges.length} complete responses
                   </p>
@@ -310,7 +309,6 @@ export default function Dashboard() {
                       '0'
                     }
                   </div>
-                  <p className="text-lg text-muted-foreground">Gemiddelde verbetering in vertrouwen voor de toekomst</p>
                   <p className="text-sm text-gray-500 mt-2">
                     {stats.confidenceChanges.length} complete responses
                   </p>
