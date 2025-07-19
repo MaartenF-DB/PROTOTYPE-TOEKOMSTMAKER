@@ -10,6 +10,7 @@ export interface IStorage {
   getSurveyResponse(id: number): Promise<SurveyResponse | undefined>;
   createSurveyResponse(response: InsertSurveyResponse): Promise<SurveyResponse>;
   getAllSurveyResponses(): Promise<SurveyResponse[]>;
+  clearAllSurveyResponses(): Promise<void>;
 }
 
 export class DbStorage implements IStorage {
@@ -41,6 +42,17 @@ export class DbStorage implements IStorage {
       return results;
     } catch (error) {
       console.error('Error getting all survey responses:', error);
+      throw error;
+    }
+  }
+
+  async clearAllSurveyResponses(): Promise<void> {
+    try {
+      console.log('🗑️ CLEARING ALL SURVEY RESPONSES FROM DATABASE');
+      await db.delete(surveyResponses);
+      console.log('✅ ALL SURVEY RESPONSES CLEARED');
+    } catch (error) {
+      console.error('Error clearing all survey responses:', error);
       throw error;
     }
   }

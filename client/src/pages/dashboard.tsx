@@ -1,16 +1,52 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { exportToCSV } from '@/lib/csvExport';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+
 import { SurveyResponse } from '@shared/schema';
 import { TOPICS, ACTION_OPTIONS } from '@/types/survey';
-import { Download, Users, TrendingUp, BarChart3 } from 'lucide-react';
+import { Download, Users, TrendingUp, BarChart3, Trash2 } from 'lucide-react';
+import { apiRequest } from '@/lib/queryClient';
+import { useToast } from '@/hooks/use-toast';
+import { useState } from 'react';
 
 export default function Dashboard() {
+  const [resetCode, setResetCode] = useState('');
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
   const { data: responses = [], isLoading } = useQuery<SurveyResponse[]>({
     queryKey: ['/api/survey-responses'],
     select: (data) => data.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+  });
+
+  const resetMutation = useMutation({
+    mutationFn: async (code: string) => {
+      return apiRequest('/api/survey-responses/reset', {
+        method: 'POST',
+        body: JSON.stringify({ code }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/survey-responses'] });
+      toast({
+        title: "Succes",
+        description: "Alle data is gereset. Nieuwe antwoorden worden als nieuw gezien.",
+      });
+      setResetCode('');
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Fout",
+        description: error.message || "Ongeldige code of server fout",
+        variant: "destructive",
+      });
+    },
   });
 
   // Separate responses by type
@@ -61,29 +97,37 @@ export default function Dashboard() {
   const mostPopularTopic = Object.entries(stats.topTopics).sort(([,a], [,b]) => b - a)[0]?.[0];
   const topicData = mostPopularTopic ? TOPICS[mostPopularTopic as keyof typeof TOPICS] : null;
 
-  const handleExportAll = () => {
-    if (responses.length === 0) return;
-    
-    const csvData = responses.map(response => ({
-      naam: response.name,
-      leeftijd: response.age,
-      bezoek_met: response.visitingWith,
-      belangrijkste_onderwerp: response.mostImportantTopic,
-      gevoel_voor: response.feelingBefore,
-      vertrouwen_voor: response.confidenceBefore,
-      gevoel_na: response.feelingAfter,
-      actie_keuze: response.actionChoice,
-      vertrouwen_na: response.confidenceAfter,
-      resultaat: response.result,
-      datum: new Date(response.createdAt).toLocaleDateString('nl-NL')
-    }));
-    
-    exportToCSV({ name: 'alle_responses', ...csvData[0] }, 'alle_survey_responses.csv');
-  };
 
-  const exportAllData = () => {
-    if (responses.length === 0) return;
+
+  const exportAllDataAndReset = () => {
+    if (responses.length === 0) {
+      toast({
+        title: "Geen data",
+        description: "Er zijn geen antwoorden om te exporteren",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!resetCode.trim()) {
+      toast({
+        title: "Code vereist",
+        description: "Voer de authenticatiecode in om data te exporteren en resetten",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (resetCode !== "NieuweInstituutLINA") {
+      toast({
+        title: "Ongeldige code",
+        description: "De authenticatiecode is onjuist",
+        variant: "destructive",
+      });
+      return;
+    }
     
+    // First export the data
     const csvContent = responses.map(response => ({
       Naam: response.name,
       Leeftijd: response.age,
@@ -113,6 +157,9 @@ export default function Dashboard() {
     a.download = `museum-responses-${new Date().toISOString().split('T')[0]}.csv`;
     a.click();
     URL.revokeObjectURL(url);
+
+    // Then reset all data
+    resetMutation.mutate(resetCode);
   };
 
   if (isLoading) {
@@ -345,17 +392,59 @@ export default function Dashboard() {
           </Card>
         </div>
 
-        {/* Export Button */}
-        <div className="mb-6">
-          <Button 
-            onClick={exportAllData}
-            disabled={responses.length === 0}
-            className="bg-blue-600 hover:bg-blue-700"
-          >
-            <Download className="mr-2 h-4 w-4" />
-            Export naar CSV ({responses.length} antwoorden)
-          </Button>
-        </div>
+        {/* Export and Reset Section */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Download className="h-5 w-5" />
+              Data Export & Reset
+            </CardTitle>
+            <CardDescription>
+              Download CSV met alle antwoorden en reset daarna alle data. Nieuwe antwoorden worden als nieuw gezien.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="reset-code">Authenticatiecode</Label>
+                <Input
+                  id="reset-code"
+                  type="password"
+                  placeholder="Voer authenticatiecode in..."
+                  value={resetCode}
+                  onChange={(e) => setResetCode(e.target.value)}
+                  disabled={resetMutation.isPending}
+                />
+                <p className="text-sm text-gray-500">
+                  Code vereist voor export en reset functionaliteit
+                </p>
+              </div>
+              <div className="flex flex-col justify-end">
+                <Button 
+                  onClick={exportAllDataAndReset}
+                  disabled={responses.length === 0 || !resetCode.trim() || resetMutation.isPending}
+                  className="bg-red-600 hover:bg-red-700 text-white"
+                >
+                  {resetMutation.isPending ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Bezig...
+                    </>
+                  ) : (
+                    <>
+                      <Download className="mr-2 h-4 w-4" />
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      Export CSV & Reset Data ({responses.length})
+                    </>
+                  )}
+                </Button>
+                <p className="text-sm text-gray-500 mt-2">
+                  ⚠️ Deze actie verwijdert ALLE data permanent na export
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Response Categories */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

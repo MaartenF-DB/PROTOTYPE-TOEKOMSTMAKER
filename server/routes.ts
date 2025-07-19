@@ -45,6 +45,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Reset all survey responses with authentication
+  app.post("/api/survey-responses/reset", async (req, res) => {
+    try {
+      const { code } = req.body;
+      
+      // Check authentication code
+      if (code !== "NieuweInstituutLINA") {
+        res.status(401).json({ error: "Ongeldige authenticatiecode" });
+        return;
+      }
+
+      await storage.clearAllSurveyResponses();
+      res.json({ success: true, message: "Alle survey responses zijn gereset" });
+    } catch (error) {
+      console.error('Error resetting survey responses:', error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
