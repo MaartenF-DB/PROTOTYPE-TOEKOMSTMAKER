@@ -23,9 +23,13 @@ export function CheckoutNameInput({ existingResponses, onNameConfirm, language =
 
 
 
-  // Check if current name already exists
+  // Check if current name already exists and has COMPLETED both check-in AND check-out
+  // Only show conflict if user has already completed the ENTIRE survey (feelingAfter is not null)
   const hasNameConflict = existingResponses.some((response: any) => 
-    response.name.toLowerCase() === enteredName.toLowerCase() && enteredName.length > 0
+    response.name.toLowerCase() === enteredName.toLowerCase() && 
+    enteredName.length > 0 &&
+    response.feelingAfter !== null && 
+    response.feelingAfter !== 0 // User has completed checkout
   );
 
   const handleNameSubmit = () => {

@@ -75,9 +75,13 @@ export default function Home() {
 
   console.log('🔍 EXISTING RESPONSES QUERY:', { existingResponses, isLoadingResponses });
   
-  // Check if current name already exists and get similar names
+  // Check if current name already exists and has COMPLETED both check-in AND check-out
+  // Only show conflict if user has already completed the ENTIRE survey (feelingAfter is not null)
   const hasNameConflict = existingResponses.some((response: any) => 
-    response.name === answers.name && answers.name.length > 0
+    response.name === answers.name && 
+    answers.name.length > 0 &&
+    response.feelingAfter !== null && 
+    response.feelingAfter !== 0 // User has completed checkout
   );
   
   // Find similar names for checkout flow

@@ -375,7 +375,11 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
  <Button 
  onClick={handleExportAndClear}
  disabled={responses.length === 0 || clearDataMutation.isPending}
- className="flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white font-bold border-2 border-red-800 shadow-lg"
+ className={`flex items-center space-x-2 font-bold border-2 shadow-lg ${
+   deleteCode === 'HNIlina' 
+     ? 'bg-red-600 hover:bg-red-700 text-white border-red-800' 
+     : 'bg-gray-400 hover:bg-gray-500 text-white border-gray-600'
+ }`}
  >
  <Download className="h-5 w-5" />
  <Trash2 className="h-5 w-5" />
@@ -388,7 +392,11 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
  onClick={handleClearData}
  disabled={responses.length === 0 || clearDataMutation.isPending}
  variant="outline"
- className="flex items-center space-x-2"
+ className={`flex items-center space-x-2 ${
+   deleteCode === 'HNIlina' 
+     ? 'border-red-600 text-red-600 hover:bg-red-50' 
+     : 'border-gray-400 text-gray-400 hover:bg-gray-50'
+ }`}
  >
  <Trash2 className="h-4 w-4" />
  <span>Alleen Wis Data</span>
