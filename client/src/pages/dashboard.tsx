@@ -3,10 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { FileText, Download, Users, TrendingUp, Calendar, ArrowLeft } from 'lucide-react';
-import { PieChart, Pie, Cell, ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar } from 'recharts';
-import { SurveyResponse } from '@/../../shared/schema';
+import { Download, Users, Calendar, ArrowLeft } from 'lucide-react';
+import { SurveyResponse } from '../../../shared/schema';
 
 // Topic mapping for display
 const TOPIC_NAMES: { [key: string]: string } = {
@@ -17,9 +15,6 @@ const TOPIC_NAMES: { [key: string]: string } = {
   'VREDE': 'Vrede',
   'VRIJE TIJD': 'Vrije tijd'
 };
-
-// Colors for charts
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
 
 // CSV Export function
 const exportToCSV = (data: any[], filename: string) => {
@@ -47,72 +42,12 @@ export default function Dashboard() {
     select: (data) => data.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
   });
 
-  const [selectedPeriod, setSelectedPeriod] = useState<'today' | 'week' | 'month' | 'all'>('all');
-
-  // Filter responses based on selected period
-  const filteredResponses = responses.filter(response => {
-    const responseDate = new Date(response.createdAt);
-    const now = new Date();
-    
-    switch (selectedPeriod) {
-      case 'today':
-        return responseDate.toDateString() === now.toDateString();
-      case 'week':
-        const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-        return responseDate >= weekAgo;
-      case 'month':
-        const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-        return responseDate >= monthAgo;
-      default:
-        return true;
-    }
-  });
-
-  // Calculate statistics
-  const completeResponses = filteredResponses.filter(r => r.result);
-  const averageFeelingBefore = completeResponses.length > 0 
-    ? completeResponses.reduce((sum, r) => sum + r.feelingBefore, 0) / completeResponses.length 
-    : 0;
-  const averageFeelingAfter = completeResponses.length > 0 && completeResponses.filter(r => r.feelingAfter).length > 0
-    ? completeResponses.filter(r => r.feelingAfter).reduce((sum, r) => sum + (r.feelingAfter || 0), 0) / completeResponses.filter(r => r.feelingAfter).length
-    : 0;
-
-  // Prepare topic distribution data
-  const topicData = Object.entries(
-    filteredResponses.reduce((acc, response) => {
-      const topic = TOPIC_NAMES[response.mostImportantTopic] || response.mostImportantTopic;
-      acc[topic] = (acc[topic] || 0) + 1;
-      return acc;
-    }, {} as { [key: string]: number })
-  ).map(([name, value]) => ({ name, value }));
-
-  // Prepare visiting with data
-  const visitingData = Object.entries(
-    filteredResponses.reduce((acc, response) => {
-      acc[response.visitingWith] = (acc[response.visitingWith] || 0) + 1;
-      return acc;
-    }, {} as { [key: string]: number })
-  ).map(([name, value]) => ({ name, value }));
-
-  // Prepare daily response data for the last 7 days
-  const last7Days = Array.from({ length: 7 }, (_, i) => {
-    const date = new Date();
-    date.setDate(date.getDate() - i);
-    return date.toDateString();
-  }).reverse();
-
-  const dailyData = last7Days.map(dateStr => {
-    const count = responses.filter(r => new Date(r.createdAt).toDateString() === dateStr).length;
-    return {
-      date: new Date(dateStr).toLocaleDateString('nl-NL', { weekday: 'short', day: 'numeric' }),
-      responses: count
-    };
-  });
+  const completeResponses = responses.filter(r => r.result);
 
   const handleExportAll = () => {
-    if (filteredResponses.length === 0) return;
+    if (responses.length === 0) return;
 
-    const csvData = filteredResponses.map(response => ({
+    const csvData = responses.map(response => ({
       naam: response.name,
       leeftijd: response.age,
       bezoek_met: response.visitingWith,
@@ -126,7 +61,7 @@ export default function Dashboard() {
       datum: new Date(response.createdAt).toLocaleDateString('nl-NL')
     }));
 
-    exportToCSV(csvData, `survey_responses_${selectedPeriod}_${new Date().toISOString().split('T')[0]}.csv`);
+    exportToCSV(csvData, `survey_responses_${new Date().toISOString().split('T')[0]}.csv`);
   };
 
   if (isLoading) {
@@ -163,28 +98,9 @@ export default function Dashboard() {
             </a>
             <Button onClick={handleExportAll} className="flex items-center gap-2">
               <Download className="w-4 h-4" />
-              Export CSV ({filteredResponses.length})
+              Export CSV ({responses.length})
             </Button>
           </div>
-        </div>
-
-        {/* Period Filter */}
-        <div className="flex gap-2 mt-4">
-          {[
-            { key: 'today', label: 'Vandaag' },
-            { key: 'week', label: 'Deze week' },
-            { key: 'month', label: 'Deze maand' },
-            { key: 'all', label: 'Alle tijd' }
-          ].map(({ key, label }) => (
-            <Button
-              key={key}
-              variant={selectedPeriod === key ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setSelectedPeriod(key as any)}
-            >
-              {label}
-            </Button>
-          ))}
         </div>
       </div>
 
@@ -196,37 +112,9 @@ export default function Dashboard() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{filteredResponses.length}</div>
+            <div className="text-2xl font-bold">{responses.length}</div>
             <p className="text-xs text-muted-foreground">
               {completeResponses.length} compleet
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Gem. Gevoel (Voor)</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{averageFeelingBefore.toFixed(1)}</div>
-            <p className="text-xs text-muted-foreground">
-              van 10 punten
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Gem. Gevoel (Na)</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {averageFeelingAfter > 0 ? averageFeelingAfter.toFixed(1) : '-'}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              {averageFeelingAfter > averageFeelingBefore ? 'Verbeterd' : averageFeelingAfter < averageFeelingBefore ? 'Verminderd' : 'Gelijk'}
             </p>
           </CardContent>
         </Card>
@@ -245,87 +133,51 @@ export default function Dashboard() {
             </p>
           </CardContent>
         </Card>
-      </div>
 
-      {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         <Card>
-          <CardHeader>
-            <CardTitle>Belangrijkste Onderwerpen</CardTitle>
-            <CardDescription>
-              Verdeling van de gekozen onderwerpen door bezoekers
-            </CardDescription>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Populairste Onderwerp</CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={topicData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {topicData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
+            <div className="text-lg font-bold">
+              {(() => {
+                const topicCount = responses.reduce((acc, r) => {
+                  const topic = TOPIC_NAMES[r.mostImportantTopic] || r.mostImportantTopic;
+                  acc[topic] = (acc[topic] || 0) + 1;
+                  return acc;
+                }, {} as { [key: string]: number });
+                
+                const mostPopular = Object.entries(topicCount).reduce((max, [topic, count]) => 
+                  count > (max.count || 0) ? { topic, count } : max, { topic: '-', count: 0 });
+                
+                return mostPopular.topic;
+              })()}
+            </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader>
-            <CardTitle>Bezoek Gezelschap</CardTitle>
-            <CardDescription>
-              Met wie bezoekers de tentoonstelling bezoeken
-            </CardDescription>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Gemiddeld Gevoel</CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={visitingData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="value" fill="#8884d8" />
-              </BarChart>
-            </ResponsiveContainer>
+            <div className="text-2xl font-bold">
+              {completeResponses.length > 0 
+                ? (completeResponses.reduce((sum, r) => sum + r.feelingBefore, 0) / completeResponses.length).toFixed(1)
+                : '-'}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              van 10 punten
+            </p>
           </CardContent>
         </Card>
       </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Responses per Dag (Laatste 7 dagen)</CardTitle>
-          <CardDescription>
-            Trends in survey deelname
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={dailyData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="responses" stroke="#8884d8" strokeWidth={2} />
-            </LineChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
 
       {/* Individual Response Cards */}
       <div className="mt-8">
-        <h2 className="text-xl font-bold mb-4">Recente Responses ({filteredResponses.length})</h2>
+        <h2 className="text-xl font-bold mb-4">Recente Responses ({responses.length})</h2>
         <div className="grid gap-4">
-          {filteredResponses.slice(0, 10).map((response, index) => (
+          {responses.slice(0, 20).map((response) => (
             <Card key={response.id} className={response.result ? 'border-green-200 bg-green-50' : 'border-yellow-200 bg-yellow-50'}>
               <CardContent className="p-4">
                 <div className="flex items-start justify-between">
@@ -363,10 +215,10 @@ export default function Dashboard() {
           ))}
         </div>
         
-        {filteredResponses.length > 10 && (
+        {responses.length > 20 && (
           <div className="text-center mt-4">
             <p className="text-gray-500">
-              Toont de laatste 10 van {filteredResponses.length} responses. 
+              Toont de laatste 20 van {responses.length} responses. 
               Gebruik de export functie voor alle data.
             </p>
           </div>
