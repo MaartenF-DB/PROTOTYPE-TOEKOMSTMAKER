@@ -105,19 +105,97 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
           
           console.log('🎤 Starting sequential speech for results');
           
-          // Function to speak without canceling previous speech
+          // Function to speak without canceling previous speech with proper voice selection
           const speakWithoutCancel = (text: string, lang: 'nl' | 'en' = 'nl') => {
             if (!('speechSynthesis' in window)) return;
             
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = lang === 'en' ? 'en-US' : 'nl-NL';
-            utterance.rate = lang === 'en' ? 0.9 : 0.95;
-            utterance.pitch = lang === 'en' ? 1.2 : 0.95;
-            utterance.volume = 0.9;
+            // Wait for voices to be loaded before creating utterance
+            const ensureVoicesLoaded = () => {
+              return new Promise<void>((resolve) => {
+                const voices = speechSynthesis.getVoices();
+                if (voices.length > 0) {
+                  resolve();
+                } else {
+                  speechSynthesis.addEventListener('voiceschanged', resolve, { once: true });
+                }
+              });
+            };
             
-            // Add to queue without canceling
-            speechSynthesis.speak(utterance);
-            console.log('🎤 Added to speech queue:', text);
+            ensureVoicesLoaded().then(() => {
+              const utterance = new SpeechSynthesisUtterance(text);
+              utterance.lang = lang === 'en' ? 'en-US' : 'nl-NL';
+              utterance.rate = lang === 'en' ? 0.9 : 0.9;
+              utterance.pitch = lang === 'en' ? 1.2 : 1.1;
+              utterance.volume = 0.95;
+              
+              // Select appropriate female voice
+              const voices = speechSynthesis.getVoices();
+              
+              if (lang === 'en') {
+                // English female voice selection
+                console.log('Available English voices:', voices.filter(v => v.lang.startsWith('en')).map(v => ({ name: v.name, lang: v.lang })));
+                
+                const englishFemaleVoice = voices.find(voice => 
+                  voice.lang === 'en-US' && 
+                  (voice.name.toLowerCase().includes('samantha') ||
+                   voice.name.toLowerCase().includes('allison') ||
+                   voice.name.toLowerCase().includes('ava') ||
+                   voice.name.toLowerCase().includes('karen') ||
+                   voice.name.toLowerCase().includes('female'))
+                ) || voices.find(voice => 
+                  voice.lang === 'en-US' && 
+                  voice.name.toLowerCase().includes('google') &&
+                  !voice.name.toLowerCase().includes('male')
+                ) || voices.find(voice => 
+                  voice.lang === 'en-US' && 
+                  voice.name.toLowerCase().includes('zira') &&
+                  !voice.name.toLowerCase().includes('male')
+                ) || voices.find(voice => 
+                  voice.lang === 'en-US' &&
+                  !voice.name.toLowerCase().includes('male') &&
+                  !voice.name.toLowerCase().includes('david') &&
+                  !voice.name.toLowerCase().includes('mark')
+                );
+                
+                if (englishFemaleVoice) {
+                  utterance.voice = englishFemaleVoice;
+                  console.log('✓ Selected English female voice:', englishFemaleVoice.name);
+                }
+              } else {
+                // Dutch female voice selection
+                console.log('Available Dutch voices:', voices.filter(v => v.lang.startsWith('nl')).map(v => ({ name: v.name, lang: v.lang })));
+                
+                const dutchFemaleVoice = voices.find(voice => 
+                  voice.lang === 'nl-NL' && 
+                  (voice.name.toLowerCase().includes('female') ||
+                   voice.name.toLowerCase().includes('claire') ||
+                   voice.name.toLowerCase().includes('saskia') ||
+                   voice.name.toLowerCase().includes('lotte'))
+                ) || voices.find(voice => 
+                  voice.lang === 'nl-NL' && 
+                  voice.name.toLowerCase().includes('google') &&
+                  !voice.name.toLowerCase().includes('male')
+                ) || voices.find(voice => 
+                  voice.lang === 'nl-NL' &&
+                  !voice.name.toLowerCase().includes('frank') &&
+                  !voice.name.toLowerCase().includes('male')
+                );
+                
+                if (dutchFemaleVoice) {
+                  utterance.voice = dutchFemaleVoice;
+                  console.log('✓ Selected Dutch female voice:', dutchFemaleVoice.name);
+                }
+              }
+              
+              // Add error handling
+              utterance.onerror = (event) => {
+                console.error('❌ Speech error in Results:', event);
+              };
+              
+              // Add to queue without canceling
+              speechSynthesis.speak(utterance);
+              console.log('🎤 Added to speech queue:', text, 'Language:', lang);
+            });
           };
           
           // 1. Speak "Jij bent een..." first
