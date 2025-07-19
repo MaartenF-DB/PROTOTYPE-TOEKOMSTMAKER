@@ -117,7 +117,7 @@ export const translations = {
     
     // Ranking
     ranking: {
-      instructions: "Sleep de onderwerpen van minst belangrijk naar meest belangrijk!",
+      instructions: "Versleep de onderwerpen van minst belangrijk naar meest belangrijk!",
       clickForInfo: "Klik op de onderwerpen voor meer info.",
       leastImportant: "Minst belangrijk",
       mostImportant: "Meest belangrijk"

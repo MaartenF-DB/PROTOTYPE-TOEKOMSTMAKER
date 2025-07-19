@@ -172,7 +172,7 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
         })}
       </div>
       
-      <div className="flex justify-between items-center text-sm">
+      <div className="flex justify-between items-center text-lg">
         <span className="text-white font-bold">{t.ranking.leastImportant}</span>
         <span className="text-white font-bold">{t.ranking.mostImportant}</span>
       </div>

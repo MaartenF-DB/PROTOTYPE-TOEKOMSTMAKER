@@ -180,8 +180,8 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
       {/* Interactive Ranking with Drop Zones */}
       <div className="mb-8">
         <div className="flex justify-between items-center mb-4">
-          <span className="text-white font-bold text-sm">{t.ranking.leastImportant}</span>
-          <span className="text-white font-bold text-sm">{t.ranking.mostImportant}</span>
+          <span className="text-white font-bold text-lg">{t.ranking.leastImportant}</span>
+          <span className="text-white font-bold text-lg">{t.ranking.mostImportant}</span>
         </div>
         
         <div className="grid grid-cols-6 gap-4">
@@ -200,7 +200,7 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
                 <div className="h-48 border-2 border-dashed border-white border-opacity-50 rounded-xl flex flex-col items-center justify-center bg-white bg-opacity-10 hover:bg-opacity-20 transition-all relative">
                   {/* Position indicator */}
                   <div className="absolute top-3 left-3 w-8 h-8 bg-white rounded-full flex items-center justify-center">
-                    <span className="text-gray-800 text-lg font-bold">{position + 1}</span>
+                    <span className="text-gray-800 text-lg font-bold">{6 - position}</span>
                   </div>
                   
                   {/* Topic content */}
@@ -238,7 +238,7 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
                   {/* Empty slot message */}
                   {!topicAtPosition && (
                     <div className="text-white text-xs opacity-50 text-center">
-                      Sleep hier een onderwerp
+                      Versleep hier een onderwerp
                     </div>
                   )}
                 </div>
