@@ -256,13 +256,59 @@ export default function Dashboard() {
               <TrendingUp className="h-5 w-5 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold mb-2">
-                {stats.feelingChanges.length > 0 ? 
-                  `${Math.round(stats.feelingChanges.reduce((acc, item) => acc + item.change, 0) / stats.feelingChanges.length * 100) / 100}` : 
-                  '0'
-                }
+              <div className="space-y-6">
+                <div className="text-center">
+                  <div className="text-3xl font-bold mb-2">
+                    {stats.feelingChanges.length > 0 ? 
+                      `+${Math.round(stats.feelingChanges.reduce((acc, item) => acc + item.change, 0) / stats.feelingChanges.length * 100) / 100}` : 
+                      '0'
+                    }
+                  </div>
+                  <p className="text-sm text-muted-foreground">Gemiddelde verbetering in gevoel voor de toekomst</p>
+                </div>
+                
+                <div className="space-y-4">
+                  {/* Feeling scale 1-5 distribution */}
+                  {[1, 2, 3, 4, 5].map((scale) => {
+                    const beforeCount = completeResponses.filter(r => r.feelingBefore === scale).length;
+                    const afterCount = completeResponses.filter(r => r.feelingAfter === scale).length;
+                    const maxCount = Math.max(beforeCount, afterCount, 1);
+                    
+                    return (
+                      <div key={scale} className="space-y-2">
+                        <div className="flex items-center justify-between text-sm font-medium">
+                          <span>Schaal {scale}</span>
+                          <span className="text-xs text-gray-500">Voor: {beforeCount} | Na: {afterCount}</span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-1">
+                            <div className="text-xs text-gray-600">Check-in (Voor)</div>
+                            <div className="w-full bg-gray-200 rounded-full h-4">
+                              <div 
+                                className="bg-red-500 h-4 rounded-full flex items-center justify-center text-white text-xs font-medium"
+                                style={{ width: `${(beforeCount / maxCount) * 100}%`, minWidth: beforeCount > 0 ? '20px' : '0' }}
+                              >
+                                {beforeCount > 0 ? beforeCount : ''}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="space-y-1">
+                            <div className="text-xs text-gray-600">Check-out (Na)</div>
+                            <div className="w-full bg-gray-200 rounded-full h-4">
+                              <div 
+                                className="bg-green-500 h-4 rounded-full flex items-center justify-center text-white text-xs font-medium"
+                                style={{ width: `${(afterCount / maxCount) * 100}%`, minWidth: afterCount > 0 ? '20px' : '0' }}
+                              >
+                                {afterCount > 0 ? afterCount : ''}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-              <p className="text-sm text-muted-foreground">Gemiddelde verbetering in gevoel voor de toekomst</p>
             </CardContent>
           </Card>
 
@@ -272,13 +318,59 @@ export default function Dashboard() {
               <BarChart3 className="h-5 w-5 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold mb-2">
-                {stats.confidenceChanges.length > 0 ? 
-                  `${Math.round(stats.confidenceChanges.reduce((acc, item) => acc + item.change, 0) / stats.confidenceChanges.length * 100) / 100}` : 
-                  '0'
-                }
+              <div className="space-y-6">
+                <div className="text-center">
+                  <div className="text-3xl font-bold mb-2">
+                    {stats.confidenceChanges.length > 0 ? 
+                      `+${Math.round(stats.confidenceChanges.reduce((acc, item) => acc + item.change, 0) / stats.confidenceChanges.length * 100) / 100}` : 
+                      '0'
+                    }
+                  </div>
+                  <p className="text-sm text-muted-foreground">Gemiddelde verbetering in vertrouwen voor de toekomst</p>
+                </div>
+                
+                <div className="space-y-4">
+                  {/* Confidence scale 1-5 distribution */}
+                  {[1, 2, 3, 4, 5].map((scale) => {
+                    const beforeCount = completeResponses.filter(r => r.confidenceBefore === scale).length;
+                    const afterCount = completeResponses.filter(r => r.confidenceAfter === scale).length;
+                    const maxCount = Math.max(beforeCount, afterCount, 1);
+                    
+                    return (
+                      <div key={scale} className="space-y-2">
+                        <div className="flex items-center justify-between text-sm font-medium">
+                          <span>Schaal {scale}</span>
+                          <span className="text-xs text-gray-500">Voor: {beforeCount} | Na: {afterCount}</span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-1">
+                            <div className="text-xs text-gray-600">Check-in (Voor)</div>
+                            <div className="w-full bg-gray-200 rounded-full h-4">
+                              <div 
+                                className="bg-orange-500 h-4 rounded-full flex items-center justify-center text-white text-xs font-medium"
+                                style={{ width: `${(beforeCount / maxCount) * 100}%`, minWidth: beforeCount > 0 ? '20px' : '0' }}
+                              >
+                                {beforeCount > 0 ? beforeCount : ''}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="space-y-1">
+                            <div className="text-xs text-gray-600">Check-out (Na)</div>
+                            <div className="w-full bg-gray-200 rounded-full h-4">
+                              <div 
+                                className="bg-blue-500 h-4 rounded-full flex items-center justify-center text-white text-xs font-medium"
+                                style={{ width: `${(afterCount / maxCount) * 100}%`, minWidth: afterCount > 0 ? '20px' : '0' }}
+                              >
+                                {afterCount > 0 ? afterCount : ''}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-              <p className="text-sm text-muted-foreground">Gemiddelde verbetering in vertrouwen voor de toekomst</p>
             </CardContent>
           </Card>
         </div>
