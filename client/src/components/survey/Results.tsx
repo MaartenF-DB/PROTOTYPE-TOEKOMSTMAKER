@@ -123,31 +123,27 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
   };
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center p-6 text-white relative">
+    <section className="min-h-screen flex flex-col items-center justify-center p-6 text-white relative bg-gradient-to-br from-purple-900 to-indigo-900">
       <div className="text-center max-w-2xl w-full relative z-10">
         {/* Mystical crystal ball with result */}
-        <div className="mb-8">
-          <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-purple-400 via-blue-500 to-purple-600 shadow-2xl mb-6">
+        <div className="mb-6">
+          <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-purple-400 via-blue-500 to-purple-600 shadow-2xl animate-pulse">
             <div className="w-full h-full rounded-full flex items-center justify-center text-6xl">
               {topicData?.icon || '🔮'}
             </div>
           </div>
-          <div className="flex justify-center space-x-4 mb-4">
-            <span className="text-yellow-400 text-2xl">✨</span>
-            <span className="text-purple-300 text-xl">🌟</span>
-            <span className="text-pink-300 text-lg">💫</span>
-          </div>
         </div>
         
+        {/* Results card directly under the crystal ball */}
         <MysticalCard className="mb-8">
-          <h2 className="text-4xl font-bold mb-2 fortune-text-glow">
-            {language === 'en' ? 'The Crystal Ball Reveals...' : 'De Kristallen Bol Toont...'}
+          <h2 className="text-3xl font-bold mb-3 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent animate-pulse">
+            {language === 'en' ? 'De Kristallen Bol Toont...' : 'De Kristallen Bol Toont...'}
           </h2>
-          <p className="text-yellow-200 text-lg mb-6 italic">
-            {language === 'en' ? "Your mystical future identity is..." : "Jouw mystieke toekomst identiteit is..."}
+          <p className="text-lg mb-6 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent italic">
+            {language === 'en' ? "Jouw mystieke toekomst identiteit is..." : "Jouw mystieke toekomst identiteit is..."}
           </p>
           
-          <div className="text-6xl font-bold mb-4 fortune-text-glow">
+          <div className="text-5xl font-bold mb-4 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent drop-shadow-lg">
             {language === 'en' ? 
               (answers.actionChoice === 'uitvinden' ? 'INVENTOR' :
                answers.actionChoice === 'actie' ? 'ACTIVIST' :
@@ -158,13 +154,13 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
                answers.actionChoice === 'veranderen' ? 'VERANDERAAR' : 'TOEKOMSTMAKER')
             }
           </div>
-          <div className="text-3xl mb-6 text-yellow-300">
-            {language === 'en' ? 'for' : 'voor'}
+          <div className="text-2xl mb-4 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
+            {language === 'en' ? 'voor' : 'voor'}
           </div>
-          <div className="text-5xl font-bold text-yellow-300 mb-8 fortune-text-glow">{getTopicName(answers.mostImportantTopic, language)}</div>
+          <div className="text-4xl font-bold mb-6 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent drop-shadow-lg">{getTopicName(answers.mostImportantTopic, language)}</div>
           
           <div className="fortune-bg-secondary rounded-xl p-6 mt-6 border-2 border-yellow-400/30">
-            <p className="text-xl font-medium text-white leading-relaxed">
+            <p className="text-lg font-medium text-white leading-relaxed">
               {motivationalMessage}
             </p>
           </div>
@@ -187,8 +183,29 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
           </Button>
         </div>
 
-        {/* Background emojis for results */}
-        <BackgroundEmojis sectionType="results" />
+      </div>
+      
+      {/* Reduced background emojis for less distraction */}
+      <div className="fixed inset-0 pointer-events-none z-0 opacity-30">
+        {Array.from({ length: 8 }).map((_, i) => {
+          const stars = ['⭐', '✨', '🌟', '💫'];
+          const star = stars[i % stars.length];
+          return (
+            <div
+              key={`star-${i}`}
+              className="absolute text-yellow-400 animate-twinkle"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                fontSize: `${0.8 + Math.random() * 0.5}rem`,
+                animationDelay: `${Math.random() * 3}s`,
+                animationDuration: `${3 + Math.random() * 2}s`
+              }}
+            >
+              {star}
+            </div>
+          );
+        })}
       </div>
     </section>
   );

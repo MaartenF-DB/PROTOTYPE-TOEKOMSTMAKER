@@ -120,6 +120,8 @@ The application follows a modern full-stack architecture with the following comp
 - **Discrete Dashboard**: Made dashboard link less prominent for museum staff use only
 - **Simplified Entry Screen**: Removed extra text and decorative emojis from choice buttons for cleaner interface
 - **Name Input Background**: Added BackgroundEmojis component to all name input pages (CheckoutNameInput, CheckInIntro, NameMatching, NameVerification)
+- **Golden Shimmer Results**: Updated Results and AnimatedResult components with golden gradient text effects for mystical appearance
+- **Improved Results Layout**: Positioned results card directly under crystal ball, reduced background distraction for better focus
 - **Consistent Mystical Experience**: Applied fortune teller theme across all survey components with star-field background including name entry sections
 
 ### July 18, 2025 - Database Migration and Checkout Flow Fix
