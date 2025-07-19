@@ -49,7 +49,10 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
       const mainQuestion = language === 'en' ? 
         "Which topic do you think is most important?" : 
         "Welk onderwerp vind jij het meest belangrijk?";
-      speak(mainQuestion, language);
+      const instructions = language === 'en' ? 
+        "Click on the topics for information. Drag the topics to the right place." : 
+        "Klik op de onderwerpen voor informatie. Sleep de onderwerpen naar de goede plek.";
+      speak(`${mainQuestion} ${instructions}`, language);
       setHasSpoken(true);
     }
   }, [speak, language, shuffledTopics.length, hasSpoken]);
@@ -167,7 +170,15 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
 
   return (
     <div className="w-full">
-      {/* Remove instruction text as requested */}
+      {/* Instruction text */}
+      <div className="text-center mb-6">
+        <p className="text-white text-lg mb-2">
+          {language === 'en' ? 'Click on the topics for information.' : 'Klik op de onderwerpen voor informatie.'}
+        </p>
+        <p className="text-white text-lg">
+          {language === 'en' ? 'Drag the topics to the right place.' : 'Sleep de onderwerpen naar de goede plek.'}
+        </p>
+      </div>
       
       {/* Interactive Ranking with Drop Zones */}
       <div className="mb-8">

@@ -122,7 +122,10 @@ The application follows a modern full-stack architecture with the following comp
 - **Name Input Background**: Added BackgroundEmojis component to all name input pages (CheckoutNameInput, CheckInIntro, NameMatching, NameVerification)
 - **Golden Shimmer Results**: Updated Results and AnimatedResult components with golden gradient text effects for mystical appearance
 - **Improved Results Layout**: Positioned results card directly under crystal ball, reduced background distraction for better focus
-- **Welcome Text Styling**: Changed "Welkom bij Toekomstmakers!" to simple yellow color without glow effects per user preference
+- **Welcome Text Styling**: Changed "Welkom bij Toekomstmakers!" to simple white color without glow effects per user preference
+- **Entry Button Styling**: Added dark purple border to "Ik kom net binnen" button and lighter yellow color for "Ik ben net klaar" button
+- **Enhanced Emoji Visibility**: Updated emoji colors to brighter shades (yellow-200, blue-300, orange-300) for better visibility
+- **Ranking Instructions**: Added instruction text and speech for ranking question with "Klik op de onderwerpen voor informatie. Sleep de onderwerpen naar de goede plek."
 - **Consistent Mystical Experience**: Applied fortune teller theme across all survey components with star-field background including name entry sections
 
 ### July 18, 2025 - Database Migration and Checkout Flow Fix

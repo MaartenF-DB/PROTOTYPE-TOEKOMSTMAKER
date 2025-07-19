@@ -33,9 +33,9 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
             </div>
           </div>
           <div className="flex justify-center space-x-4 mb-4">
-            <span className="text-yellow-400 text-2xl">✨</span>
-            <span className="text-purple-300 text-xl">🌟</span>
-            <span className="text-pink-300 text-lg">💫</span>
+            <span className="text-yellow-200 text-2xl">✨</span>
+            <span className="text-blue-300 text-xl">🌟</span>
+            <span className="text-orange-300 text-lg">💫</span>
           </div>
         </div>
         
@@ -45,7 +45,7 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
           <div className="space-y-4">
             <Button
               onClick={onCheckIn}
-              className="w-full fortune-bg-secondary hover:fortune-bg-mystical text-white text-xl py-6 px-8 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 border-2 border-yellow-400/30 hover:border-yellow-400/60"
+              className="w-full fortune-bg-secondary hover:fortune-bg-mystical text-white text-xl py-6 px-8 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 border-2 border-purple-800 hover:border-purple-700"
             >
               <span className="inline-block scale-x-[-1] text-2xl">🚶‍♂️</span>
               <span>{t.entryChoice.checkIn}</span>
