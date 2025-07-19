@@ -261,7 +261,7 @@ export default function Home() {
                 language={language}
               />
               {answers.visitingWith.length > 0 && (
-                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
+                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm mt-8">
                   <p className="text-white font-semibold">{t.yourAnswer}:</p>
                   <p className="text-white text-lg">
                     {answers.visitingWith === 'other' ? answers.visitingWithOther : 
@@ -547,7 +547,7 @@ export default function Home() {
                 language={language}
               />
               {answers.visitingWith.length > 0 && (
-                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
+                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm mt-8">
                   <p className="text-white font-semibold">{t.yourAnswer}:</p>
                   <p className="text-white text-lg">
                     {answers.visitingWith === 'other' ? answers.visitingWithOther : 
@@ -684,7 +684,7 @@ export default function Home() {
               />
               
               {answers.actionChoice && (
-                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
+                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm mt-8">
                   <p className="text-white font-semibold">{t.yourAnswer}:</p>
                   <div className="flex items-center space-x-3">
                     <span className="text-2xl">{getActionOptions().find(opt => opt.value === answers.actionChoice)?.icon}</span>
