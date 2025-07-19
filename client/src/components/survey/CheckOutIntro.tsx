@@ -23,7 +23,7 @@ export function CheckOutIntro({ onStart, mostImportantTopic, language = 'nl' }: 
   return (
     <section className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-green-600 to-teal-600 text-white">
       <div className="text-center max-w-2xl">
-        <h2 className="text-4xl font-bold mb-6">Kom je aan het einde van de tentoonstelling terug?</h2>
+        <h2 className="text-4xl font-bold mb-6">{t.checkInClosing.title}</h2>
         <p className="text-2xl font-bold mb-8">{t.checkOutIntro.subtitle}</p>
         
 

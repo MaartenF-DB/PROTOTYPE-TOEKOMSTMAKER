@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useSpeech } from '@/hooks/useSpeech';
 import { useEffect, useState } from 'react';
+import { translations } from '@/lib/translations';
 
 interface QuestionProps {
   questionNumber: number;
@@ -88,7 +89,7 @@ export function Question({
               <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
               </svg>
-              Vorige
+{translations[language].buttons.previous}
             </Button>
           )}
           
@@ -97,7 +98,7 @@ export function Question({
               onClick={handleNext}
               className={`${buttonColor} px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg`}
             >
-              Volgende
+{translations[language].buttons.next}
               <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
@@ -109,7 +110,7 @@ export function Question({
               onClick={handleComplete}
               className={`${buttonColor} px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg`}
             >
-              Afronden
+{translations[language].buttons.finish}
               <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>

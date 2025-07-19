@@ -14,6 +14,13 @@ export const translations = {
       start: "Beginnen"
     },
     
+    // Check-in Closing
+    checkInClosing: {
+      title: "Kom je aan het einde van de tentoonstelling terug?",
+      subtitle: "Dan onderzoeken we verder wat voor toekomstmaker jij bent!",
+      button: "Klaar!"
+    },
+    
     // Check-out Intro
     checkOutIntro: {
       title: "Welkom terug!",
@@ -130,6 +137,13 @@ export const translations = {
       title: "Hey Future Maker!",
       subtitle: "Shall we discover together what kind of future maker you are?",
       start: "Start"
+    },
+    
+    // Check-in Closing
+    checkInClosing: {
+      title: "Are you coming back at the end of the exhibition?",
+      subtitle: "Then we'll explore further what kind of future maker you are!",
+      button: "Done!"
     },
     
     // Check-out Intro

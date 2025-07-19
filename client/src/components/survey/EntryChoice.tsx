@@ -14,7 +14,9 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
   const { speak } = useSpeech();
 
   useEffect(() => {
-    const message = "Welkom bij de tentoonstelling! Kom je net binnen of heb je de tentoonstelling al bezocht?";
+    const message = language === 'en' 
+      ? "Welcome to the exhibition! Are you just entering or have you already visited the exhibition?"
+      : "Welkom bij de tentoonstelling! Kom je net binnen of heb je de tentoonstelling al bezocht?";
     speak(message, language);
   }, [speak, language]);
 

@@ -410,6 +410,7 @@ export default function Home() {
               setCheckoutOnly(false);
               setCurrentSection('entry-choice');
             }}
+            language={language}
           />
         );
 
