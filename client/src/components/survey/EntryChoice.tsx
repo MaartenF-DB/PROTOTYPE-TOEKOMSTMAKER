@@ -19,7 +19,7 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
   useEffect(() => {
     const message = language === 'en' 
       ? "Welcome to the exhibition! Are you just entering or have you already visited the exhibition?"
-      : "Welkom bij de tentoonstelling! Kom je net binnen of heb je de tentoonstelling al bezocht?";
+      : "Welkom bij Toekomstmakers! Kom je net binnen of heb je de tentoonstelling al bezocht?";
     speak(message, language);
   }, [speak, language]);
 
@@ -39,28 +39,54 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
           </video>
         </div>
 
-        {/* Welcome Section - iPad optimized */}
-        <MysticalCard className="mb-6 md:mb-8 bg-black bg-opacity-70 backdrop-blur-sm border border-white border-opacity-30 max-w-3xl mx-auto px-4 md:px-6 lg:px-8">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 md:mb-8 text-white drop-shadow-lg">{t.entryChoice.title}</h1>
+        {/* Welcome Section - Enhanced Design */}
+        <div className="relative mb-6 md:mb-8 max-w-3xl mx-auto">
+          {/* Decorative mystical border */}
+          <div className="absolute -inset-1 bg-gradient-to-r from-purple-400 via-yellow-400 to-purple-400 rounded-3xl blur-sm opacity-75"></div>
           
-          <div className="space-y-4 md:space-y-6">
-            <Button
-              onClick={onCheckIn}
-              className="w-full bg-purple-700 bg-opacity-90 hover:bg-purple-600 active:bg-purple-800 text-white text-lg md:text-xl lg:text-2xl py-6 md:py-8 lg:py-10 px-6 md:px-8 rounded-xl shadow-2xl transform hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center gap-3 md:gap-4 border-2 border-purple-400 hover:border-purple-300"
-            >
-              <span className="inline-block scale-x-[-1] text-2xl md:text-3xl lg:text-4xl">🚶‍♂️</span>
-              <span className="font-bold">{t.entryChoice.checkIn}</span>
-            </Button>
+          {/* Main content card */}
+          <div className="relative bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 rounded-3xl p-6 md:p-8 lg:p-10 shadow-2xl border border-purple-300 border-opacity-50">
+            {/* Mystical sparkles decoration */}
+            <div className="absolute top-4 left-4">
+              <span className="text-yellow-300 text-lg animate-pulse">✨</span>
+            </div>
+            <div className="absolute top-6 right-6">
+              <span className="text-blue-300 text-xl animate-pulse">🌟</span>
+            </div>
+            <div className="absolute bottom-4 left-6">
+              <span className="text-orange-300 text-base animate-pulse">💫</span>
+            </div>
             
-            <Button
-              onClick={onCheckOut}
-              className="w-full bg-yellow-500 bg-opacity-95 hover:bg-yellow-400 active:bg-yellow-600 text-purple-900 text-lg md:text-xl lg:text-2xl py-6 md:py-8 lg:py-10 px-6 md:px-8 rounded-xl shadow-2xl transform hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center gap-3 md:gap-4 border-2 border-yellow-300 hover:border-yellow-200"
-            >
-              <span className="text-2xl md:text-3xl lg:text-4xl">🚶‍♂️</span>
-              <span className="font-bold">{t.entryChoice.checkOut}</span>
-            </Button>
+            {/* Title with enhanced styling */}
+            <div className="text-center mb-8 md:mb-10">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-white to-yellow-300 drop-shadow-2xl mb-4">
+                {t.entryChoice.title}
+              </h1>
+              <div className="w-24 md:w-32 h-1 bg-gradient-to-r from-transparent via-yellow-400 to-transparent mx-auto rounded-full"></div>
+            </div>
+            
+            {/* Enhanced buttons */}
+            <div className="space-y-5 md:space-y-6">
+              <Button
+                onClick={onCheckIn}
+                className="group relative w-full bg-gradient-to-r from-purple-700 to-purple-600 hover:from-purple-600 hover:to-purple-500 active:from-purple-800 active:to-purple-700 text-white text-lg md:text-xl lg:text-2xl py-7 md:py-9 lg:py-11 px-6 md:px-8 rounded-2xl shadow-2xl transform hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center gap-3 md:gap-4 border-2 border-purple-400 hover:border-purple-300 overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-10 transition-opacity duration-300 -skew-x-12"></div>
+                <span className="relative inline-block scale-x-[-1] text-2xl md:text-3xl lg:text-4xl">🚶‍♂️</span>
+                <span className="relative font-bold">{t.entryChoice.checkIn}</span>
+              </Button>
+              
+              <Button
+                onClick={onCheckOut}
+                className="group relative w-full bg-gradient-to-r from-yellow-500 to-yellow-400 hover:from-yellow-400 hover:to-yellow-300 active:from-yellow-600 active:to-yellow-500 text-purple-900 text-lg md:text-xl lg:text-2xl py-7 md:py-9 lg:py-11 px-6 md:px-8 rounded-2xl shadow-2xl transform hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center gap-3 md:gap-4 border-2 border-yellow-300 hover:border-yellow-200 overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 transition-opacity duration-300 -skew-x-12"></div>
+                <span className="relative text-2xl md:text-3xl lg:text-4xl">🚶‍♂️</span>
+                <span className="relative font-bold">{t.entryChoice.checkOut}</span>
+              </Button>
+            </div>
           </div>
-        </MysticalCard>
+        </div>
 
         {/* Mystical guidance text */}
         <div className="text-center">
