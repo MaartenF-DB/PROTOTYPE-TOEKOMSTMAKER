@@ -145,8 +145,14 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
  URL.revokeObjectURL(url);
  };
 
- const handleExportAndClear = async () => {
-   // Show confirmation dialog first
+ const handleExportAndDeleteAll = async () => {
+   // Check if code is correct
+   if (deleteCode !== 'HNIlina') {
+     setDeleteError('Onjuiste code. Gebruik "HNIlina" om te exporteren en data te wissen.');
+     return;
+   }
+
+   // Show confirmation dialog
    const confirmed = window.confirm(
      '⚠️ WAARSCHUWING: Alle data wordt verwijderd!\n\n' +
      'Deze actie:\n' +
@@ -160,30 +166,22 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
      return;
    }
    
+   setDeleteError('');
+   
    try {
-     console.log('🚨 STARTING EXPORT AND CLEAR');
+     console.log('🚨 STARTING EXPORT AND DELETE ALL');
      // First export the data
      exportAllData();
      
      // Wait a moment for download to start, then clear data
      setTimeout(() => {
-       console.log('🗑️ STARTING DATA CLEAR AFTER EXPORT');
-       clearDataMutation.mutate('HNIlina'); // Use the fixed code internally
+       console.log('🗑️ STARTING DATA DELETE');
+       clearDataMutation.mutate(deleteCode);
      }, 1000);
    } catch (error) {
-     console.error('❌ Export and clear error:', error);
-     alert('Er is een fout opgetreden bij het exporteren.');
+     console.error('❌ Export and delete error:', error);
+     setDeleteError('Er is een fout opgetreden bij het exporteren.');
    }
- };
-
- const handleClearData = () => {
-   if (deleteCode !== 'HNIlina') {
-     setDeleteError('Onjuiste code. Gebruik "HNIlina" om data te wissen.');
-     return;
-   }
-   console.log('🗑️ STARTING DATA CLEAR ONLY WITH CODE:', deleteCode);
-   setDeleteError('');
-   clearDataMutation.mutate(deleteCode);
  };
 
  if (isLoading) {
@@ -341,34 +339,60 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
  {/* Export and Data Management */}
  <div className="mb-8 space-y-6">
- <Card className="border-red-200 bg-red-50">
+ <Card>
  <CardHeader>
- <CardTitle className="text-red-800">⚠️ Data Export</CardTitle>
- <CardDescription className="text-red-600">Download alle survey responses als CSV bestand - ALLE DATA WORDT VERWIJDERD</CardDescription>
+ <CardTitle>Data Export</CardTitle>
+ <CardDescription>Download alle survey responses als CSV bestand</CardDescription>
  </CardHeader>
  <CardContent>
- <Button 
- onClick={handleExportAndClear}
+ <div className="space-y-4">
+ <div className="space-y-2">
+ <Label htmlFor="accessCode">Toegangscode</Label>
+ <Input
+ id="accessCode"
+ type="text"
+ value={deleteCode}
+ onChange={(e) => setDeleteCode(e.target.value)}
+ placeholder="Voer toegangscode in..."
+ className="max-w-sm"
+ />
+ </div>
+ 
+ {deleteError && (
+ <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-md p-3">
+ {deleteError}
+ </div>
+ )}
+ 
+ <button
+ onClick={handleExportAndDeleteAll}
  disabled={responses.length === 0 || clearDataMutation.isPending}
- style={{ 
-   backgroundColor: '#dc2626', 
-   borderColor: '#991b1b',
-   color: 'white'
+ style={{
+ backgroundColor: deleteCode === 'HNIlina' ? '#dc2626' : '#9ca3af',
+ color: 'white',
+ border: '2px solid',
+ borderColor: deleteCode === 'HNIlina' ? '#991b1b' : '#6b7280',
+ padding: '12px 24px',
+ borderRadius: '8px',
+ fontWeight: 'bold',
+ display: 'flex',
+ alignItems: 'center',
+ gap: '8px',
+ cursor: responses.length === 0 || clearDataMutation.isPending ? 'not-allowed' : 'pointer',
+ opacity: responses.length === 0 || clearDataMutation.isPending ? 0.5 : 1
  }}
- className="flex items-center space-x-2 hover:bg-red-700 text-white font-bold border-2 shadow-lg !bg-red-600 !border-red-800"
  >
  <Download className="h-4 w-4" />
- <Trash2 className="h-4 w-4" />
  <span>
- {clearDataMutation.isPending ? '⏳ Bezig met verwijderen...' : 'Download CSV & Verwijder Alle Data'}
+ {clearDataMutation.isPending ? 'Bezig met verwijderen...' : `Download CSV (${responses.length} responses)`}
  </span>
- </Button>
- <div className="mt-4 text-sm text-red-700 bg-red-100 border-2 border-red-300 rounded-md p-3">
- <div className="flex items-center space-x-2 mb-2">
- <span className="text-xl">🚨</span>
- <strong>ALLE DATA WORDT VERWIJDERD</strong>
+ </button>
+ 
+ {deleteCode === 'HNIlina' && (
+ <div className="text-sm text-red-700 bg-red-100 border border-red-300 rounded-md p-3">
+ <strong>WAARSCHUWING:</strong> Deze actie downloadt de data en verwijdert alle responses permanent!
  </div>
- <p>Deze knop downloadt eerst de data en verwijdert daarna alles permanent.</p>
+ )}
  </div>
  </CardContent>
  </Card>
