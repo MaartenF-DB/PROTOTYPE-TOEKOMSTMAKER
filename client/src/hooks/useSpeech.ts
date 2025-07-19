@@ -85,11 +85,11 @@ export function useSpeech() {
         }
         
       } else {
-        // Dutch female voice configuration
+        // Dutch female voice configuration - optimized to match English quality
         utterance.lang = 'nl-NL';
-        utterance.rate = 0.85;
-        utterance.pitch = 1.0; // Standard pitch for more natural Dutch female voice
-        utterance.volume = 0.9;
+        utterance.rate = 0.9; // Slightly faster for better flow
+        utterance.pitch = 1.1; // Slightly higher for warmer tone like English
+        utterance.volume = 0.95; // Higher volume for clarity
         
         const voices = speechSynthesis.getVoices();
         console.log('Available Dutch voices:', voices.filter(v => v.lang.startsWith('nl')).map(v => ({ name: v.name, lang: v.lang })));
@@ -122,8 +122,8 @@ export function useSpeech() {
           utterance.voice = femaleVoice;
           console.log('✓ Selected Dutch female voice:', femaleVoice.name);
         } else {
-          console.log('⚠️ No Dutch female voice found, using default with standard settings');
-          utterance.pitch = 1.1; // Slightly higher pitch to compensate, but not too high
+          console.log('⚠️ No Dutch female voice found, using optimized fallback settings');
+          utterance.pitch = 1.2; // Higher pitch to compensate for lack of female voice
         }
       }
 
