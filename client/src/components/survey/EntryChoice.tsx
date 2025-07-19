@@ -40,7 +40,7 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
         </div>
         
         <MysticalCard className="mb-8">
-          <h1 className="text-4xl font-bold mb-6 text-yellow-400">{t.entryChoice.title}</h1>
+          <h1 className="text-4xl font-bold mb-6 text-white">{t.entryChoice.title}</h1>
           
           <div className="space-y-4">
             <Button
