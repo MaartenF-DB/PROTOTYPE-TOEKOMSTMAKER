@@ -81,7 +81,7 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
           "The fortune teller's vision is complete..." : 
           "De visie van de waarzegger is compleet...";
         speak(farewellText, language);
-      }, 6000); // Wait 6 seconds after other audio finishes
+      }, 10000); // Wait 10 seconds after all other audio finishes
     }
   }, [showAnimatedResult, animationComplete, language, speak]);
 
@@ -97,33 +97,45 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
           setShowAnimatedResult(false);
           setAnimationComplete(true);
           
-          // Speak the results in the correct language
+          // Speak each part of the result separately
           const actionType = language === 'en' ? 
-            (answers.actionChoice === 'uitvinden' ? 'inventor' :
-             answers.actionChoice === 'actie' ? 'activist' :
-             answers.actionChoice === 'veranderen' ? 'changemaker' : 'future maker') :
-            (answers.actionChoice === 'uitvinden' ? 'uitvinder' :
-             answers.actionChoice === 'actie' ? 'actievoerder' :
-             answers.actionChoice === 'veranderen' ? 'veranderaar' : 'toekomstmaker');
+            (answers.actionChoice === 'uitvinden' ? 'INVENTOR' :
+             answers.actionChoice === 'actie' ? 'ACTIVIST' :
+             answers.actionChoice === 'veranderen' ? 'CHANGEMAKER' : 'FUTURE MAKER') :
+            (answers.actionChoice === 'uitvinden' ? 'UITVINDER' :
+             answers.actionChoice === 'actie' ? 'ACTIEVOERDER' :
+             answers.actionChoice === 'veranderen' ? 'VERANDERAAR' : 'TOEKOMSTMAKER');
           
-          const resultText = language === 'en' ? 
-            `${actionType} for ${getTopicName(answers.mostImportantTopic, language)}` :
-            `${actionType} voor ${getTopicName(answers.mostImportantTopic, language)}`;
+          // 1. Speak "Jij bent een..." first
+          const titleText = language === 'en' ? 'You are a' : 'Jij bent een';
+          console.log('🎤 Speaking title:', titleText);
+          speak(titleText, language);
           
-          console.log('🎤 Speaking result:', resultText);
-          speak(resultText, language);
-          
-          // Speak "You are a..." title after 2 seconds
+          // 2. Speak the action type (UITVINDER) after 2 seconds
           setTimeout(() => {
-            const titleText = language === 'en' ? 'You are a' : 'Jij bent een';
-            speak(titleText, language);
+            console.log('🎤 Speaking action type:', actionType);
+            speak(actionType, language);
           }, 2000);
           
-          // Also speak the motivational message after a brief pause
+          // 3. Speak "voor" after 4 seconds
+          setTimeout(() => {
+            const forText = language === 'en' ? 'for' : 'voor';
+            console.log('🎤 Speaking "for":', forText);
+            speak(forText, language);
+          }, 4000);
+          
+          // 4. Speak the topic (KLIMAAT) after 5.5 seconds
+          setTimeout(() => {
+            const topicName = getTopicName(answers.mostImportantTopic, language);
+            console.log('🎤 Speaking topic:', topicName);
+            speak(topicName, language);
+          }, 5500);
+          
+          // 5. Speak the motivational message after 7.5 seconds
           setTimeout(() => {
             console.log('🎤 Speaking motivational message:', motivationalMessage);
             speak(motivationalMessage, language);
-          }, 4000);
+          }, 7500);
         }}
       />
     );
