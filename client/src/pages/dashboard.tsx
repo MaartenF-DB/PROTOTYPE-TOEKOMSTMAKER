@@ -24,18 +24,25 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
  const clearDataMutation = useMutation({
    mutationFn: async (code: string) => {
-     return apiRequest('/api/survey-responses/reset', {
+     console.log('🗑️ Clearing data with code:', code);
+     const response = await apiRequest('/api/survey-responses/reset', {
        method: 'POST',
        body: JSON.stringify({ code }),
        headers: { 'Content-Type': 'application/json' }
      });
+     console.log('✅ Data cleared successfully:', response);
+     return response;
    },
    onSuccess: () => {
+     console.log('🔄 Refreshing data...');
      queryClient.invalidateQueries({ queryKey: ['/api/survey-responses'] });
+     queryClient.refetchQueries({ queryKey: ['/api/survey-responses'] });
      setDeleteCode('');
      setDeleteError('');
+     alert('✅ Alle data is succesvol verwijderd!');
    },
    onError: (error: any) => {
+     console.error('❌ Error clearing data:', error);
      setDeleteError(error.message || 'Fout bij het wissen van data');
    }
  });
@@ -142,7 +149,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
  URL.revokeObjectURL(url);
  };
 
- const handleExportAndClear = () => {
+ const handleExportAndClear = async () => {
    if (deleteCode !== 'HNIlina') {
      setDeleteError('Onjuiste code. Gebruik "HNIlina" om te exporteren en data te wissen.');
      return;
@@ -150,11 +157,17 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
    
    setDeleteError('');
    
-   // First export the data
-   exportAllData();
-   
-   // Then clear all data
-   clearDataMutation.mutate(deleteCode);
+   try {
+     // First export the data
+     exportAllData();
+     
+     // Wait a moment for download to start, then clear data
+     setTimeout(() => {
+       clearDataMutation.mutate(deleteCode);
+     }, 1000);
+   } catch (error) {
+     setDeleteError('Er is een fout opgetreden bij het exporteren.');
+   }
  };
 
  const handleClearData = () => {
@@ -365,13 +378,12 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
  <Button 
  onClick={handleExportAndClear}
  disabled={responses.length === 0 || clearDataMutation.isPending}
- variant="destructive"
- className="flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white"
+ className="flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white font-bold border-2 border-red-800 shadow-lg"
  >
- <Download className="h-4 w-4" />
- <Trash2 className="h-4 w-4" />
- <span>
- {clearDataMutation.isPending ? 'Bezig...' : 'Download CSV & Verwijder ALLE Data'}
+ <Download className="h-5 w-5" />
+ <Trash2 className="h-5 w-5" />
+ <span className="text-sm">
+ {clearDataMutation.isPending ? '⏳ Bezig met wissen...' : '🚨 DOWNLOAD & WISSEN'}
  </span>
  </Button>
  
@@ -386,10 +398,22 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
  </Button>
  </div>
  
- <div className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-md p-3">
- <strong>⚠️ WAARSCHUWING:</strong> De rode knop downloadt eerst een CSV bestand en verwijdert daarna 
- <strong>ALLE SURVEY DATA PERMANENT</strong>. Gebruik code "HNIlina" om deze actie te bevestigen. 
- Deze actie kan niet ongedaan worden gemaakt!
+ <div className="text-sm text-red-700 bg-red-100 border-2 border-red-300 rounded-md p-4">
+ <div className="flex items-center space-x-2 mb-2">
+ <span className="text-2xl">🚨</span>
+ <strong>KRITIEKE WAARSCHUWING</strong>
+ </div>
+ <p className="mb-2">
+ De rode knop "🚨 DOWNLOAD & WISSEN" doet het volgende:
+ </p>
+ <ol className="list-decimal list-inside space-y-1 ml-4">
+ <li>Downloadt alle survey data als CSV bestand</li>
+ <li><strong className="text-red-800">VERWIJDERT PERMANENT ALLE DATA</strong></li>
+ <li>Dashboard wordt leeg - geen undo mogelijk!</li>
+ </ol>
+ <p className="mt-2 font-bold">
+ Vereist code: "HNIlina"
+ </p>
  </div>
  </CardContent>
  </Card>
