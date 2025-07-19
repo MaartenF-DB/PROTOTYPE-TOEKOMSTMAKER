@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -8,6 +9,9 @@ import { TOPICS, ACTION_OPTIONS } from '@/types/survey';
 import { Download, Users, TrendingUp, BarChart3 } from 'lucide-react';
 
 export default function Dashboard() {
+  const [exportCode, setExportCode] = useState('');
+  const [exportError, setExportError] = useState('');
+
   const { data: responses = [], isLoading } = useQuery<SurveyResponse[]>({
     queryKey: ['/api/survey-responses'],
     select: (data) => data.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
@@ -76,6 +80,15 @@ export default function Dashboard() {
 
   const mostPopularTopic = Object.entries(stats.topTopics).sort(([,a], [,b]) => b - a)[0]?.[0];
   const topicData = mostPopularTopic ? TOPICS[mostPopularTopic as keyof typeof TOPICS] : null;
+
+  const handleExportWithCode = () => {
+    if (exportCode !== 'HNIlina') {
+      setExportError('Onjuiste toegangscode. Probeer opnieuw.');
+      return;
+    }
+    setExportError('');
+    exportAllData();
+  };
 
   const exportAllData = () => {
     if (responses.length === 0) return;
@@ -250,7 +263,10 @@ export default function Dashboard() {
                     const actionData = ACTION_OPTIONS.find(opt => opt.value === action);
                     return (
                       <div key={action} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                        <div className="font-medium">{actionData?.label || action}</div>
+                        <div className="flex items-center space-x-3">
+                          <span className="text-2xl">{actionData?.icon || '❓'}</span>
+                          <div className="font-medium">{actionData?.label || action}</div>
+                        </div>
                         <Badge variant="secondary">{count}</Badge>
                       </div>
                     );
@@ -268,14 +284,28 @@ export default function Dashboard() {
               <CardDescription>Download alle survey responses als CSV bestand</CardDescription>
             </CardHeader>
             <CardContent>
-              <Button 
-                onClick={exportAllData}
-                disabled={responses.length === 0}
-                className="flex items-center space-x-2"
-              >
-                <Download className="h-4 w-4" />
-                <span>Download CSV ({responses.length} responses)</span>
-              </Button>
+              <div className="space-y-4">
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="password"
+                    placeholder="Voer toegangscode in"
+                    value={exportCode}
+                    onChange={(e) => setExportCode(e.target.value)}
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <Button 
+                    onClick={handleExportWithCode}
+                    disabled={responses.length === 0 || !exportCode}
+                    className="flex items-center space-x-2"
+                  >
+                    <Download className="h-4 w-4" />
+                    <span>Download CSV ({responses.length} responses)</span>
+                  </Button>
+                </div>
+                {exportError && (
+                  <p className="text-red-600 text-sm">{exportError}</p>
+                )}
+              </div>
             </CardContent>
           </Card>
         </div>
