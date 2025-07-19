@@ -769,13 +769,13 @@ export default function Home() {
         />
       </div>
 
-      {/* Dashboard Link for Staff - mystical style */}
+      {/* Dashboard Link for Staff - discrete style */}
       <div className="fixed top-4 right-4 z-50">
         <a 
           href="/dashboard" 
-          className="fortune-bg-primary text-yellow-300 px-4 py-2 rounded-lg text-sm fortune-border-glow hover:fortune-bg-secondary transition-all duration-300 backdrop-blur-sm"
+          className="bg-gray-800/50 text-gray-300 px-3 py-1 rounded text-xs hover:bg-gray-700/50 transition-colors backdrop-blur-sm"
         >
-          ✨ Dashboard
+          Dashboard
         </a>
       </div>
 

@@ -115,9 +115,11 @@ The application follows a modern full-stack architecture with the following comp
 - **Progress Bar**: Transformed to mystical shimmer effect with gradient colors
 - **Dashboard Link**: Styled with mystical theme and glow effects
 - **Animation Optimization**: Reduced distracting animations - only background elements animate, main UI elements are static for better focus
-- **Background Emojis System**: Created BackgroundEmojis component with section-specific themed decorative elements (entry, checkin, checkout, questions, results)
+- **Background Stars System**: Updated all background decorations to use only stars (⭐, ✨, 🌟, 💫) and dots for consistent mystical atmosphere
 - **Enhanced Results Page**: Completely redesigned Results component with mystical crystal ball theme matching homepage atmosphere
-- **Consistent Mystical Experience**: Applied fortune teller theme across all survey components with appropriate background decorations
+- **Discrete Dashboard**: Made dashboard link less prominent for museum staff use only
+- **Simplified Entry Screen**: Removed extra text and decorative emojis from choice buttons for cleaner interface
+- **Consistent Mystical Experience**: Applied fortune teller theme across all survey components with star-field background
 
 ### July 18, 2025 - Database Migration and Checkout Flow Fix
 - **Database Migration**: Replaced in-memory storage with PostgreSQL database to ensure data persistence

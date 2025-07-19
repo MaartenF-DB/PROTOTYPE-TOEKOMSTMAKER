@@ -7,36 +7,42 @@ interface FortuneTellerThemeProps {
   children: React.ReactNode;
 }
 
-// Fortune Teller mystical elements
+// Fortune Teller mystical elements - stars and dots background
 const MysticalParticles = () => (
   <div className="fixed inset-0 pointer-events-none z-0">
-    {/* Floating magical particles */}
-    {Array.from({ length: 15 }).map((_, i) => (
+    {/* Animated stars background */}
+    {Array.from({ length: 12 }).map((_, i) => {
+      const stars = ['⭐', '✨', '🌟', '💫'];
+      const star = stars[i % stars.length];
+      return (
+        <div
+          key={`star-${i}`}
+          className="absolute text-yellow-400 opacity-60 animate-twinkle"
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+            fontSize: `${0.8 + Math.random() * 1}rem`,
+            animationDelay: `${Math.random() * 3}s`,
+            animationDuration: `${2 + Math.random() * 2}s`
+          }}
+        >
+          {star}
+        </div>
+      );
+    })}
+    
+    {/* Small dots */}
+    {Array.from({ length: 20 }).map((_, i) => (
       <div
-        key={i}
-        className="absolute w-2 h-2 bg-yellow-300 rounded-full opacity-70 animate-pulse"
+        key={`dot-${i}`}
+        className="absolute w-1 h-1 bg-yellow-300 rounded-full opacity-40 animate-pulse"
         style={{
           left: `${Math.random() * 100}%`,
           top: `${Math.random() * 100}%`,
-          animationDelay: `${Math.random() * 3}s`,
-          animationDuration: `${3 + Math.random() * 2}s`
+          animationDelay: `${Math.random() * 4}s`,
+          animationDuration: `${3 + Math.random() * 3}s`
         }}
       />
-    ))}
-    
-    {/* Mystical stars */}
-    {Array.from({ length: 8 }).map((_, i) => (
-      <div
-        key={`star-${i}`}
-        className="absolute text-yellow-400 text-xl animate-twinkle"
-        style={{
-          left: `${Math.random() * 100}%`,
-          top: `${Math.random() * 100}%`,
-          animationDelay: `${Math.random() * 2}s`
-        }}
-      >
-        ✨
-      </div>
     ))}
   </div>
 );

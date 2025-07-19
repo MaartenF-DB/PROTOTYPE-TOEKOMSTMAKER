@@ -4,20 +4,8 @@ interface BackgroundEmojisProps {
 
 export function BackgroundEmojis({ sectionType = 'entry' }: BackgroundEmojisProps) {
   const getEmojisForSection = () => {
-    switch (sectionType) {
-      case 'entry':
-        return ['🔮', '✨', '🌟', '💫', '🌙', '⭐'];
-      case 'checkin':
-        return ['🚶‍♂️', '🏛️', '📝', '✨', '🎯', '🌟'];
-      case 'checkout':
-        return ['🚪', '🎊', '📊', '💫', '🔮', '⭐'];
-      case 'questions':
-        return ['❓', '💭', '🎯', '✨', '🌟', '💫'];
-      case 'results':
-        return ['🎉', '🌟', '✨', '🔮', '💫', '⭐'];
-      default:
-        return ['🔮', '✨', '🌟', '💫', '🌙', '⭐'];
-    }
+    // Use only stars and dots for all sections as background
+    return ['⭐', '✨', '🌟', '💫', '⭐', '✨'];
   };
 
   const emojis = getEmojisForSection();

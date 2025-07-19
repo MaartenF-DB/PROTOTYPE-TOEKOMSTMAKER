@@ -40,10 +40,7 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
         </div>
         
         <MysticalCard className="mb-8">
-          <h1 className="text-4xl font-bold mb-2 fortune-text-glow">{t.entryChoice.title}</h1>
-          <p className="text-yellow-200 text-lg mb-6 italic">
-            {language === 'en' ? "The crystal ball reveals two paths before you..." : "De kristallen bol toont twee paden voor je..."}
-          </p>
+          <h1 className="text-4xl font-bold mb-6 fortune-text-glow">{t.entryChoice.title}</h1>
           
           <div className="space-y-4">
             <Button
@@ -52,7 +49,6 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
             >
               <span className="inline-block scale-x-[-1] text-2xl">🚶‍♂️</span>
               <span>{t.entryChoice.checkIn}</span>
-              <span className="text-yellow-400">✨</span>
             </Button>
             
             <Button
@@ -61,7 +57,6 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
             >
               <span className="text-2xl">🚶‍♂️</span>
               <span className="font-bold">{t.entryChoice.checkOut}</span>
-              <span className="text-purple-600">🔮</span>
             </Button>
           </div>
         </MysticalCard>
