@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { TOPICS } from '@/types/survey';
+import { useSpeech } from '@/hooks/useSpeech';
 
 interface AnimatedResultProps {
   finalResult: string;
   onComplete: () => void;
+  language?: 'nl' | 'en';
 }
 
 // Shuffle function
@@ -16,7 +18,8 @@ const shuffleArray = (array: string[]) => {
   return shuffled;
 };
 
-export function AnimatedResult({ finalResult, onComplete }: AnimatedResultProps) {
+export function AnimatedResult({ finalResult, onComplete, language = 'nl' }: AnimatedResultProps) {
+  const { speak } = useSpeech();
   const [currentIcon, setCurrentIcon] = useState('🔮');
   const [currentColor, setCurrentColor] = useState('#6366f1');
   const [timeRemaining, setTimeRemaining] = useState(10);
@@ -33,6 +36,12 @@ export function AnimatedResult({ finalResult, onComplete }: AnimatedResultProps)
     startedRef.current = true;
     
     console.log('🔮 FORTUNE TELLER ANIMATION STARTED - 10 SECONDS COUNTDOWN');
+    
+    // Speak the fortune teller reveal text
+    const revealText = language === 'en' ? 
+      'The fortune teller reveals your personality...' : 
+      'De waarzegster onthult je persoonlijkheid...';
+    speak(revealText, language);
     
     // Animation loop
     intervalRef.current = setInterval(() => {
@@ -94,10 +103,10 @@ export function AnimatedResult({ finalResult, onComplete }: AnimatedResultProps)
       <div className="text-center max-w-2xl w-full relative z-10">
         <div className="bg-white bg-opacity-40 rounded-2xl p-8 mb-8 backdrop-blur-sm border border-white border-opacity-30">
           <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
-            De waarzegger onthult je persoonlijkheid... 🔮
+            {language === 'en' ? 'The fortune teller reveals your personality... 🔮' : 'De waarzegster onthult je persoonlijkheid... 🔮'}
           </h2>
           <div className="text-2xl font-bold mb-4 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
-            {timeRemaining} seconden
+            {timeRemaining} {language === 'en' ? 'seconds' : 'seconden'}
           </div>
           
           <div className="relative mb-8">
@@ -122,7 +131,7 @@ export function AnimatedResult({ finalResult, onComplete }: AnimatedResultProps)
           </div>
 
           <div className="text-sm opacity-75 text-yellow-200">
-            Wacht alsjeblieft... De waarzegger werkt haar magie...
+            {language === 'en' ? 'Please wait... The fortune teller is working her magic...' : 'Wacht alsjeblieft... De waarzegger werkt haar magie...'}
           </div>
         </div>
       </div>

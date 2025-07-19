@@ -173,7 +173,7 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
       {/* Instruction text */}
       <div className="text-center mb-6">
         <p className="text-white text-lg">
-          {language === 'en' ? 'Drag the topics to the right place.' : 'Sleep de onderwerpen naar de goede plek.'}
+          {language === 'en' ? 'Drag the topics to the right place.' : 'Versleep de onderwerpen naar de goede plek.'}
         </p>
       </div>
       

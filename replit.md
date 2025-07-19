@@ -135,6 +135,8 @@ The application follows a modern full-stack architecture with the following comp
 - **Removed Check-in Notice**: Removed "Je hebt al eerder de check-in ingevuld" message for existing users for cleaner checkout experience
 - **Removed All Answer Displays**: Completely removed all "Jouw antwoord:" sections throughout the application for cleaner interface
 - **Enhanced Audio Feedback**: All answer selections now trigger audio playback automatically when clicked
+- **Improved Ranking Instructions**: Changed "Sleep" to "Versleep" for better pronunciation
+- **Results Audio Integration**: Added speech synthesis to "De waarzegster onthult" and "De Uitkomst" sections
 - **Consistent Mystical Experience**: Applied fortune teller theme across all survey components with star-field background including name entry sections
 
 ### July 18, 2025 - Database Migration and Checkout Flow Fix

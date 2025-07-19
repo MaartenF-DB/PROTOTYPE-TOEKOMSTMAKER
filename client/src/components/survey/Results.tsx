@@ -79,6 +79,7 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
     return (
       <AnimatedResult 
         finalResult={answers.mostImportantTopic}
+        language={language}
         onComplete={() => {
           console.log('✅ ANIMATION COMPLETE - SHOWING FINAL RESULTS NOW');
           setShowAnimatedResult(false);
@@ -95,6 +96,12 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
           
           console.log('🎤 Speaking result:', resultText);
           speak(resultText, language);
+          
+          // Speak "De Uitkomst" title after 2 seconds
+          setTimeout(() => {
+            const titleText = language === 'en' ? 'The Result' : 'De Uitkomst';
+            speak(titleText, language);
+          }, 2000);
           
           // Also speak the motivational message after a brief pause
           setTimeout(() => {
@@ -157,7 +164,7 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
         {/* Results card directly under the crystal ball */}
         <div className="bg-white bg-opacity-40 rounded-2xl p-8 mb-8 backdrop-blur-sm border border-white border-opacity-30">
           <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
-            {language === 'en' ? 'Jij bent een...' : 'Jij bent een...'}
+            {language === 'en' ? 'The Result' : 'De Uitkomst'}
           </h2>
           
           <div className="text-5xl font-bold mb-4 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent drop-shadow-lg">
