@@ -1,16 +1,43 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
  import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
  import { Button } from '@/components/ui/button';
  import { Badge } from '@/components/ui/badge';
+ import { Input } from '@/components/ui/input';
+ import { Label } from '@/components/ui/label';
  import { exportToCSV } from '@/lib/csvExport';
  import { SurveyResponse } from '@shared/schema';
  import { TOPICS, ACTION_OPTIONS } from '@/types/survey';
- import { Download, Users, TrendingUp, BarChart3 } from 'lucide-react';
+ import { Download, Users, TrendingUp, BarChart3, Trash2 } from 'lucide-react';
+ import { useState } from 'react';
+ import { apiRequest } from '@/lib/queryClient';
 
  export default function Dashboard() {
+ const [deleteCode, setDeleteCode] = useState('');
+ const [deleteError, setDeleteError] = useState('');
+ 
+ const queryClient = useQueryClient();
+ 
  const { data: responses = [], isLoading } = useQuery<SurveyResponse[]>({
  queryKey: ['/api/survey-responses'],
  select: (data) => data.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+ });
+
+ const clearDataMutation = useMutation({
+   mutationFn: async (code: string) => {
+     return apiRequest('/api/survey-responses/reset', {
+       method: 'POST',
+       body: JSON.stringify({ code }),
+       headers: { 'Content-Type': 'application/json' }
+     });
+   },
+   onSuccess: () => {
+     queryClient.invalidateQueries({ queryKey: ['/api/survey-responses'] });
+     setDeleteCode('');
+     setDeleteError('');
+   },
+   onError: (error: any) => {
+     setDeleteError(error.message || 'Fout bij het wissen van data');
+   }
  });
 
  // Separate responses by type
@@ -113,6 +140,29 @@ import { useQuery } from '@tanstack/react-query';
  a.download = `museum-responses-${new Date().toISOString().split('T')[0]}.csv`;
  a.click();
  URL.revokeObjectURL(url);
+ };
+
+ const handleExportAndClear = () => {
+   if (deleteCode !== 'HNIlina') {
+     setDeleteError('Onjuiste code. Gebruik "HNIlina" om te exporteren en data te wissen.');
+     return;
+   }
+   
+   setDeleteError('');
+   
+   // First export the data
+   exportAllData();
+   
+   // Then clear all data
+   clearDataMutation.mutate(deleteCode);
+ };
+
+ const handleClearData = () => {
+   if (!deleteCode.trim()) {
+     setDeleteError('Voer een code in om data te wissen.');
+     return;
+   }
+   clearDataMutation.mutate(deleteCode);
  };
 
  if (isLoading) {
@@ -268,8 +318,8 @@ import { useQuery } from '@tanstack/react-query';
  </Card>
  </div>
 
- {/* Export Button */}
- <div className="mb-8">
+ {/* Export and Data Management */}
+ <div className="mb-8 space-y-6">
  <Card>
  <CardHeader>
  <CardTitle>Data Export</CardTitle>
@@ -284,6 +334,62 @@ import { useQuery } from '@tanstack/react-query';
  <Download className="h-4 w-4" />
  <span>Download CSV ({responses.length} responses)</span>
  </Button>
+ </CardContent>
+ </Card>
+
+ <Card>
+ <CardHeader>
+ <CardTitle>Data Management</CardTitle>
+ <CardDescription>Exporteer en wis alle data met beveiligingscode</CardDescription>
+ </CardHeader>
+ <CardContent className="space-y-4">
+ <div className="space-y-2">
+ <Label htmlFor="deleteCode">Beveiligingscode</Label>
+ <Input
+ id="deleteCode"
+ type="text"
+ value={deleteCode}
+ onChange={(e) => setDeleteCode(e.target.value)}
+ placeholder="Voer beveiligingscode in..."
+ className="max-w-sm"
+ />
+ </div>
+ 
+ {deleteError && (
+ <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-md p-3">
+ {deleteError}
+ </div>
+ )}
+ 
+ <div className="flex space-x-3">
+ <Button 
+ onClick={handleExportAndClear}
+ disabled={responses.length === 0 || clearDataMutation.isPending}
+ variant="destructive"
+ className="flex items-center space-x-2"
+ >
+ <Download className="h-4 w-4" />
+ <Trash2 className="h-4 w-4" />
+ <span>
+ {clearDataMutation.isPending ? 'Bezig...' : 'Exporteer & Wis Data (HNIlina)'}
+ </span>
+ </Button>
+ 
+ <Button 
+ onClick={handleClearData}
+ disabled={responses.length === 0 || clearDataMutation.isPending}
+ variant="outline"
+ className="flex items-center space-x-2"
+ >
+ <Trash2 className="h-4 w-4" />
+ <span>Alleen Wis Data</span>
+ </Button>
+ </div>
+ 
+ <div className="text-xs text-gray-500">
+ <strong>Let op:</strong> Gebruik code "HNIlina" om data te exporteren en daarna te wissen. 
+ Deze actie kan niet ongedaan worden gemaakt.
+ </div>
  </CardContent>
  </Card>
  </div>

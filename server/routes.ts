@@ -51,7 +51,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { code } = req.body;
       
       // Check authentication code
-      if (code !== "NieuweInstituutLINA") {
+      if (code !== "HNIlina") {
         res.status(401).json({ error: "Ongeldige authenticatiecode" });
         return;
       }

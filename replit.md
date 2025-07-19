@@ -120,6 +120,7 @@ The application follows a modern full-stack architecture with the following comp
 - **Title Text Update**: Changed homepage title from "Welkom bij Toekomstmakers!" to "Wat voor toekomstmaker ben jij?" (Dutch) and "What kind of future maker are you?" (English)
 - **Enhanced Text Block Design**: Redesigned main content card with mystical gradient borders, animated sparkle decorations, and improved button hover effects
 - **Audio Loop Implementation**: Added 10-second interval audio loop for welcome messages on homepage with improved speech error handling
+- **CSV Export with Data Clearing**: Added comprehensive CSV download functionality with administrative data clearing using authentication code "HNIlina"
 - **Looping Audio System**: Added automatic audio loop on entry page with 10-second intervals between welcome messages
 - **Enhanced Mystical Design**: Upgraded entry page with gradient borders, animated decorations, and premium button styling
 
