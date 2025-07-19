@@ -218,7 +218,7 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           <Card>
             <CardHeader>
-              <CardTitle>Gevoel Verbetering</CardTitle>
+              <CardTitle>Onderwerp 1: Visie van Toekomst</CardTitle>
               <CardDescription>Gemiddelde voor en na scores</CardDescription>
             </CardHeader>
             <CardContent>
@@ -261,7 +261,7 @@ export default function Dashboard() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Vertrouwen Verbetering</CardTitle>
+              <CardTitle>Onderwerp 2: Vertrouwen in Toekomst</CardTitle>
               <CardDescription>Gemiddelde voor en na scores</CardDescription>
             </CardHeader>
             <CardContent>
