@@ -115,6 +115,7 @@ export default function Dashboard() {
     }
   };
 
+  // Separate responses by type
   const completeResponses = responses.filter(r => 
     r.feelingAfter !== null && 
     r.feelingAfter !== 0 &&
@@ -123,7 +124,6 @@ export default function Dashboard() {
     r.confidenceAfter !== null &&
     r.confidenceAfter !== 0
   );
-  
   const checkInOnlyResponses = responses.filter(r => 
     r.feelingAfter === null || 
     r.feelingAfter === 0 ||
@@ -132,6 +132,36 @@ export default function Dashboard() {
     r.confidenceAfter === null ||
     r.confidenceAfter === 0
   );
+
+  const stats = {
+    totalResponses: responses.length,
+    completeResponses: completeResponses.length,
+    checkInOnlyResponses: checkInOnlyResponses.length,
+    averageAge: responses.length > 0 ? Math.round(responses.reduce((acc, r) => acc + parseInt(r.age), 0) / responses.length) : 0,
+    topTopics: responses.reduce((acc, r) => {
+      acc[r.mostImportantTopic] = (acc[r.mostImportantTopic] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>),
+    topActions: completeResponses.reduce((acc, r) => {
+      acc[r.actionChoice] = (acc[r.actionChoice] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>),
+    feelingChanges: completeResponses.filter(r => r.feelingBefore !== null && r.feelingAfter !== null).map(r => ({
+      topic: r.mostImportantTopic,
+      before: r.feelingBefore!,
+      after: r.feelingAfter!,
+      change: r.feelingAfter! - r.feelingBefore!
+    })),
+    confidenceChanges: completeResponses.filter(r => r.confidenceBefore !== null && r.confidenceAfter !== null).map(r => ({
+      topic: r.mostImportantTopic,
+      before: r.confidenceBefore!,
+      after: r.confidenceAfter!,
+      change: r.confidenceAfter! - r.confidenceBefore!
+    }))
+  };
+
+  const mostPopularTopic = Object.entries(stats.topTopics).sort(([,a], [,b]) => b - a)[0]?.[0];
+  const topicData = mostPopularTopic ? TOPICS[mostPopularTopic as keyof typeof TOPICS] : null;
 
   if (isLoading) {
     return (
@@ -158,14 +188,14 @@ export default function Dashboard() {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Totaal Antwoorden</CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{responses.length}</div>
+              <div className="text-2xl font-bold">{stats.totalResponses}</div>
             </CardContent>
           </Card>
 
@@ -175,7 +205,7 @@ export default function Dashboard() {
               <Badge className="bg-green-100 text-green-800 text-xs px-2 py-1">Check-in + Check-out</Badge>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{completeResponses.length}</div>
+              <div className="text-2xl font-bold">{stats.completeResponses}</div>
             </CardContent>
           </Card>
 
@@ -185,7 +215,109 @@ export default function Dashboard() {
               <Badge className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1">Incomplete</Badge>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{checkInOnlyResponses.length}</div>
+              <div className="text-2xl font-bold">{stats.checkInOnlyResponses}</div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Gemiddelde Leeftijd</CardTitle>
+              <BarChart3 className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stats.averageAge} jaar</div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Gevoel Verbetering</CardTitle>
+              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {stats.feelingChanges.length > 0 ? 
+                  `${Math.round(stats.feelingChanges.reduce((acc, item) => acc + item.change, 0) / stats.feelingChanges.length * 100) / 100}` : 
+                  '0'
+                }
+              </div>
+              <p className="text-xs text-muted-foreground">gemiddeld verschil</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Vertrouwen Verbetering</CardTitle>
+              <BarChart3 className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {stats.confidenceChanges.length > 0 ? 
+                  `${Math.round(stats.confidenceChanges.reduce((acc, item) => acc + item.change, 0) / stats.confidenceChanges.length * 100) / 100}` : 
+                  '0'
+                }
+              </div>
+              <p className="text-xs text-muted-foreground">gemiddeld verschil</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Topic Distribution */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <Card>
+            <CardHeader>
+              <CardTitle>Meest Populaire Onderwerpen</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {Object.entries(stats.topTopics)
+                  .sort(([,a], [,b]) => b - a)
+                  .map(([topic, count]) => {
+                    const topicData = TOPICS[topic as keyof typeof TOPICS];
+                    return (
+                      <div key={topic} className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
+                        <div 
+                          className="w-12 h-12 rounded-full flex items-center justify-center text-2xl"
+                          style={{ backgroundColor: topicData?.hexColor || '#6B7280' }}
+                        >
+                          {topicData?.icon || '❓'}
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-medium">{topic}</div>
+                          <div className="text-sm text-gray-500">{count} keer gekozen</div>
+                        </div>
+                        <Badge variant="secondary">{count}</Badge>
+                      </div>
+                    );
+                  })}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Meest Populaire Acties</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {Object.entries(stats.topActions)
+                  .sort(([,a], [,b]) => b - a)
+                  .map(([action, count]) => {
+                    const actionData = ACTION_OPTIONS.find(opt => opt.value === action);
+                    return (
+                      <div key={action} className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
+                        <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-2xl">
+                          {actionData?.icon || '🎯'}
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-medium">{actionData?.label || action}</div>
+                          <div className="text-sm text-gray-500">{count} keer gekozen</div>
+                        </div>
+                        <Badge variant="secondary">{count}</Badge>
+                      </div>
+                    );
+                  })}
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -255,40 +387,116 @@ export default function Dashboard() {
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Recent Responses</CardTitle>
-              <CardDescription>Laatste survey antwoorden</CardDescription>
+              <CardTitle>Complete Responses (Check-in + Check-out)</CardTitle>
+              <CardDescription>Bezoekers die beide delen van de survey hebben voltooid</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {responses.length === 0 ? (
-                  <p className="text-gray-500 text-center py-8">Nog geen responses</p>
+                {completeResponses.length === 0 ? (
+                  <p className="text-gray-500 text-center py-8">Nog geen complete responses</p>
                 ) : (
-                  responses.slice(0, 10).map((response) => (
-                    <div key={response.id} className="border border-gray-200 bg-white rounded-lg p-4">
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center space-x-3">
-                          <span className="font-semibold">{response.name}</span>
-                          <Badge variant={response.result ? "default" : "secondary"}>
-                            {response.result ? "Complete" : "Incomplete"}
-                          </Badge>
+                  completeResponses.slice(0, 10).map((response) => {
+                    const topicData = TOPICS[response.mostImportantTopic as keyof typeof TOPICS];
+                    return (
+                      <div key={response.id} className="border border-green-200 bg-green-50 rounded-lg p-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center space-x-3">
+                            <div 
+                              className="w-8 h-8 rounded-full flex items-center justify-center text-lg"
+                              style={{ backgroundColor: topicData?.hexColor || '#6B7280' }}
+                            >
+                              {topicData?.icon || '❓'}
+                            </div>
+                            <span className="font-semibold">{response.name}</span>
+                            <Badge className="bg-green-100 text-green-800">Complete</Badge>
+                          </div>
+                          <span className="text-sm text-gray-500">
+                            {new Date(response.createdAt).toLocaleDateString('nl-NL')}
+                          </span>
                         </div>
-                        <span className="text-sm text-gray-500">
-                          {new Date(response.createdAt).toLocaleDateString('nl-NL')}
-                        </span>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                          <div>
+                            <span className="text-gray-600">Leeftijd:</span> {response.age}
+                          </div>
+                          <div>
+                            <span className="text-gray-600">Onderwerp:</span> {response.mostImportantTopic}
+                          </div>
+                          <div>
+                            <span className="text-gray-600">Bezoekt met:</span> {response.visitingWith}
+                          </div>
+                          <div>
+                            <span className="text-gray-600">Actie:</span> {response.actionChoice}
+                          </div>
+                          <div>
+                            <span className="text-gray-600">Gevoel voor:</span> {response.feelingBefore || 'N/A'}
+                          </div>
+                          <div>
+                            <span className="text-gray-600">Gevoel na:</span> {response.feelingAfter}
+                          </div>
+                          <div>
+                            <span className="text-gray-600">Vertrouwen voor:</span> {response.confidenceBefore || 'N/A'}
+                          </div>
+                          <div>
+                            <span className="text-gray-600">Vertrouwen na:</span> {response.confidenceAfter}
+                          </div>
+                        </div>
+                        <div className="mt-3 p-2 bg-white rounded border">
+                          <span className="text-sm font-medium text-gray-600">Resultaat: </span>
+                          <span className="text-sm font-semibold" style={{ color: topicData?.hexColor || '#6B7280' }}>
+                            {response.result}
+                          </span>
+                        </div>
                       </div>
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
-                        <div>
-                          <span className="text-gray-600">Leeftijd:</span> {response.age}
+                    );
+                  })
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Check-in Only Responses</CardTitle>
+              <CardDescription>Bezoekers die alleen check-in hebben gedaan</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {checkInOnlyResponses.length === 0 ? (
+                  <p className="text-gray-500 text-center py-8">Nog geen check-in only responses</p>
+                ) : (
+                  checkInOnlyResponses.slice(0, 10).map((response) => {
+                    const topicData = TOPICS[response.mostImportantTopic as keyof typeof TOPICS];
+                    return (
+                      <div key={response.id} className="border border-yellow-200 bg-yellow-50 rounded-lg p-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center space-x-3">
+                            <div 
+                              className="w-8 h-8 rounded-full flex items-center justify-center text-lg"
+                              style={{ backgroundColor: topicData?.hexColor || '#6B7280' }}
+                            >
+                              {topicData?.icon || '❓'}
+                            </div>
+                            <span className="font-semibold">{response.name}</span>
+                            <Badge className="bg-yellow-100 text-yellow-800">Incomplete</Badge>
+                          </div>
+                          <span className="text-sm text-gray-500">
+                            {new Date(response.createdAt).toLocaleDateString('nl-NL')}
+                          </span>
                         </div>
-                        <div>
-                          <span className="text-gray-600">Onderwerp:</span> {response.mostImportantTopic}
-                        </div>
-                        <div>
-                          <span className="text-gray-600">Bezoekt met:</span> {response.visitingWith}
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                          <div>
+                            <span className="text-gray-600">Leeftijd:</span> {response.age}
+                          </div>
+                          <div>
+                            <span className="text-gray-600">Onderwerp:</span> {response.mostImportantTopic}
+                          </div>
+                          <div>
+                            <span className="text-gray-600">Bezoekt met:</span> {response.visitingWith}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))
+                    );
+                  })
                 )}
               </div>
             </CardContent>
