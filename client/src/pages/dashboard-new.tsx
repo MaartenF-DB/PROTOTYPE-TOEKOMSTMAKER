@@ -75,6 +75,14 @@ export default function Dashboard() {
       acc[visiting] = (acc[visiting] || 0) + 1;
       return acc;
     }, {} as Record<string, number>),
+    averageFeelingBefore: completeResponses.length > 0 ? 
+      completeResponses.reduce((acc, r) => acc + (r.feelingBefore || 0), 0) / completeResponses.length : 0,
+    averageFeelingAfter: completeResponses.length > 0 ? 
+      completeResponses.reduce((acc, r) => acc + (r.feelingAfter || 0), 0) / completeResponses.length : 0,
+    averageConfidenceBefore: completeResponses.length > 0 ? 
+      completeResponses.reduce((acc, r) => acc + (r.confidenceBefore || 0), 0) / completeResponses.length : 0,
+    averageConfidenceAfter: completeResponses.length > 0 ? 
+      completeResponses.reduce((acc, r) => acc + (r.confidenceAfter || 0), 0) / completeResponses.length : 0,
     feelingChanges: completeResponses.filter(r => r.feelingBefore !== null && r.feelingAfter !== null).map(r => ({
       topic: r.mostImportantTopic,
       before: r.feelingBefore!,
@@ -205,11 +213,17 @@ export default function Dashboard() {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Gemiddelde Leeftijd</CardTitle>
-              <BarChart3 className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium">Vertrouwen Verbetering</CardTitle>
+              <TrendingUp className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.averageAge} jaar</div>
+              <div className="text-2xl font-bold">
+                {stats.confidenceChanges.length > 0 ? 
+                  `${Math.round(stats.confidenceChanges.reduce((acc, item) => acc + item.change, 0) / stats.confidenceChanges.length * 100) / 100}` : 
+                  '0'
+                }
+              </div>
+              <p className="text-xs text-muted-foreground">gemiddeld verschil</p>
             </CardContent>
           </Card>
 
@@ -230,7 +244,96 @@ export default function Dashboard() {
           </Card>
         </div>
 
-        {/* Age and Visiting Distribution */}
+        {/* Improvement Charts */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <Card>
+            <CardHeader>
+              <CardTitle>Gevoel Verbetering</CardTitle>
+              <CardDescription>Gemiddelde voor en na scores</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">Voor bezoek</span>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-32 bg-gray-200 rounded-full h-4">
+                      <div 
+                        className="bg-red-500 h-4 rounded-full transition-all duration-300" 
+                        style={{ width: `${((stats.averageFeelingBefore || 0) / 5) * 100}%` }}
+                      ></div>
+                    </div>
+                    <span className="text-sm font-bold">{stats.averageFeelingBefore?.toFixed(1) || '0.0'}</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">Na bezoek</span>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-32 bg-gray-200 rounded-full h-4">
+                      <div 
+                        className="bg-green-500 h-4 rounded-full transition-all duration-300" 
+                        style={{ width: `${((stats.averageFeelingAfter || 0) / 5) * 100}%` }}
+                      ></div>
+                    </div>
+                    <span className="text-sm font-bold">{stats.averageFeelingAfter?.toFixed(1) || '0.0'}</span>
+                  </div>
+                </div>
+                <div className="pt-2 border-t">
+                  <div className="text-center">
+                    <span className="text-lg font-bold text-green-600">
+                      +{((stats.averageFeelingAfter || 0) - (stats.averageFeelingBefore || 0)).toFixed(1)}
+                    </span>
+                    <p className="text-xs text-muted-foreground">verbetering</p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Vertrouwen Verbetering</CardTitle>
+              <CardDescription>Gemiddelde voor en na scores</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">Voor bezoek</span>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-32 bg-gray-200 rounded-full h-4">
+                      <div 
+                        className="bg-orange-500 h-4 rounded-full transition-all duration-300" 
+                        style={{ width: `${((stats.averageConfidenceBefore || 0) / 5) * 100}%` }}
+                      ></div>
+                    </div>
+                    <span className="text-sm font-bold">{stats.averageConfidenceBefore?.toFixed(1) || '0.0'}</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">Na bezoek</span>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-32 bg-gray-200 rounded-full h-4">
+                      <div 
+                        className="bg-blue-500 h-4 rounded-full transition-all duration-300" 
+                        style={{ width: `${((stats.averageConfidenceAfter || 0) / 5) * 100}%` }}
+                      ></div>
+                    </div>
+                    <span className="text-sm font-bold">{stats.averageConfidenceAfter?.toFixed(1) || '0.0'}</span>
+                  </div>
+                </div>
+                <div className="pt-2 border-t">
+                  <div className="text-center">
+                    <span className="text-lg font-bold text-blue-600">
+                      +{((stats.averageConfidenceAfter || 0) - (stats.averageConfidenceBefore || 0)).toFixed(1)}
+                    </span>
+                    <p className="text-xs text-muted-foreground">verbetering</p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Distribution Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-8 mb-8">
           <Card>
             <CardHeader>
@@ -291,12 +394,12 @@ export default function Dashboard() {
               <CardTitle>Leeftijd Verdeling</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div className="space-y-2">
                 {Object.entries(stats.ageDistribution)
                   .sort(([a], [b]) => parseInt(a) - parseInt(b))
                   .map(([age, count]) => (
-                    <div key={age} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                      <div className="font-medium">{count} {count === 1 ? 'persoon is' : 'mensen zijn'} {age} jaar</div>
+                    <div key={age} className="flex items-center justify-between py-1">
+                      <span className="text-sm">{age} jaar</span>
                       <Badge variant="secondary">{count}</Badge>
                     </div>
                   ))}
@@ -309,7 +412,7 @@ export default function Dashboard() {
               <CardTitle>Bezoek Met</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div className="space-y-2">
                 {Object.entries(stats.visitingDistribution)
                   .sort(([,a], [,b]) => b - a)
                   .map(([visiting, count]) => {
@@ -327,8 +430,8 @@ export default function Dashboard() {
                     };
                     
                     return (
-                      <div key={visiting} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                        <div className="font-medium">{count} {count === 1 ? 'persoon bezoekt' : 'mensen bezoeken'} {getVisitingLabel(visiting)}</div>
+                      <div key={visiting} className="flex items-center justify-between py-1">
+                        <span className="text-sm">{getVisitingLabel(visiting)}</span>
                         <Badge variant="secondary">{count}</Badge>
                       </div>
                     );
