@@ -53,7 +53,7 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
             
             <Button
               onClick={onCheckOut}
-              className="w-full fortune-bg-accent hover:bg-yellow-600 text-purple-900 text-xl py-6 px-8 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 border-2 border-purple-400/30 hover:border-purple-400/60"
+              className="w-full bg-yellow-300 hover:bg-yellow-400 text-purple-900 text-xl py-6 px-8 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 border-2 border-purple-400/30 hover:border-purple-400/60"
             >
               <span className="text-2xl">🚶‍♂️</span>
               <span className="font-bold">{t.entryChoice.checkOut}</span>
