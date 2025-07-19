@@ -350,7 +350,12 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
  <Button 
  onClick={handleExportAndClear}
  disabled={responses.length === 0 || clearDataMutation.isPending}
- className="flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white font-bold border-2 border-red-800 shadow-lg"
+ style={{ 
+   backgroundColor: '#dc2626', 
+   borderColor: '#991b1b',
+   color: 'white'
+ }}
+ className="flex items-center space-x-2 hover:bg-red-700 text-white font-bold border-2 shadow-lg !bg-red-600 !border-red-800"
  >
  <Download className="h-4 w-4" />
  <Trash2 className="h-4 w-4" />
