@@ -24,32 +24,23 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
   }, [speak, language]);
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center p-6 text-white relative overflow-hidden">
-      {/* Background Video - Enlarged and Top Positioned */}
-      <video 
-        autoPlay 
-        loop 
-        muted 
-        playsInline
-        className="absolute z-0"
-        style={{
-          width: '120vw',
-          height: '120vh',
-          objectFit: 'cover',
-          top: '-10vh',
-          left: '-10vw'
-        }}
-      >
-        <source src={backgroundVideoPath} type="video/mp4" />
-      </video>
-      
-      {/* Dark overlay for better text readability */}
-      <div className="absolute inset-0 bg-black bg-opacity-30 z-1"></div>
-      
-      <div className="text-center max-w-2xl w-full relative z-10">
+    <section className="min-h-screen flex flex-col items-center p-6 text-white relative bg-gradient-to-br from-purple-900 via-purple-800 to-purple-900">
+      <div className="text-center max-w-4xl w-full">
+        {/* Video positioned above the welcome section */}
+        <div className="mb-8 rounded-2xl overflow-hidden shadow-2xl mt-4">
+          <video 
+            autoPlay 
+            loop 
+            muted 
+            playsInline
+            className="w-full h-72 md:h-96 lg:h-[32rem] object-cover"
+          >
+            <source src={backgroundVideoPath} type="video/mp4" />
+          </video>
+        </div>
 
-        
-        <MysticalCard className="mb-8 bg-black bg-opacity-70 backdrop-blur-sm border border-white border-opacity-30">
+        {/* Welcome Section */}
+        <MysticalCard className="mb-8 bg-black bg-opacity-70 backdrop-blur-sm border border-white border-opacity-30 max-w-2xl mx-auto">
           <h1 className="text-4xl font-bold mb-6 text-white drop-shadow-lg">{t.entryChoice.title}</h1>
           
           <div className="space-y-6">
@@ -77,8 +68,6 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
             {language === 'en' ? "The fortune teller awaits your choice..." : "De waarzegger wacht op jouw keuze..."}
           </p>
         </div>
-
-
       </div>
     </section>
   );

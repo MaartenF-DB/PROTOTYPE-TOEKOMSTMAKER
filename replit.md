@@ -111,6 +111,8 @@ The application follows a modern full-stack architecture with the following comp
 - **Improved Button Styling**: Enhanced button visibility with stronger backgrounds, borders, and backdrop-blur effects
 - **Responsive Video**: Video scales properly across all screen sizes using object-cover and viewport dimensions
 - **Professional Presentation**: Removed background emoji decorations in favor of clean video background
+- **Video Repositioning**: Moved video above "Welkom bij Toekomstmakers!" section instead of background overlay
+- **Crystal Ball Removal**: Removed crystal ball icon for cleaner interface design
 
 ### July 19, 2025 - Enhanced Name Conflict Resolution System (Updated)
 - **Mandatory Unique Names**: Users must manually enter unique names (with numbers) when name conflicts occur - no automatic generation
