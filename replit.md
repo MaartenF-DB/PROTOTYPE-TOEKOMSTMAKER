@@ -104,6 +104,14 @@ The application follows a modern full-stack architecture with the following comp
 
 ## Recent Changes
 
+### July 19, 2025 - Background Video Implementation
+- **Full-Screen Video Background**: Added HNI_afstuderen_(5)_1752931557943.mp4 as background video on welcome/entry page
+- **Video Optimization**: Video is auto-playing, looping, muted with full viewport coverage
+- **Enhanced UI Overlay**: Added semi-transparent dark overlay (40% opacity) for better text readability
+- **Improved Button Styling**: Enhanced button visibility with stronger backgrounds, borders, and backdrop-blur effects
+- **Responsive Video**: Video scales properly across all screen sizes using object-cover and viewport dimensions
+- **Professional Presentation**: Removed background emoji decorations in favor of clean video background
+
 ### July 19, 2025 - Enhanced Name Conflict Resolution System (Updated)
 - **Mandatory Unique Names**: Users must manually enter unique names (with numbers) when name conflicts occur - no automatic generation
 - **Blocked Navigation**: Users cannot proceed in check-in or checkout if they enter an existing name
