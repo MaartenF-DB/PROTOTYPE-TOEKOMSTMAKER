@@ -343,8 +343,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
  <div className="mb-8 space-y-6">
  <Card className="border-red-200 bg-red-50">
  <CardHeader>
- <CardTitle className="text-red-800">⚠️ Data Export & Verwijdering</CardTitle>
- <CardDescription className="text-red-600">WAARSCHUWING: Bij het klikken wordt alle data gedownload EN verwijderd</CardDescription>
+ <CardTitle className="text-red-800">⚠️ Data Export</CardTitle>
+ <CardDescription className="text-red-600">Download alle survey responses als CSV bestand - ALLE DATA WORDT VERWIJDERD</CardDescription>
  </CardHeader>
  <CardContent>
  <Button 
@@ -364,79 +364,6 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
  <strong>ALLE DATA WORDT VERWIJDERD</strong>
  </div>
  <p>Deze knop downloadt eerst de data en verwijdert daarna alles permanent.</p>
- </div>
- </CardContent>
- </Card>
-
- <Card className="border-red-200 bg-red-50">
- <CardHeader>
- <CardTitle className="text-red-800">⚠️ Data Management - GEVAARLIJKE ZONE</CardTitle>
- <CardDescription className="text-red-600">Exporteer en verwijder ALLE survey data permanent met beveiligingscode</CardDescription>
- </CardHeader>
- <CardContent className="space-y-4">
- <div className="space-y-2">
- <Label htmlFor="deleteCode">Beveiligingscode</Label>
- <Input
- id="deleteCode"
- type="text"
- value={deleteCode}
- onChange={(e) => setDeleteCode(e.target.value)}
- placeholder="Voer beveiligingscode in..."
- className="max-w-sm"
- />
- </div>
- 
- {deleteError && (
- <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-md p-3">
- {deleteError}
- </div>
- )}
- 
- <div className="flex space-x-3">
- <Button 
- onClick={handleExportAndClear}
- disabled={responses.length === 0 || clearDataMutation.isPending || deleteCode !== 'HNIlina'}
- className={deleteCode === 'HNIlina' 
-   ? "flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white font-bold border-2 border-red-800 shadow-lg"
-   : "flex items-center space-x-2 bg-gray-400 hover:bg-gray-500 text-white font-bold border-2 border-gray-600 shadow-lg"
- }
- >
- <Download className="h-5 w-5" />
- <Trash2 className="h-5 w-5" />
- <span className="text-sm">
- {clearDataMutation.isPending ? '⏳ Bezig met wissen...' : '🚨 DOWNLOAD & WISSEN'}
- </span>
- </Button>
- 
- <Button 
- onClick={handleClearData}
- disabled={responses.length === 0 || clearDataMutation.isPending || deleteCode !== 'HNIlina'}
- className={deleteCode === 'HNIlina' 
-   ? "flex items-center space-x-2 border-2 border-red-600 text-red-600 hover:bg-red-50 bg-white"
-   : "flex items-center space-x-2 border-2 border-gray-400 text-gray-400 hover:bg-gray-50 bg-white"
- }
- >
- <Trash2 className="h-4 w-4" />
- <span>Alleen Wis Data</span>
- </Button>
- </div>
- 
- <div className="text-sm text-red-700 bg-red-100 border-2 border-red-300 rounded-md p-4">
- <div className="flex items-center space-x-2 mb-2">
- <span className="text-2xl">🚨</span>
- <strong>KRITIEKE WAARSCHUWING</strong>
- </div>
- <p className="mb-2">
- De rode knop "🚨 DOWNLOAD & WISSEN" doet het volgende:
- </p>
- <ol className="list-decimal list-inside space-y-1 ml-4">
- <li>Downloadt alle survey data als CSV bestand</li>
- <li><strong className="text-red-800">VERWIJDERT PERMANENT ALLE DATA</strong></li>
- <li>Dashboard wordt leeg - geen undo mogelijk!</li>
- </ol>
- <p className="mt-2 font-bold">
- Vereist code: "HNIlina"
- </p>
  </div>
  </CardContent>
  </Card>
