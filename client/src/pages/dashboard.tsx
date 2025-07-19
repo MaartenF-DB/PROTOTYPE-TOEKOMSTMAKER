@@ -337,10 +337,10 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
  </CardContent>
  </Card>
 
- <Card>
+ <Card className="border-red-200 bg-red-50">
  <CardHeader>
- <CardTitle>Data Management</CardTitle>
- <CardDescription>Exporteer en wis alle data met beveiligingscode</CardDescription>
+ <CardTitle className="text-red-800">⚠️ Data Management - GEVAARLIJKE ZONE</CardTitle>
+ <CardDescription className="text-red-600">Exporteer en verwijder ALLE survey data permanent met beveiligingscode</CardDescription>
  </CardHeader>
  <CardContent className="space-y-4">
  <div className="space-y-2">
@@ -366,12 +366,12 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
  onClick={handleExportAndClear}
  disabled={responses.length === 0 || clearDataMutation.isPending}
  variant="destructive"
- className="flex items-center space-x-2"
+ className="flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white"
  >
  <Download className="h-4 w-4" />
  <Trash2 className="h-4 w-4" />
  <span>
- {clearDataMutation.isPending ? 'Bezig...' : 'Exporteer & Wis Data (HNIlina)'}
+ {clearDataMutation.isPending ? 'Bezig...' : 'Download CSV & Verwijder ALLE Data'}
  </span>
  </Button>
  
@@ -386,9 +386,10 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
  </Button>
  </div>
  
- <div className="text-xs text-gray-500">
- <strong>Let op:</strong> Gebruik code "HNIlina" om data te exporteren en daarna te wissen. 
- Deze actie kan niet ongedaan worden gemaakt.
+ <div className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-md p-3">
+ <strong>⚠️ WAARSCHUWING:</strong> De rode knop downloadt eerst een CSV bestand en verwijdert daarna 
+ <strong>ALLE SURVEY DATA PERMANENT</strong>. Gebruik code "HNIlina" om deze actie te bevestigen. 
+ Deze actie kan niet ongedaan worden gemaakt!
  </div>
  </CardContent>
  </Card>
