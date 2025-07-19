@@ -6,6 +6,7 @@ import { exportToCSV } from '@/lib/csvExport';
 import { SurveyAnswers } from '@/types/survey';
 import { AnimatedResult } from './AnimatedResult';
 import { translations, Language } from '@/lib/translations';
+import { useLocation } from 'wouter';
 
 
 
@@ -25,6 +26,7 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
   const { speak } = useSpeech();
   const [showAnimatedResult, setShowAnimatedResult] = useState(true);
   const [animationComplete, setAnimationComplete] = useState(false);
+  const [, setLocation] = useLocation();
 
   const topicData = TOPICS[answers.mostImportantTopic as keyof typeof TOPICS];
   
@@ -58,6 +60,18 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
   useEffect(() => {
     console.log('Results component mounted, showAnimatedResult:', showAnimatedResult);
   }, [showAnimatedResult]);
+
+  // Auto-redirect to homepage after 1 minute if "Nieuwe Lezing" button is not clicked
+  useEffect(() => {
+    if (!showAnimatedResult && animationComplete) {
+      const timer = setTimeout(() => {
+        console.log('🕒 Auto-redirecting to homepage after 1 minute');
+        setLocation('/');
+      }, 60000); // 1 minute = 60000ms
+
+      return () => clearTimeout(timer);
+    }
+  }, [showAnimatedResult, animationComplete, setLocation]);
 
   // Show animated result first
   if (showAnimatedResult) {
@@ -160,15 +174,7 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
           <div className="text-2xl mb-4 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
             {language === 'en' ? 'voor' : 'voor'}
           </div>
-          <div 
-            className="text-4xl font-bold mb-6 drop-shadow-lg"
-            style={{ 
-              background: `linear-gradient(135deg, ${topicData.hexColor}, ${topicData.hexColor}dd)`,
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
-            }}
-          >
+          <div className="text-4xl font-bold mb-6 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent drop-shadow-lg">
             {getTopicName(answers.mostImportantTopic, language)}
           </div>
           
