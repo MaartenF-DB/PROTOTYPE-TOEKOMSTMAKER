@@ -122,6 +122,7 @@ The application follows a modern full-stack architecture with the following comp
 - **Name Input Background**: Added BackgroundEmojis component to all name input pages (CheckoutNameInput, CheckInIntro, NameMatching, NameVerification)
 - **Golden Shimmer Results**: Updated Results and AnimatedResult components with golden gradient text effects for mystical appearance
 - **Improved Results Layout**: Positioned results card directly under crystal ball, reduced background distraction for better focus
+- **Welcome Text Styling**: Changed "Welkom bij Toekomstmakers!" to simple yellow color without glow effects per user preference
 - **Consistent Mystical Experience**: Applied fortune teller theme across all survey components with star-field background including name entry sections
 
 ### July 18, 2025 - Database Migration and Checkout Flow Fix
