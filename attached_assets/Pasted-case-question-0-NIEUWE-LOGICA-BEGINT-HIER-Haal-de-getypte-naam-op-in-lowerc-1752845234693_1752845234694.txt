@@ -1,0 +1,72 @@
+case 'question-0':
+  // --- NIEUWE LOGICA BEGINT HIER ---
+
+  // Haal de getypte naam op in lowercase voor een consistente vergelijking.
+  const currentNameLower = answers.name.trim().toLowerCase();
+
+  // Filter de database om alle namen te vinden die beginnen met de getypte naam (bv. "emma", "emma2", "emma3").
+  const similarNamesInDB = existingResponses.filter((response: any) =>
+    response.name.toLowerCase().startsWith(currentNameLower) &&
+    // Zorgt ervoor dat we "emma" niet verwarren met "emmanuel".
+    // We gebruiken een RegEx om te controleren of het "emma" is of "emma" gevolgd door een getal.
+    new RegExp(`^${currentNameLower}[0-9]*$`, 'i').test(response.name)
+  );
+  
+  // Tel hoeveel varianten van de naam al bestaan.
+  const nameCount = similarNamesInDB.length;
+  
+  // Bepaal de eerstvolgende beschikbare naam. Als "emma" en "emma2" bestaan (count = 2), wordt dit "emma3".
+  const suggestedName = answers.name.trim() + (nameCount + 1);
+
+  // Controleer of de exácte naam die de gebruiker heeft ingetypt al bestaat.
+  const isNameTaken = similarNamesInDB.some(
+    (response: any) => response.name.toLowerCase() === currentNameLower
+  );
+
+  // De "Volgende" knop is geldig als de naam niet leeg is ÉN als de naam niet bezet is.
+  const isInputValid = answers.name.trim().length > 0 && !isNameTaken;
+
+  // --- EINDE NIEUWE LOGICA ---
+
+  return (
+    <Question
+      questionNumber={0}
+      question={t.questions.name}
+      bgGradient="from-blue-500 to-teal-500"
+      buttonColor="bg-blue-600 hover:bg-blue-700"
+      onNext={() => setCurrentSection('question-1')}
+      showPrevious={false}
+      showNext={true}
+      // Gebruik de nieuwe validatieregel.
+      isValid={isInputValid}
+      language={language}
+    >
+      <div className="space-y-4">
+        <Input
+          value={answers.name}
+          onChange={(e) => updateAnswers({ name: e.target.value })}
+          placeholder={t.placeholders.typeName}
+          className="w-full p-4 text-2xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-blue-300 outline-none"
+        />
+
+        {/* --- NIEUWE MELDING --- */}
+        {/* Toon deze melding als de getypte naam al bezet is. */}
+        {isNameTaken && (
+          <div className="bg-yellow-200 text-yellow-900 p-3 rounded-lg text-center">
+            <p>De naam '<strong>{answers.name.trim()}</strong>' is al in gebruik.</p>
+            <p className="font-semibold">
+              Probeer alsjeblieft '<strong>{suggestedName}</strong>' in te vullen.
+            </p>
+          </div>
+        )}
+        
+        {/* De bestaande preview van het antwoord */}
+        {answers.name.length > 0 && !isNameTaken && (
+          <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
+            <p className="text-white font-semibold">{t.yourAnswer}:</p>
+            <p className="text-white text-lg">{answers.name}</p>
+          </div>
+        )}
+      </div>
+    </Question>
+  );

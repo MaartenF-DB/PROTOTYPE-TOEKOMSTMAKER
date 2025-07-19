@@ -25,7 +25,7 @@ export const TOPICS = {
   VREDE: { name: 'VREDE', color: 'bg-emerald-500', icon: '🕊️', description: 'Geen ruzie en we respecteren elkaar!', hexColor: '#999999', nameEn: 'PEACE', descriptionEn: 'No fighting and we respect each other!' },
   GEZONDHEID: { name: 'GEZONDHEID', color: 'bg-amber-500', icon: '💗', description: 'Iedereen is gezond en krijgt goede hulp.', hexColor: '#EC8FBB', nameEn: 'HEALTH', descriptionEn: 'Everyone is healthy and gets good help.' },
   RIJKDOM: { name: 'RIJKDOM', color: 'bg-purple-500', icon: '🤝', description: 'Delen is fijner dan hebben!', hexColor: '#6358A6', nameEn: 'WEALTH', descriptionEn: 'Sharing is better than having!' },
-  'VRIJE TIJD': { name: 'VRIJE TIJD', color: 'bg-red-500', icon: '🎮', description: 'Minder werken, meer spelen!', hexColor: '#9E4622', nameEn: 'FREE TIME', descriptionEn: 'Less work, more play!' },
+  'VRIJE TIJD': { name: 'VRIJE TIJD', color: 'bg-red-500', icon: '🎨', description: 'Minder werken, meer spelen!', hexColor: '#9E4622', nameEn: 'FREE TIME', descriptionEn: 'Less work, more play!' },
   KLIMAAT: { name: 'KLIMAAT', color: 'bg-cyan-500', icon: '🌱', description: 'We maken de aarde samen groener!', hexColor: '#70C164', nameEn: 'CLIMATE', descriptionEn: 'We make the earth greener together!' },
   WONEN: { name: 'WONEN', color: 'bg-orange-500', icon: '🏠', description: 'Iedereen woont op een goede plek!', hexColor: '#F59E0B', nameEn: 'LIVING', descriptionEn: 'Everyone lives in a good place!' }
 } as const;
