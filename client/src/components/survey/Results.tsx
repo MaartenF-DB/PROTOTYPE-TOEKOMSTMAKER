@@ -6,8 +6,8 @@ import { exportToCSV } from '@/lib/csvExport';
 import { SurveyAnswers } from '@/types/survey';
 import { AnimatedResult } from './AnimatedResult';
 import { translations, Language } from '@/lib/translations';
-import { MysticalCard } from '@/components/fortune/FortuneTellerCharacter';
-import { BackgroundEmojis } from '@/components/fortune/BackgroundEmojis';
+
+
 
 interface ResultsProps {
   answers: SurveyAnswers;
@@ -141,7 +141,7 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
         </div>
         
         {/* Results card directly under the crystal ball */}
-        <MysticalCard className="mb-8">
+        <div className="bg-white bg-opacity-40 rounded-2xl p-8 mb-8 backdrop-blur-sm border border-white border-opacity-30">
           <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
             {language === 'en' ? 'Jij bent een...' : 'Jij bent een...'}
           </h2>
@@ -177,7 +177,7 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
               {motivationalMessage}
             </p>
           </div>
-        </MysticalCard>
+        </div>
 
         {/* Mystical farewell */}
         <div className="text-center mb-6">

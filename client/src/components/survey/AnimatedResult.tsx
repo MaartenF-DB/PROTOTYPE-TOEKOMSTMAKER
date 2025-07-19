@@ -92,9 +92,9 @@ export function AnimatedResult({ finalResult, onComplete }: AnimatedResultProps)
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-purple-900 to-indigo-900 text-white relative">
       <div className="text-center max-w-2xl w-full relative z-10">
-        <div className="bg-white bg-opacity-20 rounded-2xl p-8 mb-8 backdrop-blur-sm">
+        <div className="bg-white bg-opacity-40 rounded-2xl p-8 mb-8 backdrop-blur-sm border border-white border-opacity-30">
           <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
-            🔮 De waarzegger onthult je persoonlijkheid...
+            De waarzegger onthult je persoonlijkheid... 🔮
           </h2>
           <div className="text-2xl font-bold mb-4 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
             {timeRemaining} seconden
