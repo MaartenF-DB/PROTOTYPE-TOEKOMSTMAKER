@@ -127,7 +127,13 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
       <div className="text-center max-w-2xl w-full relative z-10">
         {/* Mystical crystal ball with result */}
         <div className="mb-6">
-          <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-purple-400 via-blue-500 to-purple-600 shadow-2xl animate-pulse">
+          <div 
+            className="w-32 h-32 mx-auto rounded-full shadow-2xl"
+            style={{ 
+              background: `linear-gradient(135deg, ${topicData.hexColor}, ${topicData.hexColor}dd, #1e1b4b)`,
+              border: `3px solid ${topicData.hexColor}80`
+            }}
+          >
             <div className="w-full h-full rounded-full flex items-center justify-center text-6xl">
               {topicData?.icon || '🔮'}
             </div>
@@ -136,12 +142,9 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
         
         {/* Results card directly under the crystal ball */}
         <MysticalCard className="mb-8">
-          <h2 className="text-3xl font-bold mb-3 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent animate-pulse">
-            {language === 'en' ? 'De Kristallen Bol Toont...' : 'De Kristallen Bol Toont...'}
+          <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
+            {language === 'en' ? 'Jij bent een...' : 'Jij bent een...'}
           </h2>
-          <p className="text-lg mb-6 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent italic">
-            {language === 'en' ? "Jouw mystieke toekomst identiteit is..." : "Jouw mystieke toekomst identiteit is..."}
-          </p>
           
           <div className="text-5xl font-bold mb-4 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent drop-shadow-lg">
             {language === 'en' ? 
@@ -157,7 +160,17 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
           <div className="text-2xl mb-4 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
             {language === 'en' ? 'voor' : 'voor'}
           </div>
-          <div className="text-4xl font-bold mb-6 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent drop-shadow-lg">{getTopicName(answers.mostImportantTopic, language)}</div>
+          <div 
+            className="text-4xl font-bold mb-6 drop-shadow-lg"
+            style={{ 
+              background: `linear-gradient(135deg, ${topicData.hexColor}, ${topicData.hexColor}dd)`,
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
+            }}
+          >
+            {getTopicName(answers.mostImportantTopic, language)}
+          </div>
           
           <div className="fortune-bg-secondary rounded-xl p-6 mt-6 border-2 border-yellow-400/30">
             <p className="text-lg font-medium text-white leading-relaxed">

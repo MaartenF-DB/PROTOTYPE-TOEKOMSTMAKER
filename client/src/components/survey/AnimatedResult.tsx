@@ -93,7 +93,7 @@ export function AnimatedResult({ finalResult, onComplete }: AnimatedResultProps)
     <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-purple-900 to-indigo-900 text-white relative">
       <div className="text-center max-w-2xl w-full relative z-10">
         <div className="bg-white bg-opacity-20 rounded-2xl p-8 mb-8 backdrop-blur-sm">
-          <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent animate-pulse">
+          <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
             🔮 De waarzegger onthult je persoonlijkheid...
           </h2>
           <div className="text-2xl font-bold mb-4 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
@@ -102,18 +102,22 @@ export function AnimatedResult({ finalResult, onComplete }: AnimatedResultProps)
           
           <div className="relative mb-8">
             <div 
-              className="w-32 h-32 rounded-full flex items-center justify-center mx-auto mb-6 transition-all duration-300 shadow-2xl border-4 border-yellow-400 border-opacity-50"
+              className="w-32 h-32 rounded-full flex items-center justify-center mx-auto mb-6 transition-all duration-300 shadow-2xl"
               style={{ 
                 backgroundColor: currentColor,
                 transform: 'scale(1.1)',
-                boxShadow: `0 0 40px ${currentColor}60, 0 0 20px rgba(255, 215, 0, 0.3)`
+                boxShadow: `0 0 40px ${currentColor}60`,
+                border: `3px solid ${currentColor}80`
               }}
             >
               <span className="text-6xl animate-pulse">{currentIcon}</span>
             </div>
             
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="animate-spin rounded-full h-40 w-40 border-t-2 border-b-2 border-yellow-400 border-opacity-50"></div>
+              <div 
+                className="animate-spin rounded-full h-40 w-40 border-t-2 border-b-2 border-opacity-50"
+                style={{ borderColor: `${currentColor}80` }}
+              ></div>
             </div>
           </div>
 
