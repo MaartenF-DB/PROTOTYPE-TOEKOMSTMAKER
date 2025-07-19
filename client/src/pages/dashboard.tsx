@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 
 import { SurveyResponse } from '@shared/schema';
 import { TOPICS, ACTION_OPTIONS } from '@/types/survey';
@@ -231,8 +232,30 @@ export default function Dashboard() {
     }
   };
 
-  // Separate responses by type
+  // Enhanced response categorization
   const completeResponses = responses.filter(r => 
+    r.feelingAfter !== null && 
+    r.feelingAfter !== 0 &&
+    r.actionChoice && 
+    r.actionChoice.trim() !== '' &&
+    r.confidenceAfter !== null &&
+    r.confidenceAfter !== 0 &&
+    r.mostImportantTopic
+  );
+  
+  const checkInOnlyResponses = responses.filter(r => 
+    r.mostImportantTopic && (
+      r.feelingAfter === null || 
+      r.feelingAfter === 0 ||
+      !r.actionChoice || 
+      r.actionChoice.trim() === '' ||
+      r.confidenceAfter === null ||
+      r.confidenceAfter === 0
+    )
+  );
+  
+  const checkOutOnlyResponses = responses.filter(r => 
+    !r.mostImportantTopic && 
     r.feelingAfter !== null && 
     r.feelingAfter !== 0 &&
     r.actionChoice && 
@@ -240,41 +263,126 @@ export default function Dashboard() {
     r.confidenceAfter !== null &&
     r.confidenceAfter !== 0
   );
-  const checkInOnlyResponses = responses.filter(r => 
-    r.feelingAfter === null || 
-    r.feelingAfter === 0 ||
-    !r.actionChoice || 
-    r.actionChoice.trim() === '' ||
-    r.confidenceAfter === null ||
-    r.confidenceAfter === 0
-  );
 
+  // Enhanced stats with all requested metrics
   const stats = {
     totalResponses: responses.length,
     completeResponses: completeResponses.length,
     checkInOnlyResponses: checkInOnlyResponses.length,
+    checkOutOnlyResponses: checkOutOnlyResponses.length,
+    
+    // Age distribution for pie chart
+    ageDistribution: responses.reduce((acc, r) => {
+      if (r.age) {
+        const age = parseInt(r.age);
+        let ageGroup = '';
+        if (age <= 6) ageGroup = '0-6 jaar';
+        else if (age <= 9) ageGroup = '7-9 jaar';  
+        else if (age <= 12) ageGroup = '10-12 jaar';
+        else ageGroup = '13+ jaar';
+        acc[ageGroup] = (acc[ageGroup] || 0) + 1;
+      }
+      return acc;
+    }, {} as Record<string, number>),
+    
+    // Visiting with distribution for pie chart
+    visitingWithDistribution: responses.reduce((acc, r) => {
+      if (r.visitingWith) {
+        let visiting = r.visitingWith;
+        if (visiting === 'family') visiting = 'Familie';
+        else if (visiting === 'school') visiting = 'School';
+        else if (visiting === 'friends') visiting = 'Vrienden';
+        else if (visiting === 'parents') visiting = 'Ouders';
+        else if (visiting === 'other') visiting = r.visitingWithOther || 'Anders';
+        
+        acc[visiting] = (acc[visiting] || 0) + 1;
+      }
+      return acc;
+    }, {} as Record<string, number>),
+    
     averageAge: responses.length > 0 ? Math.round(responses.reduce((acc, r) => acc + parseInt(r.age), 0) / responses.length) : 0,
+    
     topTopics: responses.reduce((acc, r) => {
-      acc[r.mostImportantTopic] = (acc[r.mostImportantTopic] || 0) + 1;
+      if (r.mostImportantTopic) {
+        acc[r.mostImportantTopic] = (acc[r.mostImportantTopic] || 0) + 1;
+      }
       return acc;
     }, {} as Record<string, number>),
-    topActions: completeResponses.reduce((acc, r) => {
-      acc[r.actionChoice] = (acc[r.actionChoice] || 0) + 1;
+    
+    actionChoices: completeResponses.reduce((acc, r) => {
+      if (r.actionChoice) {
+        let action = r.actionChoice;
+        if (action === 'uitvinden') action = 'Uitvinden';
+        else if (action === 'actie') action = 'Actie ondernemen';
+        else if (action === 'veranderen') action = 'Veranderen';
+        
+        acc[action] = (acc[action] || 0) + 1;
+      }
       return acc;
     }, {} as Record<string, number>),
+    
     feelingChanges: completeResponses.filter(r => r.feelingBefore !== null && r.feelingAfter !== null).map(r => ({
       topic: r.mostImportantTopic,
       before: r.feelingBefore!,
       after: r.feelingAfter!,
       change: r.feelingAfter! - r.feelingBefore!
     })),
+    
     confidenceChanges: completeResponses.filter(r => r.confidenceBefore !== null && r.confidenceAfter !== null).map(r => ({
       topic: r.mostImportantTopic,
       before: r.confidenceBefore!,
       after: r.confidenceAfter!,
       change: r.confidenceAfter! - r.confidenceBefore!
-    }))
+    })),
+    
+    // Average improvements
+    averageFeelingImprovement: completeResponses.filter(r => r.feelingBefore !== null && r.feelingAfter !== null).length > 0 ? 
+      Math.round(completeResponses.filter(r => r.feelingBefore !== null && r.feelingAfter !== null)
+        .reduce((acc, r) => acc + (r.feelingAfter! - r.feelingBefore!), 0) / 
+        completeResponses.filter(r => r.feelingBefore !== null && r.feelingAfter !== null).length * 100) / 100 : 0,
+        
+    averageConfidenceImprovement: completeResponses.filter(r => r.confidenceBefore !== null && r.confidenceAfter !== null).length > 0 ? 
+      Math.round(completeResponses.filter(r => r.confidenceBefore !== null && r.confidenceAfter !== null)
+        .reduce((acc, r) => acc + (r.confidenceAfter! - r.confidenceBefore!), 0) / 
+        completeResponses.filter(r => r.confidenceBefore !== null && r.confidenceAfter !== null).length * 100) / 100 : 0
   };
+  
+  // Data for pie charts
+  const ageChartData = Object.entries(stats.ageDistribution).map(([age, count]) => ({
+    name: age,
+    value: count
+  }));
+  
+  const visitingChartData = Object.entries(stats.visitingWithDistribution).map(([visiting, count]) => ({
+    name: visiting,
+    value: count
+  }));
+  
+  const topicsChartData = Object.entries(stats.topTopics).map(([topic, count]) => ({
+    name: topic,
+    value: count
+  }));
+  
+  const actionsChartData = Object.entries(stats.actionChoices).map(([action, count]) => ({
+    name: action,
+    value: count
+  }));
+  
+  // Chart colors
+  const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff7c7c', '#8dd1e1', '#d084d0'];
+  
+  // Before/After comparison data
+  const feelingComparisonData = stats.feelingChanges.map(item => ({
+    name: item.topic,
+    voor: item.before,
+    na: item.after
+  }));
+  
+  const confidenceComparisonData = stats.confidenceChanges.map(item => ({
+    name: item.topic,
+    voor: item.before,
+    na: item.after
+  }));
 
   const mostPopularTopic = Object.entries(stats.topTopics).sort(([,a], [,b]) => b - a)[0]?.[0];
   const topicData = mostPopularTopic ? TOPICS[mostPopularTopic as keyof typeof TOPICS] : null;
@@ -347,11 +455,11 @@ export default function Dashboard() {
           </a>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+        {/* Stats Cards - Row 1: Basic Statistics */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Totaal Antwoorden</CardTitle>
+              <CardTitle className="text-sm font-medium">1. Totaal Antwoorden</CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -361,8 +469,8 @@ export default function Dashboard() {
           
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Complete Responses</CardTitle>
-              <Badge className="bg-green-100 text-green-800 text-xs px-2 py-1">Check-in + Check-out</Badge>
+              <CardTitle className="text-sm font-medium">2. Check-in + Check-out</CardTitle>
+              <Badge className="bg-green-100 text-green-800 text-xs px-2 py-1">Complete</Badge>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats.completeResponses}</div>
@@ -371,8 +479,8 @@ export default function Dashboard() {
           
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Check-in Only</CardTitle>
-              <Badge className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1">Incomplete</Badge>
+              <CardTitle className="text-sm font-medium">3. Check-in Only</CardTitle>
+              <Badge className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1">Incompleet</Badge>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats.checkInOnlyResponses}</div>
@@ -381,177 +489,173 @@ export default function Dashboard() {
           
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Gemiddelde Leeftijd</CardTitle>
-              <BarChart3 className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium">4. Check-out Only</CardTitle>
+              <Badge className="bg-blue-100 text-blue-800 text-xs px-2 py-1">Alleen uitgang</Badge>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.averageAge} jaar</div>
+              <div className="text-2xl font-bold">{stats.checkOutOnlyResponses}</div>
             </CardContent>
           </Card>
-          
+        </div>
+
+        {/* Charts Row 1: Age and Visiting Distribution */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <Card>
+            <CardHeader>
+              <CardTitle>5. Leeftijd Verdeling</CardTitle>
+              <CardDescription>Cirkeldiagram van bezoeker leeftijden</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={ageChartData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={({name, value}) => `${name}: ${value}`}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="value"
+                  >
+                    {ageChartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>6. Met Wie Bezoek</CardTitle>
+              <CardDescription>Cirkeldiagram van begeleiding</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={visitingChartData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={({name, value}) => `${name}: ${value}`}
+                    outerRadius={80}
+                    fill="#82ca9d"
+                    dataKey="value"
+                  >
+                    {visitingChartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Stats Row 2: Improvements */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Gevoel Verbetering</CardTitle>
+              <CardTitle className="text-sm font-medium">7. Gevoel Verbetering</CardTitle>
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
-                {stats.feelingChanges.length > 0 ? 
-                  `${Math.round(stats.feelingChanges.reduce((acc, item) => acc + item.change, 0) / stats.feelingChanges.length * 100) / 100}` : 
-                  '0'
-                }
-              </div>
-              <p className="text-xs text-muted-foreground">gemiddeld verschil</p>
+              <div className="text-2xl font-bold">+{stats.averageFeelingImprovement}</div>
+              <p className="text-xs text-muted-foreground">gemiddeld voor de Toekomst</p>
             </CardContent>
           </Card>
           
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Vertrouwen Verbetering</CardTitle>
+              <CardTitle className="text-sm font-medium">8. Vertrouwen Verbetering</CardTitle>
               <BarChart3 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
-                {stats.confidenceChanges.length > 0 ? 
-                  `${Math.round(stats.confidenceChanges.reduce((acc, item) => acc + item.change, 0) / stats.confidenceChanges.length * 100) / 100}` : 
-                  '0'
-                }
+              <div className="text-2xl font-bold">+{stats.averageConfidenceImprovement}</div>
+              <p className="text-xs text-muted-foreground">gemiddeld in veranderen</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">9. Populairste Onderwerp</CardTitle>
+              <BarChart3 className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-lg font-bold">
+                {Object.entries(stats.topTopics).sort(([,a], [,b]) => b - a)[0]?.[0] || 'Geen data'}
               </div>
-              <p className="text-xs text-muted-foreground">gemiddeld verschil</p>
+              <p className="text-xs text-muted-foreground">
+                {Object.entries(stats.topTopics).sort(([,a], [,b]) => b - a)[0]?.[1] || 0} keer gekozen
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">10. Populairste Actie</CardTitle>
+              <BarChart3 className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-lg font-bold">
+                {Object.entries(stats.actionChoices).sort(([,a], [,b]) => b - a)[0]?.[0] || 'Geen data'}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                {Object.entries(stats.actionChoices).sort(([,a], [,b]) => b - a)[0]?.[1] || 0} keer gekozen
+              </p>
             </CardContent>
           </Card>
         </div>
 
-        {/* Topic Distribution */}
+        {/* Charts Row 2: Before/After Comparison */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           <Card>
             <CardHeader>
-              <CardTitle>Meest Populaire Onderwerpen</CardTitle>
+              <CardTitle>11. Gevoel Verandering</CardTitle>
+              <CardDescription>Voor vs Na tentoonstelling</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {Object.entries(stats.topTopics)
-                  .sort(([,a], [,b]) => b - a)
-                  .map(([topic, count]) => {
-                    const topicData = TOPICS[topic as keyof typeof TOPICS];
-                    return (
-                      <div key={topic} className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
-                        <div 
-                          className="w-12 h-12 rounded-full flex items-center justify-center text-2xl"
-                          style={{ backgroundColor: topicData?.hexColor || '#6B7280' }}
-                        >
-                          {topicData?.icon || '❓'}
-                        </div>
-                        <div className="flex-1">
-                          <div className="font-medium">{topic}</div>
-                          <div className="text-sm text-gray-500">{count} keer gekozen</div>
-                        </div>
-                        <Badge variant="secondary">{count}</Badge>
-                      </div>
-                    );
-                  })}
-              </div>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={feelingComparisonData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis domain={[1, 5]} />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="voor" fill="#8884d8" name="Voor" />
+                  <Bar dataKey="na" fill="#82ca9d" name="Na" />
+                </BarChart>
+              </ResponsiveContainer>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle>Actie Keuzes</CardTitle>
+              <CardTitle>12. Vertrouwen Verandering</CardTitle>
+              <CardDescription>Voor vs Na tentoonstelling</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {Object.entries(stats.topActions)
-                  .sort(([,a], [,b]) => b - a)
-                  .map(([action, count]) => {
-                    const actionData = ACTION_OPTIONS.find(opt => opt.value === action);
-                    return (
-                      <div key={action} className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
-                        <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-2xl">
-                          {actionData?.icon || '❓'}
-                        </div>
-                        <div className="flex-1">
-                          <div className="font-medium">{actionData?.label || action}</div>
-                          <div className="text-sm text-gray-500">{count} keer gekozen</div>
-                        </div>
-                        <Badge variant="secondary">{count}</Badge>
-                      </div>
-                    );
-                  })}
-              </div>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={confidenceComparisonData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis domain={[1, 5]} />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="voor" fill="#ffc658" name="Voor" />
+                  <Bar dataKey="na" fill="#ff7c7c" name="Na" />
+                </BarChart>
+              </ResponsiveContainer>
             </CardContent>
           </Card>
         </div>
 
-        {/* Before vs After Comparison */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          <Card>
-            <CardHeader>
-              <CardTitle>Gevoel Verandering</CardTitle>
-              <CardDescription>Voor vs Na tentoonstelling</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {stats.feelingChanges.map((change, index) => {
-                  const topicData = TOPICS[change.topic as keyof typeof TOPICS];
-                  const changeColor = change.change >= 0 ? 'text-green-600' : 'text-red-600';
-                  return (
-                    <div key={index} className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
-                      <div 
-                        className="w-10 h-10 rounded-full flex items-center justify-center text-lg"
-                        style={{ backgroundColor: topicData?.hexColor || '#6B7280' }}
-                      >
-                        {topicData?.icon || '❓'}
-                      </div>
-                      <div className="flex-1">
-                        <div className="font-medium">{change.topic}</div>
-                        <div className="text-sm text-gray-500">
-                          {change.before} → {change.after}
-                        </div>
-                      </div>
-                      <div className={`font-bold ${changeColor}`}>
-                        {change.change >= 0 ? '+' : ''}{change.change}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Vertrouwen Verandering</CardTitle>
-              <CardDescription>Voor vs Na tentoonstelling</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {stats.confidenceChanges.map((change, index) => {
-                  const topicData = TOPICS[change.topic as keyof typeof TOPICS];
-                  const changeColor = change.change >= 0 ? 'text-green-600' : 'text-red-600';
-                  return (
-                    <div key={index} className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
-                      <div 
-                        className="w-10 h-10 rounded-full flex items-center justify-center text-lg"
-                        style={{ backgroundColor: topicData?.hexColor || '#6B7280' }}
-                      >
-                        {topicData?.icon || '❓'}
-                      </div>
-                      <div className="flex-1">
-                        <div className="font-medium">{change.topic}</div>
-                        <div className="text-sm text-gray-500">
-                          {change.before} → {change.after}
-                        </div>
-                      </div>
-                      <div className={`font-bold ${changeColor}`}>
-                        {change.change >= 0 ? '+' : ''}{change.change}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        {/* Export and Reset Section */}
 
         {/* Export and Reset Section */}
         <Card className="mb-6">
@@ -720,6 +824,98 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Charts Row 3: Topic and Action Distribution */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 mt-8">
+          <Card>
+            <CardHeader>
+              <CardTitle>13. Onderwerp Verdeling</CardTitle>
+              <CardDescription>Cirkeldiagram van gekozen onderwerpen</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={topicsChartData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={({name, value}) => `${name}: ${value}`}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="value"
+                  >
+                    {topicsChartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>14. Actie Keuze Verdeling</CardTitle>
+              <CardDescription>Cirkeldiagram van gekozen acties</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={actionsChartData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={({name, value}) => `${name}: ${value}`}
+                    outerRadius={80}
+                    fill="#82ca9d"
+                    dataKey="value"
+                  >
+                    {actionsChartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Final Summary Card */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>15. Samenvatting Dashboard</CardTitle>
+            <CardDescription>Overzicht van alle belangrijke statistieken</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="text-center p-4 bg-blue-50 rounded-lg">
+                <div className="text-2xl font-bold text-blue-600">{stats.totalResponses}</div>
+                <div className="text-sm text-gray-600">Totaal Bezoekers</div>
+              </div>
+              <div className="text-center p-4 bg-green-50 rounded-lg">
+                <div className="text-2xl font-bold text-green-600">
+                  {stats.totalResponses > 0 ? Math.round((stats.completeResponses / stats.totalResponses) * 100) : 0}%
+                </div>
+                <div className="text-sm text-gray-600">Complete Responses</div>
+              </div>
+              <div className="text-center p-4 bg-purple-50 rounded-lg">
+                <div className="text-2xl font-bold text-purple-600">{stats.averageAge}</div>
+                <div className="text-sm text-gray-600">Gemiddelde Leeftijd</div>
+              </div>
+            </div>
+            
+            <div className="mt-6 text-center">
+              <p className="text-gray-600">
+                Het dashboard toont alle 15 gewenste statistieken met interactieve cirkeldiagrammen, 
+                balkendiagrammen en gedetailleerde response categorieën voor een complete analyse van de museumervaring.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
