@@ -125,7 +125,7 @@ The application follows a modern full-stack architecture with the following comp
 - **Welcome Text Styling**: Changed "Welkom bij Toekomstmakers!" to simple white color without glow effects per user preference
 - **Entry Button Styling**: Added dark purple border to "Ik kom net binnen" button and lighter yellow color for "Ik ben net klaar" button
 - **Enhanced Emoji Visibility**: Updated emoji colors to brighter shades (yellow-200, blue-300, orange-300) for better visibility
-- **Ranking Instructions**: Simplified to only "Sleep de onderwerpen naar de goede plek." with speech synthesis
+- **Ranking Instructions**: Simplified to only "Versleep de onderwerpen naar de goede plek." with speech synthesis
 - **Results Text Consistency**: All result text now uses same golden color instead of topic-specific colors
 - **Auto-redirect Feature**: Results page automatically returns to homepage after 1 minute if "Nieuwe Lezing" button not clicked
 - **Button Border Removal**: Removed borders from entry choice buttons for cleaner appearance
@@ -135,7 +135,7 @@ The application follows a modern full-stack architecture with the following comp
 - **Removed Check-in Notice**: Removed "Je hebt al eerder de check-in ingevuld" message for existing users for cleaner checkout experience
 - **Removed All Answer Displays**: Completely removed all "Jouw antwoord:" sections throughout the application for cleaner interface
 - **Enhanced Audio Feedback**: All answer selections now trigger audio playback automatically when clicked
-- **Improved Ranking Instructions**: Changed "Sleep" to "Versleep" for better pronunciation
+- **Improved Ranking Instructions**: Changed "Sleep" to "Versleep" for better pronunciation (July 19, 2025 - Updated "Sleep de onderwerpen" to "Versleep de onderwerpen" throughout application)
 - **Results Audio Integration**: Added speech synthesis to "De waarzegster onthult" and "De Uitkomst" sections
 - **English Translation Fix**: Fixed all result text to properly translate to English including "You are a...", "for", and motivational messages with correct audio
 - **Consistent Mystical Experience**: Applied fortune teller theme across all survey components with star-field background including name entry sections

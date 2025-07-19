@@ -51,7 +51,7 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
         "Welk onderwerp vind jij het meest belangrijk?";
       const instructions = language === 'en' ? 
         "Drag the topics to the right place." : 
-        "Sleep de onderwerpen naar de goede plek.";
+        "Versleep de onderwerpen naar de goede plek.";
       speak(`${mainQuestion} ${instructions}`, language);
       setHasSpoken(true);
     }
