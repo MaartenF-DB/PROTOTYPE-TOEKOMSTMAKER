@@ -206,7 +206,7 @@ export default function Dashboard() {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Totaal Antwoorden</CardTitle>
@@ -246,46 +246,39 @@ export default function Dashboard() {
               <div className="text-2xl font-bold">{stats.checkOutOnlyResponses}</div>
             </CardContent>
           </Card>
+        </div>
 
+        {/* Full Width Charts */}
+        <div className="space-y-6 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Gemiddelde Leeftijd</CardTitle>
-              <BarChart3 className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-lg font-medium">📊 Onderwerp 1: Visie van de Toekomst</CardTitle>
+              <TrendingUp className="h-5 w-5 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.averageAge} jaar</div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Onderwerp 1</CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-3xl font-bold mb-2">
                 {stats.feelingChanges.length > 0 ? 
                   `${Math.round(stats.feelingChanges.reduce((acc, item) => acc + item.change, 0) / stats.feelingChanges.length * 100) / 100}` : 
                   '0'
                 }
               </div>
-              <p className="text-xs text-muted-foreground">Visie van de Toekomst</p>
+              <p className="text-sm text-muted-foreground">Gemiddelde verbetering in gevoel voor de toekomst</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Onderwerp 2</CardTitle>
-              <BarChart3 className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-lg font-medium">🎯 Onderwerp 2: Vertrouwen in de Toekomst</CardTitle>
+              <BarChart3 className="h-5 w-5 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-3xl font-bold mb-2">
                 {stats.confidenceChanges.length > 0 ? 
                   `${Math.round(stats.confidenceChanges.reduce((acc, item) => acc + item.change, 0) / stats.confidenceChanges.length * 100) / 100}` : 
                   '0'
                 }
               </div>
-              <p className="text-xs text-muted-foreground">Vertrouwen in de Toekomst</p>
+              <p className="text-sm text-muted-foreground">Gemiddelde verbetering in vertrouwen voor de toekomst</p>
             </CardContent>
           </Card>
         </div>
@@ -294,62 +287,70 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           <Card>
             <CardHeader>
-              <CardTitle>Hoe oud ben je?</CardTitle>
+              <CardTitle>🎂 Hoe oud ben je?</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {Object.entries(stats.ageDistribution)
-                  .sort(([a], [b]) => parseInt(a) - parseInt(b))
-                  .map(([age, count]) => {
-                    const percentage = (count / stats.totalResponses) * 100;
-                    return (
-                      <div key={age} className="flex items-center space-x-4">
-                        <div className="w-16 text-sm font-medium">{age} jaar</div>
-                        <div className="flex-1">
-                          <div className="w-full bg-gray-200 rounded-full h-6">
-                            <div 
-                              className="bg-blue-600 h-6 rounded-full flex items-center justify-center text-white text-xs font-medium"
-                              style={{ width: `${Math.max(percentage, 8)}%` }}
-                            >
-                              {count}
-                            </div>
+                {['6', '7', '8', '9', '10', '11', '12', 'anders'].map((ageOption) => {
+                  const count = stats.ageDistribution[ageOption] || 0;
+                  const percentage = stats.totalResponses > 0 ? (count / stats.totalResponses) * 100 : 0;
+                  return (
+                    <div key={ageOption} className="flex items-center space-x-4">
+                      <div className="w-16 text-sm font-medium">
+                        {ageOption === 'anders' ? 'Anders' : `${ageOption} jaar`}
+                      </div>
+                      <div className="flex-1">
+                        <div className="w-full bg-gray-200 rounded-full h-6">
+                          <div 
+                            className="bg-blue-600 h-6 rounded-full flex items-center justify-center text-white text-xs font-medium"
+                            style={{ width: `${Math.max(percentage, 8)}%` }}
+                          >
+                            {count}
                           </div>
                         </div>
-                        <div className="w-12 text-sm text-gray-500">{Math.round(percentage)}%</div>
                       </div>
-                    );
-                  })}
+                      <div className="w-12 text-sm text-gray-500">{Math.round(percentage)}%</div>
+                    </div>
+                  );
+                })}
               </div>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle>Met wie bezoek je de tentoonstelling?</CardTitle>
+              <CardTitle>👥 Met wie bezoek je de tentoonstelling?</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {Object.entries(stats.visitingWithDistribution)
-                  .sort(([,a], [,b]) => b - a)
-                  .map(([companion, count]) => {
-                    const percentage = (count / stats.totalResponses) * 100;
-                    return (
-                      <div key={companion} className="flex items-center space-x-4">
-                        <div className="w-20 text-sm font-medium capitalize">{companion}</div>
-                        <div className="flex-1">
-                          <div className="w-full bg-gray-200 rounded-full h-6">
-                            <div 
-                              className="bg-green-600 h-6 rounded-full flex items-center justify-center text-white text-xs font-medium"
-                              style={{ width: `${Math.max(percentage, 8)}%` }}
-                            >
-                              {count}
-                            </div>
+                {[
+                  { value: 'school', label: 'School', icon: '🏫' },
+                  { value: 'alleen', label: 'Alleen', icon: '🚶' },
+                  { value: 'babysitter', label: 'Oppas', icon: '👩‍🍼' },
+                  { value: 'anders', label: 'Anders', icon: '👪' }
+                ].map(({ value, label, icon }) => {
+                  const count = stats.visitingWithDistribution[value] || 0;
+                  const percentage = stats.totalResponses > 0 ? (count / stats.totalResponses) * 100 : 0;
+                  return (
+                    <div key={value} className="flex items-center space-x-4">
+                      <div className="w-20 text-sm font-medium flex items-center space-x-2">
+                        <span>{icon}</span>
+                        <span>{label}</span>
+                      </div>
+                      <div className="flex-1">
+                        <div className="w-full bg-gray-200 rounded-full h-6">
+                          <div 
+                            className="bg-green-600 h-6 rounded-full flex items-center justify-center text-white text-xs font-medium"
+                            style={{ width: `${Math.max(percentage, 8)}%` }}
+                          >
+                            {count}
                           </div>
                         </div>
-                        <div className="w-12 text-sm text-gray-500">{Math.round(percentage)}%</div>
                       </div>
-                    );
-                  })}
+                      <div className="w-12 text-sm text-gray-500">{Math.round(percentage)}%</div>
+                    </div>
+                  );
+                })}
               </div>
             </CardContent>
           </Card>
@@ -359,7 +360,7 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           <Card>
             <CardHeader>
-              <CardTitle>Meest Populaire Onderwerpen</CardTitle>
+              <CardTitle>🏆 Meest Populaire Onderwerpen</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -376,7 +377,10 @@ export default function Dashboard() {
                           {topicData?.icon || '❓'}
                         </div>
                         <div className="flex-1">
-                          <div className="font-medium">{topic}</div>
+                          <div className="font-medium flex items-center space-x-2">
+                            <span>{topicData?.icon}</span>
+                            <span>{topic}</span>
+                          </div>
                           <div className="text-sm text-gray-500">{count} keer gekozen</div>
                         </div>
                         <Badge variant="secondary">{count}</Badge>
@@ -389,7 +393,7 @@ export default function Dashboard() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Meest Populaire Acties</CardTitle>
+              <CardTitle>⚡ Meest Populaire Acties</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -403,7 +407,10 @@ export default function Dashboard() {
                           {actionData?.icon || '🎯'}
                         </div>
                         <div className="flex-1">
-                          <div className="font-medium">{actionData?.label || action}</div>
+                          <div className="font-medium flex items-center space-x-2">
+                            <span>{actionData?.icon}</span>
+                            <span>{actionData?.label || action}</span>
+                          </div>
                           <div className="text-sm text-gray-500">{count} keer gekozen</div>
                         </div>
                         <Badge variant="secondary">{count}</Badge>
