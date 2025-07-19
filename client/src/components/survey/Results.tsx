@@ -73,17 +73,7 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
     }
   }, [showAnimatedResult, animationComplete, setLocation]);
 
-  // Speak the farewell message when results are shown
-  useEffect(() => {
-    if (!showAnimatedResult && animationComplete) {
-      setTimeout(() => {
-        const farewellText = language === 'en' ? 
-          "The fortune teller's vision is complete..." : 
-          "De visie van de waarzegger is compleet...";
-        speak(farewellText, language);
-      }, 10000); // Wait 10 seconds after all other audio finishes
-    }
-  }, [showAnimatedResult, animationComplete, language, speak]);
+  // Remove farewell message as requested by user
 
   // Show animated result first
   if (showAnimatedResult) {
@@ -106,36 +96,50 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
              answers.actionChoice === 'actie' ? 'ACTIEVOERDER' :
              answers.actionChoice === 'veranderen' ? 'VERANDERAAR' : 'TOEKOMSTMAKER');
           
-          // 1. Speak "Jij bent een..." first
+          // Create a sequential speech function that doesn't cancel previous speech
           const titleText = language === 'en' ? 'You are a' : 'Jij bent een';
-          console.log('🎤 Speaking title:', titleText);
-          speak(titleText, language);
+          const forText = language === 'en' ? 'for' : 'voor';
+          const topicName = getTopicName(answers.mostImportantTopic, language);
+          
+          console.log('🎤 Starting sequential speech for results');
+          
+          // Function to speak without canceling previous speech
+          const speakWithoutCancel = (text: string, lang: 'nl' | 'en' = 'nl') => {
+            if (!('speechSynthesis' in window)) return;
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = lang === 'en' ? 'en-US' : 'nl-NL';
+            utterance.rate = lang === 'en' ? 0.9 : 0.95;
+            utterance.pitch = lang === 'en' ? 1.2 : 0.95;
+            utterance.volume = 0.9;
+            
+            // Add to queue without canceling
+            speechSynthesis.speak(utterance);
+            console.log('🎤 Added to speech queue:', text);
+          };
+          
+          // 1. Speak "Jij bent een..." first
+          speakWithoutCancel(titleText, language);
           
           // 2. Speak the action type (UITVINDER) after 2 seconds
           setTimeout(() => {
-            console.log('🎤 Speaking action type:', actionType);
-            speak(actionType, language);
+            speakWithoutCancel(actionType, language);
           }, 2000);
           
           // 3. Speak "voor" after 4 seconds
           setTimeout(() => {
-            const forText = language === 'en' ? 'for' : 'voor';
-            console.log('🎤 Speaking "for":', forText);
-            speak(forText, language);
+            speakWithoutCancel(forText, language);
           }, 4000);
           
-          // 4. Speak the topic (KLIMAAT) after 5.5 seconds
+          // 4. Speak the topic (GEZONDHEID) after 6 seconds
           setTimeout(() => {
-            const topicName = getTopicName(answers.mostImportantTopic, language);
-            console.log('🎤 Speaking topic:', topicName);
-            speak(topicName, language);
-          }, 5500);
+            speakWithoutCancel(topicName, language);
+          }, 6000);
           
-          // 5. Speak the motivational message after 7.5 seconds
+          // 5. Speak the motivational message after 8 seconds
           setTimeout(() => {
-            console.log('🎤 Speaking motivational message:', motivationalMessage);
-            speak(motivationalMessage, language);
-          }, 7500);
+            speakWithoutCancel(motivationalMessage, language);
+          }, 8000);
         }}
       />
     );
