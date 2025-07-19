@@ -26,6 +26,7 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
   const { speak } = useSpeech();
   const [showAnimatedResult, setShowAnimatedResult] = useState(true);
   const [animationComplete, setAnimationComplete] = useState(false);
+  const [countdown, setCountdown] = useState(30);
   const [, setLocation] = useLocation();
 
   const topicData = TOPICS[answers.mostImportantTopic as keyof typeof TOPICS];
@@ -61,15 +62,35 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
     console.log('Results component mounted, showAnimatedResult:', showAnimatedResult);
   }, [showAnimatedResult]);
 
-  // Auto-redirect to homepage after 30 seconds if "Nieuwe Lezing" button is not clicked
+  // Auto-redirect to homepage after 30 seconds with countdown
   useEffect(() => {
     if (!showAnimatedResult && animationComplete) {
-      const timer = setTimeout(() => {
-        console.log('🕒 Auto-redirecting to homepage after 30 seconds');
-        setLocation('/');
-      }, 30000); // 30 seconds = 30000ms
+      // Start countdown immediately
+      let countdownValue = 30;
+      setCountdown(countdownValue);
+      
+      const countdownInterval = setInterval(() => {
+        countdownValue--;
+        setCountdown(countdownValue);
+        
+        if (countdownValue <= 0) {
+          clearInterval(countdownInterval);
+          console.log('🕒 Auto-redirecting to homepage after 30 seconds');
+          // Use both setLocation and window.location as fallback
+          try {
+            setLocation('/');
+            // Fallback method if wouter navigation fails
+            setTimeout(() => {
+              window.location.href = '/';
+            }, 100);
+          } catch (error) {
+            console.error('Navigation error:', error);
+            window.location.href = '/';
+          }
+        }
+      }, 1000); // Update every second
 
-      return () => clearTimeout(timer);
+      return () => clearInterval(countdownInterval);
     }
   }, [showAnimatedResult, animationComplete, setLocation]);
 
@@ -312,7 +333,7 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
           </p>
         </div>
         
-        <div className="flex justify-center">
+        <div className="flex flex-col items-center space-y-4">
           <Button 
             onClick={handleStop}
             className="fortune-bg-accent hover:bg-yellow-600 text-purple-900 px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg border-2 border-purple-400/30 hover:border-purple-400/60"
@@ -320,6 +341,14 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
             <span className="mr-2">🔮</span>
             {language === 'en' ? 'New Reading' : 'Nieuwe Lezing'}
           </Button>
+          
+          {countdown > 0 && (
+            <div className="text-yellow-300 text-sm text-center opacity-70">
+              {language === 'en' 
+                ? `Returning to welcome page in ${countdown} seconds...`
+                : `Terug naar welkomstpagina in ${countdown} seconden...`}
+            </div>
+          )}
         </div>
 
       </div>
