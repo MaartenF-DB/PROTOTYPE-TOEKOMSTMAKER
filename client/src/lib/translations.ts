@@ -90,7 +90,8 @@ export const translations = {
     validation: {
       fillAnswer: "Vul eerst je antwoord in!",
       nameExists: "Er bestaat al een antwoord met deze naam. Klik verder om te bevestigen dat jij dit bent.",
-      nameConflict: "Als er meer mensen zijn met dezelfde naam, typ dan je naam met een nummer (bijvoorbeeld: Jan 1)"
+      nameConflict: "Deze naam bestaat al. Als je doorgaat, wordt je naam automatisch aangepast met een nummer.",
+      nameWillBecome: "Je naam wordt opgeslagen als:"
     },
     
     // Placeholders
@@ -204,7 +205,8 @@ export const translations = {
     validation: {
       fillAnswer: "Please fill in your answer first!",
       nameExists: "An answer with this name already exists. Click continue to confirm that this is you.",
-      nameConflict: "If there are multiple people with the same name, type your name with a number (e.g., John 1)"
+      nameConflict: "This name already exists. If you continue, your name will be automatically adjusted with a number.",
+      nameWillBecome: "Your name will be saved as:"
     },
     
     // Placeholders

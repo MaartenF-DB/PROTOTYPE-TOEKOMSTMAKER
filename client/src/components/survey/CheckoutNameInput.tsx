@@ -21,10 +21,42 @@ export function CheckoutNameInput({ existingResponses, onNameConfirm, language =
     speak(t.questions?.name || "What is your name?", language);
   }, [speak, t.questions, language]);
 
+  // Generate unique name with number suffix if needed
+  const generateUniqueName = (baseName: string) => {
+    if (!baseName.trim()) return baseName;
+    
+    const existingNames = existingResponses.map((r: any) => r.name.toLowerCase());
+    const baseNameLower = baseName.toLowerCase();
+    
+    // If name doesn't exist, use it as is
+    if (!existingNames.includes(baseNameLower)) {
+      return baseName;
+    }
+    
+    // Find the next available number
+    let counter = 1;
+    let uniqueName = `${baseName} ${counter}`;
+    
+    while (existingNames.includes(uniqueName.toLowerCase())) {
+      counter++;
+      uniqueName = `${baseName} ${counter}`;
+    }
+    
+    return uniqueName;
+  };
+
+  // Check if current name already exists
+  const hasNameConflict = existingResponses.some((response: any) => 
+    response.name.toLowerCase() === enteredName.toLowerCase() && enteredName.length > 0
+  );
+
   const handleNameSubmit = () => {
     if (!enteredName.trim()) return;
     
     console.log('🔍 CHECKOUT NAME SUBMIT:', { enteredName, existingResponses });
+    
+    // Automatically generate unique name if there's a conflict with ANY existing response
+    const finalName = generateUniqueName(enteredName);
     
     // Check if this exact name exists and has complete check-in data
     // BUT has NOT completed checkout (feelingAfter is null)
@@ -39,6 +71,7 @@ export function CheckoutNameInput({ existingResponses, onNameConfirm, language =
     console.log('🔍 EXACT MATCH RESULT:', { 
       exactMatch, 
       enteredName,
+      finalName,
       allUsers: existingResponses.map(r => ({ 
         name: r.name, 
         hasCheckIn: !!(r.age && r.visitingWith && r.mostImportantTopic),
@@ -54,7 +87,7 @@ export function CheckoutNameInput({ existingResponses, onNameConfirm, language =
     } else {
       // No exact match with complete check-in data - this is a new user who needs to answer age/visiting/ranking questions
       console.log('❌ NO EXACT MATCH - NEW USER NEEDS ALL PRELIMINARY QUESTIONS');
-      onNameConfirm(enteredName, true); // true = new user
+      onNameConfirm(finalName, true); // true = new user, use unique name
     }
   };
 
@@ -72,6 +105,14 @@ export function CheckoutNameInput({ existingResponses, onNameConfirm, language =
               className="w-full p-4 text-2xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-blue-300 outline-none"
               onKeyPress={(e) => e.key === 'Enter' && handleNameSubmit()}
             />
+            {hasNameConflict && (
+              <div className="text-sm text-white opacity-80 space-y-2">
+                <p>{t.validation.nameConflict}</p>
+                <p className="font-semibold">
+                  {t.validation.nameWillBecome} "{generateUniqueName(enteredName)}"
+                </p>
+              </div>
+            )}
 
           </div>
         </div>

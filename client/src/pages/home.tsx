@@ -89,6 +89,30 @@ export default function Home() {
       .map((response: any) => response.name);
   };
   
+  // Generate unique name with number suffix if needed
+  const generateUniqueName = (baseName: string) => {
+    if (!baseName.trim()) return baseName;
+    
+    const existingNames = existingResponses.map((r: any) => r.name.toLowerCase());
+    const baseNameLower = baseName.toLowerCase();
+    
+    // If name doesn't exist, use it as is
+    if (!existingNames.includes(baseNameLower)) {
+      return baseName;
+    }
+    
+    // Find the next available number
+    let counter = 1;
+    let uniqueName = `${baseName} ${counter}`;
+    
+    while (existingNames.includes(uniqueName.toLowerCase())) {
+      counter++;
+      uniqueName = `${baseName} ${counter}`;
+    }
+    
+    return uniqueName;
+  };
+  
   const similarNames = findSimilarNames(answers.name);
   
   // Get topic data for theming
@@ -165,7 +189,14 @@ export default function Home() {
             question={t.questions.name}
             bgGradient="from-blue-500 to-teal-500"
             buttonColor="bg-blue-600 hover:bg-blue-700"
-            onNext={() => setCurrentSection('question-1')}
+            onNext={() => {
+              // Automatically generate unique name if there's a conflict
+              const uniqueName = generateUniqueName(answers.name);
+              if (uniqueName !== answers.name) {
+                updateAnswers({ name: uniqueName });
+              }
+              setCurrentSection('question-1');
+            }}
             showPrevious={false}
             showNext={true}
             isValid={answers.name.length > 0}
@@ -179,9 +210,12 @@ export default function Home() {
                 className="w-full p-4 text-2xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-blue-300 outline-none"
               />
               {hasNameConflict && (
-                <p className="text-sm text-white opacity-80">
-                  {t.validation.nameConflict}
-                </p>
+                <div className="text-sm text-white opacity-80 space-y-2">
+                  <p>{t.validation.nameConflict}</p>
+                  <p className="font-semibold">
+                    {t.validation.nameWillBecome} "{generateUniqueName(answers.name)}"
+                  </p>
+                </div>
               )}
 
             </div>
