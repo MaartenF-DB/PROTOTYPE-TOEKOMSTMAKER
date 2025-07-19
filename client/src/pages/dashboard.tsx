@@ -249,7 +249,7 @@ export default function Dashboard() {
         </div>
 
         {/* Full Width Charts */}
-        <div className="space-y-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-lg font-medium">📊 Onderwerp 1: Visie van de Toekomst</CardTitle>
@@ -258,55 +258,39 @@ export default function Dashboard() {
             <CardContent>
               <div className="space-y-6">
                 <div className="text-center">
-                  <div className="text-3xl font-bold mb-2">
+                  <div className="text-5xl font-bold mb-4 text-green-600">
                     {stats.feelingChanges.length > 0 ? 
                       `+${Math.round(stats.feelingChanges.reduce((acc, item) => acc + item.change, 0) / stats.feelingChanges.length * 100) / 100}` : 
                       '0'
                     }
                   </div>
-                  <p className="text-sm text-muted-foreground">Gemiddelde verbetering in gevoel voor de toekomst</p>
+                  <p className="text-lg text-muted-foreground">Gemiddelde verbetering in gevoel voor de toekomst</p>
+                  <p className="text-sm text-gray-500 mt-2">
+                    {stats.feelingChanges.length} complete responses
+                  </p>
                 </div>
                 
-                <div className="space-y-4">
-                  {/* Feeling scale 1-5 distribution */}
-                  {[1, 2, 3, 4, 5].map((scale) => {
-                    const beforeCount = completeResponses.filter(r => r.feelingBefore === scale).length;
-                    const afterCount = completeResponses.filter(r => r.feelingAfter === scale).length;
-                    const maxCount = Math.max(beforeCount, afterCount, 1);
-                    
-                    return (
-                      <div key={scale} className="space-y-2">
-                        <div className="flex items-center justify-between text-sm font-medium">
-                          <span>Schaal {scale}</span>
-                          <span className="text-xs text-gray-500">Voor: {beforeCount} | Na: {afterCount}</span>
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="space-y-1">
-                            <div className="text-xs text-gray-600">Check-in (Voor)</div>
-                            <div className="w-full bg-gray-200 rounded-full h-4">
-                              <div 
-                                className="bg-red-500 h-4 rounded-full flex items-center justify-center text-white text-xs font-medium"
-                                style={{ width: `${(beforeCount / maxCount) * 100}%`, minWidth: beforeCount > 0 ? '20px' : '0' }}
-                              >
-                                {beforeCount > 0 ? beforeCount : ''}
-                              </div>
-                            </div>
-                          </div>
-                          <div className="space-y-1">
-                            <div className="text-xs text-gray-600">Check-out (Na)</div>
-                            <div className="w-full bg-gray-200 rounded-full h-4">
-                              <div 
-                                className="bg-green-500 h-4 rounded-full flex items-center justify-center text-white text-xs font-medium"
-                                style={{ width: `${(afterCount / maxCount) * 100}%`, minWidth: afterCount > 0 ? '20px' : '0' }}
-                              >
-                                {afterCount > 0 ? afterCount : ''}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="grid grid-cols-2 gap-4 text-center">
+                    <div>
+                      <div className="text-2xl font-bold text-red-600">
+                        {stats.feelingChanges.length > 0 ? 
+                          (stats.feelingChanges.reduce((acc, item) => acc + item.before, 0) / stats.feelingChanges.length).toFixed(1) : 
+                          '0'
+                        }
                       </div>
-                    );
-                  })}
+                      <div className="text-sm text-gray-600">Check-in (Voor)</div>
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold text-green-600">
+                        {stats.feelingChanges.length > 0 ? 
+                          (stats.feelingChanges.reduce((acc, item) => acc + item.after, 0) / stats.feelingChanges.length).toFixed(1) : 
+                          '0'
+                        }
+                      </div>
+                      <div className="text-sm text-gray-600">Check-out (Na)</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -320,55 +304,39 @@ export default function Dashboard() {
             <CardContent>
               <div className="space-y-6">
                 <div className="text-center">
-                  <div className="text-3xl font-bold mb-2">
+                  <div className="text-5xl font-bold mb-4 text-blue-600">
                     {stats.confidenceChanges.length > 0 ? 
                       `+${Math.round(stats.confidenceChanges.reduce((acc, item) => acc + item.change, 0) / stats.confidenceChanges.length * 100) / 100}` : 
                       '0'
                     }
                   </div>
-                  <p className="text-sm text-muted-foreground">Gemiddelde verbetering in vertrouwen voor de toekomst</p>
+                  <p className="text-lg text-muted-foreground">Gemiddelde verbetering in vertrouwen voor de toekomst</p>
+                  <p className="text-sm text-gray-500 mt-2">
+                    {stats.confidenceChanges.length} complete responses
+                  </p>
                 </div>
                 
-                <div className="space-y-4">
-                  {/* Confidence scale 1-5 distribution */}
-                  {[1, 2, 3, 4, 5].map((scale) => {
-                    const beforeCount = completeResponses.filter(r => r.confidenceBefore === scale).length;
-                    const afterCount = completeResponses.filter(r => r.confidenceAfter === scale).length;
-                    const maxCount = Math.max(beforeCount, afterCount, 1);
-                    
-                    return (
-                      <div key={scale} className="space-y-2">
-                        <div className="flex items-center justify-between text-sm font-medium">
-                          <span>Schaal {scale}</span>
-                          <span className="text-xs text-gray-500">Voor: {beforeCount} | Na: {afterCount}</span>
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="space-y-1">
-                            <div className="text-xs text-gray-600">Check-in (Voor)</div>
-                            <div className="w-full bg-gray-200 rounded-full h-4">
-                              <div 
-                                className="bg-orange-500 h-4 rounded-full flex items-center justify-center text-white text-xs font-medium"
-                                style={{ width: `${(beforeCount / maxCount) * 100}%`, minWidth: beforeCount > 0 ? '20px' : '0' }}
-                              >
-                                {beforeCount > 0 ? beforeCount : ''}
-                              </div>
-                            </div>
-                          </div>
-                          <div className="space-y-1">
-                            <div className="text-xs text-gray-600">Check-out (Na)</div>
-                            <div className="w-full bg-gray-200 rounded-full h-4">
-                              <div 
-                                className="bg-blue-500 h-4 rounded-full flex items-center justify-center text-white text-xs font-medium"
-                                style={{ width: `${(afterCount / maxCount) * 100}%`, minWidth: afterCount > 0 ? '20px' : '0' }}
-                              >
-                                {afterCount > 0 ? afterCount : ''}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="grid grid-cols-2 gap-4 text-center">
+                    <div>
+                      <div className="text-2xl font-bold text-orange-600">
+                        {stats.confidenceChanges.length > 0 ? 
+                          (stats.confidenceChanges.reduce((acc, item) => acc + item.before, 0) / stats.confidenceChanges.length).toFixed(1) : 
+                          '0'
+                        }
                       </div>
-                    );
-                  })}
+                      <div className="text-sm text-gray-600">Check-in (Voor)</div>
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold text-blue-600">
+                        {stats.confidenceChanges.length > 0 ? 
+                          (stats.confidenceChanges.reduce((acc, item) => acc + item.after, 0) / stats.confidenceChanges.length).toFixed(1) : 
+                          '0'
+                        }
+                      </div>
+                      <div className="text-sm text-gray-600">Check-out (Na)</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </CardContent>
