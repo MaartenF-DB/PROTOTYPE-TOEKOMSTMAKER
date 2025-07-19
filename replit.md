@@ -136,6 +136,7 @@ The application follows a modern full-stack architecture with the following comp
 - **Removed All Answer Displays**: Completely removed all "Jouw antwoord:" sections throughout the application for cleaner interface
 - **Enhanced Audio Feedback**: All answer selections now trigger audio playback automatically when clicked
 - **Improved Ranking Instructions**: Changed "Sleep" to "Versleep" for better pronunciation (July 19, 2025 - Updated "Sleep de onderwerpen" to "Versleep de onderwerpen" throughout application)
+- **Enhanced English Topic Translation**: Fixed confidence and feeling questions to properly translate topic names from Dutch to English (e.g., "WONEN" → "LIVING" in English questions)
 - **Results Audio Integration**: Added speech synthesis to "De waarzegster onthult" and "De Uitkomst" sections
 - **English Translation Fix**: Fixed all result text to properly translate to English including "You are a...", "for", and motivational messages with correct audio
 - **Consistent Mystical Experience**: Applied fortune teller theme across all survey components with star-field background including name entry sections

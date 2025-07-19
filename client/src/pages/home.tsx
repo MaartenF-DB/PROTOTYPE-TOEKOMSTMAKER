@@ -300,7 +300,7 @@ export default function Home() {
         return (
           <Question
             questionNumber={4}
-            question={`${t.questions.feelingBefore.replace('{topic}', answers.mostImportantTopic)}`}
+            question={`${t.questions.feelingBefore.replace('{topic}', language === 'en' ? topicData?.nameEn || answers.mostImportantTopic : answers.mostImportantTopic)}`}
             bgGradient={topicData?.hexColor ? '' : 'from-red-500 to-pink-500'}
             buttonColor={topicData?.hexColor ? '' : 'bg-red-600 hover:bg-red-700'}
             style={topicData?.hexColor ? { background: getTopicGradient(topicData.hexColor) } : {}}
@@ -337,7 +337,7 @@ export default function Home() {
         return (
           <Question
             questionNumber={5}
-            question={`${t.questions.confidenceBefore.replace('{topic}', answers.mostImportantTopic)}`}
+            question={`${t.questions.confidenceBefore.replace('{topic}', language === 'en' ? topicData?.nameEn || answers.mostImportantTopic : answers.mostImportantTopic)}`}
             bgGradient={topicData?.hexColor ? '' : 'from-blue-500 to-purple-600'}
             buttonColor={topicData?.hexColor ? '' : 'bg-blue-600 hover:bg-blue-700'}
             style={topicData?.hexColor ? { background: getTopicGradient(topicData.hexColor) } : {}}
