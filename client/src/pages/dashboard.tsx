@@ -146,26 +146,33 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
  };
 
  const handleExportAndClear = async () => {
-   if (deleteCode !== 'HNIlina') {
-     setDeleteError('Onjuiste code. Gebruik "HNIlina" om te exporteren en data te wissen.');
+   // Show confirmation dialog first
+   const confirmed = window.confirm(
+     '⚠️ WAARSCHUWING: Alle data wordt verwijderd!\n\n' +
+     'Deze actie:\n' +
+     '1. Downloadt alle survey data als CSV\n' +
+     '2. VERWIJDERT PERMANENT ALLE DATA\n' +
+     '3. Kan NIET ongedaan gemaakt worden\n\n' +
+     'Weet je zeker dat je wilt doorgaan?'
+   );
+   
+   if (!confirmed) {
      return;
    }
    
-   setDeleteError('');
-   
    try {
-     console.log('🚨 STARTING EXPORT AND CLEAR WITH CODE:', deleteCode);
+     console.log('🚨 STARTING EXPORT AND CLEAR');
      // First export the data
      exportAllData();
      
      // Wait a moment for download to start, then clear data
      setTimeout(() => {
        console.log('🗑️ STARTING DATA CLEAR AFTER EXPORT');
-       clearDataMutation.mutate(deleteCode);
+       clearDataMutation.mutate('HNIlina'); // Use the fixed code internally
      }, 1000);
    } catch (error) {
      console.error('❌ Export and clear error:', error);
-     setDeleteError('Er is een fout opgetreden bij het exporteren.');
+     alert('Er is een fout opgetreden bij het exporteren.');
    }
  };
 
@@ -334,20 +341,30 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
  {/* Export and Data Management */}
  <div className="mb-8 space-y-6">
- <Card>
+ <Card className="border-red-200 bg-red-50">
  <CardHeader>
- <CardTitle>Data Export</CardTitle>
- <CardDescription>Download alle survey responses als CSV bestand</CardDescription>
+ <CardTitle className="text-red-800">⚠️ Data Export & Verwijdering</CardTitle>
+ <CardDescription className="text-red-600">WAARSCHUWING: Bij het klikken wordt alle data gedownload EN verwijderd</CardDescription>
  </CardHeader>
  <CardContent>
  <Button 
- onClick={exportAllData}
- disabled={responses.length === 0}
- className="flex items-center space-x-2"
+ onClick={handleExportAndClear}
+ disabled={responses.length === 0 || clearDataMutation.isPending}
+ className="flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white font-bold border-2 border-red-800 shadow-lg"
  >
  <Download className="h-4 w-4" />
- <span>Download CSV ({responses.length} responses)</span>
+ <Trash2 className="h-4 w-4" />
+ <span>
+ {clearDataMutation.isPending ? '⏳ Bezig met verwijderen...' : 'Download CSV & Verwijder Alle Data'}
+ </span>
  </Button>
+ <div className="mt-4 text-sm text-red-700 bg-red-100 border-2 border-red-300 rounded-md p-3">
+ <div className="flex items-center space-x-2 mb-2">
+ <span className="text-xl">🚨</span>
+ <strong>ALLE DATA WORDT VERWIJDERD</strong>
+ </div>
+ <p>Deze knop downloadt eerst de data en verwijdert daarna alles permanent.</p>
+ </div>
  </CardContent>
  </Card>
 
