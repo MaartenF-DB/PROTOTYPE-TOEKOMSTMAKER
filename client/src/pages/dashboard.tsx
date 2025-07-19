@@ -8,11 +8,10 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Legend, BarChart, Bar, XAxis,
 
 import { SurveyResponse } from '@shared/schema';
 import { TOPICS, ACTION_OPTIONS } from '@/types/survey';
-import { Download, Users, TrendingUp, BarChart3, Trash2, FileText } from 'lucide-react';
+import { Download, Users, TrendingUp, BarChart3, Trash2 } from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
-import jsPDF from 'jspdf';
 
 export default function Dashboard() {
   const [resetCode, setResetCode] = useState('');
@@ -30,25 +29,18 @@ export default function Dashboard() {
         throw new Error('Onjuiste authenticatiecode');
       }
       
-      console.log('🔐 Authentication successful, starting export and reset');
+      console.log('🔐 Authentication successful, starting CSV export and reset');
       
       // Get current data before reset
       const currentResponses = responses;
       
-      // Generate CSV first
+      // Generate and download CSV
       console.log('📊 Generating CSV...');
       const csvContent = generateCSV(currentResponses);
       downloadCSV(csvContent);
       
       // Small delay to ensure CSV download starts
       await new Promise(resolve => setTimeout(resolve, 500));
-      
-      // Generate PDF
-      console.log('📋 Generating PDF...');
-      generatePDF();
-      
-      // Small delay to ensure PDF is processed
-      await new Promise(resolve => setTimeout(resolve, 1000));
       
       // Reset data via API
       console.log('🗑️ Resetting all survey data');
@@ -71,8 +63,8 @@ export default function Dashboard() {
       console.log('Export and reset successful:', data);
       queryClient.invalidateQueries({ queryKey: ['/api/survey-responses'] });
       toast({
-        title: "Export Voltooid",
-        description: "CSV en PDF gedownload, alle data is gereset. Nieuwe antwoorden worden nu als verse data behandeld.",
+        title: "CSV Export Voltooid",
+        description: "CSV gedownload en alle data is gereset. Nieuwe antwoorden worden nu als verse data behandeld.",
       });
       setResetCode('');
     },
@@ -85,152 +77,6 @@ export default function Dashboard() {
       });
     },
   });
-
-  const generatePDF = () => {
-    try {
-      if (responses.length === 0) {
-        toast({
-          title: "Geen data",
-          description: "Er zijn geen antwoorden om een PDF van te maken",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      console.log('Starting PDF generation with', responses.length, 'responses');
-      
-      const doc = new jsPDF();
-      const pageWidth = doc.internal.pageSize.width;
-      
-      // Title page
-      doc.setFontSize(20);
-      doc.text('Museum Dashboard Rapport', pageWidth / 2, 30, { align: 'center' });
-      
-      doc.setFontSize(12);
-      doc.text(`Gegenereerd op: ${new Date().toLocaleDateString('nl-NL')}`, pageWidth / 2, 45, { align: 'center' });
-      doc.text(`Totaal aantal responses: ${responses.length}`, pageWidth / 2, 55, { align: 'center' });
-      
-      // Statistics section
-      doc.setFontSize(16);
-      doc.text('Statistieken', 20, 80);
-      
-      doc.setFontSize(10);
-      const statsY = 95;
-      doc.text(`Totaal antwoorden: ${stats.totalResponses}`, 20, statsY);
-      doc.text(`Complete responses: ${stats.completeResponses}`, 20, statsY + 10);
-      doc.text(`Check-in alleen: ${stats.checkInOnlyResponses}`, 20, statsY + 20);
-      doc.text(`Gemiddelde leeftijd: ${stats.averageAge} jaar`, 20, statsY + 30);
-      
-      // Topics section
-      doc.setFontSize(14);
-      doc.text('Populaire Onderwerpen', 20, statsY + 50);
-      
-      let topicY = statsY + 65;
-      Object.entries(stats.topTopics)
-        .sort(([,a], [,b]) => b - a)
-        .slice(0, 6)
-        .forEach(([topic, count], index) => {
-          doc.setFontSize(9);
-          doc.text(`${index + 1}. ${topic}: ${count} keer gekozen`, 20, topicY);
-          topicY += 10;
-        });
-
-      // Add new page for detailed responses
-      doc.addPage();
-      
-      // Detailed responses table
-      doc.setFontSize(16);
-      doc.text('Gedetailleerde Antwoorden', 20, 20);
-      
-      // Table headers
-      doc.setFontSize(9);
-      const startY = 35;
-      const rowHeight = 15;
-      let currentY = startY;
-      
-      // Headers
-      doc.setFont(undefined, 'bold');
-      doc.text('Naam', 15, currentY);
-      doc.text('Leeftijd', 45, currentY);
-      doc.text('Met wie', 70, currentY);
-      doc.text('Onderwerp', 105, currentY);
-      doc.text('Gevoel Voor/Na', 140, currentY);
-      doc.text('Actie & Result', 175, currentY);
-      currentY += rowHeight;
-      
-      // Draw header line
-      doc.line(10, currentY - 5, 200, currentY - 5);
-      
-      // Table rows
-      doc.setFont(undefined, 'normal');
-      doc.setFontSize(8);
-      
-      responses.forEach((response, index) => {
-        if (currentY > 260) { // New page if needed
-          doc.addPage();
-          currentY = 30;
-          
-          // Repeat headers on new page
-          doc.setFont(undefined, 'bold');
-          doc.setFontSize(9);
-          doc.text('Naam', 15, currentY);
-          doc.text('Leeftijd', 45, currentY);
-          doc.text('Met wie', 70, currentY);
-          doc.text('Onderwerp', 105, currentY);
-          doc.text('Gevoel Voor/Na', 140, currentY);
-          doc.text('Actie & Result', 175, currentY);
-          currentY += rowHeight;
-          doc.line(10, currentY - 5, 200, currentY - 5);
-          doc.setFont(undefined, 'normal');
-          doc.setFontSize(8);
-        }
-        
-        // Row data
-        doc.text(response.name || '', 15, currentY);
-        doc.text(response.age || '', 45, currentY);
-        doc.text(response.visitingWith || '', 70, currentY);
-        doc.text(response.mostImportantTopic || '', 105, currentY);
-        doc.text(`${response.feelingBefore || '-'}→${response.feelingAfter || '-'}`, 140, currentY);
-        doc.text(`${response.actionChoice || '-'}`, 175, currentY);
-        
-        // Second line for result if it exists
-        if (response.result) {
-          currentY += 8;
-          doc.setFontSize(7);
-          const resultText = response.result.length > 40 ? response.result.substring(0, 40) + '...' : response.result;
-          doc.text(resultText, 15, currentY);
-          doc.setFontSize(8);
-        }
-        
-        currentY += rowHeight;
-        
-        // Light separator line
-        if (index < responses.length - 1) {
-          doc.setDrawColor(220, 220, 220);
-          doc.line(10, currentY - 5, 200, currentY - 5);
-          doc.setDrawColor(0, 0, 0);
-        }
-      });
-
-      console.log('PDF generation completed, saving file');
-      
-      // Save the PDF
-      doc.save(`museum-dashboard-rapport-${new Date().toISOString().split('T')[0]}.pdf`);
-      
-      toast({
-        title: "PDF Rapport Gedownload",
-        description: "Gedetailleerd dashboard rapport met statistieken en tabellen",
-      });
-      
-    } catch (error) {
-      console.error('PDF generation error:', error);
-      toast({
-        title: "PDF Fout",
-        description: "Er is een fout opgetreden bij het genereren van de PDF",
-        variant: "destructive",
-      });
-    }
-  };
 
   // Enhanced response categorization
   const completeResponses = responses.filter(r => 
@@ -665,7 +511,7 @@ export default function Dashboard() {
               Data Export & Reset
             </CardTitle>
             <CardDescription>
-              Download CSV + PDF rapport met alle antwoorden en reset daarna alle data. Nieuwe antwoorden worden als nieuw gezien.
+              Download CSV bestand met alle antwoorden en reset daarna alle data. Nieuwe antwoorden worden als nieuw gezien.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -698,14 +544,13 @@ export default function Dashboard() {
                   ) : (
                     <>
                       <Download className="mr-2 h-4 w-4" />
-                      <FileText className="mr-2 h-4 w-4" />
                       <Trash2 className="mr-2 h-4 w-4" />
-                      Export CSV + PDF & Reset ({responses.length})
+                      Export CSV & Reset ({responses.length})
                     </>
                   )}
                 </Button>
                 <p className="text-sm text-gray-500 mt-2">
-                  ⚠️ Downloadt CSV + PDF rapport, daarna verwijdert ALLE data permanent
+                  ⚠️ Downloadt CSV bestand, daarna verwijdert ALLE data permanent
                 </p>
               </div>
             </div>
