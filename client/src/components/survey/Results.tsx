@@ -103,11 +103,19 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
           const forText = language === 'en' ? 'for' : 'voor';
           const topicName = getTopicName(answers.mostImportantTopic, language);
           
-          console.log('🎤 Starting sequential speech for results');
+          console.log('🎤 Starting continuous speech for results');
           
-          // Function to speak without canceling previous speech with proper voice selection
-          const speakWithoutCancel = (text: string, lang: 'nl' | 'en' = 'nl') => {
+          // Create complete text to speak as one continuous piece
+          const completeResultText = `${titleText} ${actionType} ${forText} ${topicName}. ${motivationalMessage}`;
+          
+          console.log('🎤 Complete text to speak:', completeResultText);
+          
+          // Function to speak complete text with proper voice selection
+          const speakCompleteResult = (text: string, lang: 'nl' | 'en' = 'nl') => {
             if (!('speechSynthesis' in window)) return;
+            
+            // Cancel any existing speech first
+            speechSynthesis.cancel();
             
             // Wait for voices to be loaded before creating utterance
             const ensureVoicesLoaded = () => {
@@ -117,6 +125,8 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
                   resolve();
                 } else {
                   speechSynthesis.addEventListener('voiceschanged', resolve, { once: true });
+                  // Trigger voice loading
+                  speechSynthesis.getVoices();
                 }
               });
             };
@@ -124,9 +134,9 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
             ensureVoicesLoaded().then(() => {
               const utterance = new SpeechSynthesisUtterance(text);
               utterance.lang = lang === 'en' ? 'en-US' : 'nl-NL';
-              utterance.rate = lang === 'en' ? 0.9 : 0.9;
-              utterance.pitch = lang === 'en' ? 1.2 : 1.1;
-              utterance.volume = 0.95;
+              utterance.rate = lang === 'en' ? 0.85 : 0.85;
+              utterance.pitch = lang === 'en' ? 1.1 : 1.0;
+              utterance.volume = 1.0;
               
               // Select appropriate female voice
               const voices = speechSynthesis.getVoices();
@@ -136,22 +146,19 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
                 console.log('Available English voices:', voices.filter(v => v.lang.startsWith('en')).map(v => ({ name: v.name, lang: v.lang })));
                 
                 const englishFemaleVoice = voices.find(voice => 
-                  voice.lang === 'en-US' && 
+                  (voice.lang === 'en-US' || voice.lang === 'en-GB') && 
                   (voice.name.toLowerCase().includes('samantha') ||
                    voice.name.toLowerCase().includes('allison') ||
                    voice.name.toLowerCase().includes('ava') ||
                    voice.name.toLowerCase().includes('karen') ||
-                   voice.name.toLowerCase().includes('female'))
+                   voice.name.toLowerCase().includes('female') ||
+                   voice.name.toLowerCase().includes('zira'))
                 ) || voices.find(voice => 
-                  voice.lang === 'en-US' && 
+                  (voice.lang === 'en-US' || voice.lang === 'en-GB') && 
                   voice.name.toLowerCase().includes('google') &&
                   !voice.name.toLowerCase().includes('male')
                 ) || voices.find(voice => 
-                  voice.lang === 'en-US' && 
-                  voice.name.toLowerCase().includes('zira') &&
-                  !voice.name.toLowerCase().includes('male')
-                ) || voices.find(voice => 
-                  voice.lang === 'en-US' &&
+                  (voice.lang === 'en-US' || voice.lang === 'en-GB') &&
                   !voice.name.toLowerCase().includes('male') &&
                   !voice.name.toLowerCase().includes('david') &&
                   !voice.name.toLowerCase().includes('mark')
@@ -160,6 +167,8 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
                 if (englishFemaleVoice) {
                   utterance.voice = englishFemaleVoice;
                   console.log('✓ Selected English female voice:', englishFemaleVoice.name);
+                } else {
+                  console.log('⚠️ No English female voice found, using default');
                 }
               } else {
                 // Dutch female voice selection
@@ -184,42 +193,32 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
                 if (dutchFemaleVoice) {
                   utterance.voice = dutchFemaleVoice;
                   console.log('✓ Selected Dutch female voice:', dutchFemaleVoice.name);
+                } else {
+                  console.log('⚠️ No Dutch female voice found, using default');
                 }
               }
               
-              // Add error handling
+              // Add event handlers
+              utterance.onstart = () => {
+                console.log('🎤 Started speaking complete result:', lang);
+              };
+              
+              utterance.onend = () => {
+                console.log('🔇 Finished speaking complete result');
+              };
+              
               utterance.onerror = (event) => {
                 console.error('❌ Speech error in Results:', event);
               };
               
-              // Add to queue without canceling
+              // Speak the complete text
               speechSynthesis.speak(utterance);
-              console.log('🎤 Added to speech queue:', text, 'Language:', lang);
+              console.log('🎤 Speaking complete result:', text.substring(0, 50) + '...', 'Language:', lang);
             });
           };
           
-          // 1. Speak "Jij bent een..." first
-          speakWithoutCancel(titleText, language);
-          
-          // 2. Speak the action type (UITVINDER) after 2 seconds
-          setTimeout(() => {
-            speakWithoutCancel(actionType, language);
-          }, 2000);
-          
-          // 3. Speak "voor" after 4 seconds
-          setTimeout(() => {
-            speakWithoutCancel(forText, language);
-          }, 4000);
-          
-          // 4. Speak the topic (GEZONDHEID) after 6 seconds
-          setTimeout(() => {
-            speakWithoutCancel(topicName, language);
-          }, 6000);
-          
-          // 5. Speak the motivational message after 8 seconds
-          setTimeout(() => {
-            speakWithoutCancel(motivationalMessage, language);
-          }, 8000);
+          // Speak the complete result as one piece
+          speakCompleteResult(completeResultText, language);
         }}
       />
     );
