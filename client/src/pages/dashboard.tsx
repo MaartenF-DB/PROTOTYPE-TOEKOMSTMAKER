@@ -213,6 +213,7 @@ import { useQuery } from '@tanstack/react-query';
  </CardContent>
  </Card>
  </div>
+ </div>
 
  {/* Topic Distribution */}
  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
@@ -256,4 +257,139 @@ import { useQuery } from '@tanstack/react-query';
  .sort(([,a], [,b]) => b - a)
  .map(([action, count]) => {
  const actionData = ACTION_OPTIONS.find(opt => opt.value === action);
- _message_init_end
+ return (
+ <div key={action} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+ <div className="font-medium">{actionData?.label || action}</div>
+ <Badge variant="secondary">{count}</Badge>
+ </div>
+ );
+ })}
+ </div>
+ </CardContent>
+ </Card>
+ </div>
+
+ {/* Export Button */}
+ <div className="mb-8">
+ <Card>
+ <CardHeader>
+ <CardTitle>Data Export</CardTitle>
+ <CardDescription>Download alle survey responses als CSV bestand</CardDescription>
+ </CardHeader>
+ <CardContent>
+ <Button 
+ onClick={exportAllData}
+ disabled={responses.length === 0}
+ className="flex items-center space-x-2"
+ >
+ <Download className="h-4 w-4" />
+ <span>Download CSV ({responses.length} responses)</span>
+ </Button>
+ </CardContent>
+ </Card>
+ </div>
+
+ {/* Recent Responses */}
+ <div className="space-y-6">
+ <Card>
+ <CardHeader>
+ <CardTitle>Complete Responses (Check-in + Check-out)</CardTitle>
+ <CardDescription>Bezoekers die beide delen van de survey hebben voltooid</CardDescription>
+ </CardHeader>
+ <CardContent>
+ <div className="space-y-4">
+ {completeResponses.length === 0 ? (
+ <p className="text-gray-500 text-center py-8">Nog geen complete responses</p>
+ ) : (
+ completeResponses.slice(0, 10).map((response) => {
+ const topicData = TOPICS[response.mostImportantTopic as keyof typeof TOPICS];
+ return (
+ <div key={response.id} className="border border-green-200 bg-green-50 rounded-lg p-4">
+ <div className="flex items-center justify-between mb-2">
+ <div className="flex items-center space-x-3">
+ <div 
+ className="w-8 h-8 rounded-full flex items-center justify-center text-lg"
+ style={{ backgroundColor: topicData?.hexColor || '#6B7280' }}
+ >
+ {topicData?.icon || '❓'}
+ </div>
+ <span className="font-semibold">{response.name}</span>
+ <Badge className="bg-green-100 text-green-800">Complete</Badge>
+ </div>
+ <span className="text-sm text-gray-500">
+ {new Date(response.createdAt).toLocaleDateString('nl-NL')}
+ </span>
+ </div>
+ <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+ <div>
+ <span className="text-gray-600">Leeftijd:</span> {response.age}
+ </div>
+ <div>
+ <span className="text-gray-600">Onderwerp:</span> {response.mostImportantTopic}
+ </div>
+ <div>
+ <span className="text-gray-600">Resultaat:</span> {response.result}
+ </div>
+ <div>
+ <span className="text-gray-600">Actie:</span> {response.actionChoice}
+ </div>
+ </div>
+ </div>
+ );
+ })
+ )}
+ </div>
+ </CardContent>
+ </Card>
+
+ <Card>
+ <CardHeader>
+ <CardTitle>Check-in Only Responses</CardTitle>
+ <CardDescription>Bezoekers die alleen de check-in hebben voltooid</CardDescription>
+ </CardHeader>
+ <CardContent>
+ <div className="space-y-4">
+ {checkInOnlyResponses.length === 0 ? (
+ <p className="text-gray-500 text-center py-8">Geen check-in only responses</p>
+ ) : (
+ checkInOnlyResponses.slice(0, 10).map((response) => {
+                  const topicData = TOPICS[response.mostImportantTopic as keyof typeof TOPICS];
+                  return (
+                    <div key={response.id} className="border border-yellow-200 bg-yellow-50 rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center space-x-3">
+                          <div 
+                            className="w-8 h-8 rounded-full flex items-center justify-center text-lg"
+                            style={{ backgroundColor: topicData?.hexColor || '#6B7280' }}
+                          >
+                            {topicData?.icon || '❓'}
+                          </div>
+                          <span className="font-semibold">{response.name}</span>
+                          <Badge className="bg-yellow-100 text-yellow-800">Incomplete</Badge>
+                        </div>
+                        <span className="text-sm text-gray-500">
+                          {new Date(response.createdAt).toLocaleDateString('nl-NL')}
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                        <div>
+                          <span className="text-gray-600">Leeftijd:</span> {response.age}
+                        </div>
+                        <div>
+                          <span className="text-gray-600">Onderwerp:</span> {response.mostImportantTopic}
+                        </div>
+                        <div>
+                          <span className="text-gray-600">Bezoekt met:</span> {response.visitingWith}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}
