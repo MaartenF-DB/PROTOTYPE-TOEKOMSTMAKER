@@ -97,7 +97,9 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
              answers.actionChoice === 'veranderen' ? 'VERANDERAAR' : 'TOEKOMSTMAKER');
           
           // Create a sequential speech function that doesn't cancel previous speech
-          const titleText = language === 'en' ? 'You are a' : 'Jij bent een';
+          const titleText = language === 'en' ? 
+            (actionType.startsWith('I') || actionType.startsWith('A') ? 'You are an' : 'You are a') : 
+            'Jij bent een';
           const forText = language === 'en' ? 'for' : 'voor';
           const topicName = getTopicName(answers.mostImportantTopic, language);
           
@@ -196,7 +198,9 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
         {/* Results card directly under the crystal ball */}
         <div className="bg-white bg-opacity-40 rounded-2xl p-8 mb-8 backdrop-blur-sm border border-white border-opacity-30">
           <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
-            {language === 'en' ? 'You are a...' : 'Jij bent een...'}
+            {language === 'en' ? 
+              ((answers.actionChoice === 'uitvinden' || answers.actionChoice === 'actie') ? 'You are an...' : 'You are a...') : 
+              'Jij bent een...'}
           </h2>
           
           <div className="text-5xl font-bold mb-4 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent drop-shadow-lg">
