@@ -45,7 +45,7 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
           <div className="space-y-4">
             <Button
               onClick={onCheckIn}
-              className="w-full fortune-bg-secondary hover:fortune-bg-mystical text-white text-xl py-6 px-8 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 border-2 border-purple-800 hover:border-purple-700"
+              className="w-full fortune-bg-secondary hover:fortune-bg-mystical text-white text-xl py-6 px-8 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3"
             >
               <span className="inline-block scale-x-[-1] text-2xl">🚶‍♂️</span>
               <span>{t.entryChoice.checkIn}</span>
@@ -53,7 +53,7 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
             
             <Button
               onClick={onCheckOut}
-              className="w-full bg-yellow-300 hover:bg-yellow-400 text-purple-900 text-xl py-6 px-8 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 border-2 border-purple-400/30 hover:border-purple-400/60"
+              className="w-full bg-yellow-300 hover:bg-yellow-400 text-purple-900 text-xl py-6 px-8 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3"
             >
               <span className="text-2xl">🚶‍♂️</span>
               <span className="font-bold">{t.entryChoice.checkOut}</span>

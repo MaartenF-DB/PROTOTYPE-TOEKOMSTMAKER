@@ -122,7 +122,7 @@ export function AnimatedResult({ finalResult, onComplete }: AnimatedResultProps)
           </div>
 
           <div className="text-sm opacity-75 text-yellow-200">
-            Wacht alsjeblieft... De waarzegger werkt zijn magie...
+            Wacht alsjeblieft... De waarzegger werkt haar magie...
           </div>
         </div>
       </div>
