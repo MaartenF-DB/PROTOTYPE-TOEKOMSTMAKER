@@ -22,19 +22,18 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
       ? "Welcome to Future Makers! What kind of futuremaker are you? Let's find out together! Are you a newcomer or have you just finished the exhibition?"
       : "Welkom bij Toekomstmakers! Wat voor toekomstmaker ben jij? Laten we het samen uitzoeken! Kom je net binnen of ben je net klaar met de tentoonstelling?";
     
-    const playMessage = () => {
-      // Stop any existing speech before starting new one
-      window.speechSynthesis.cancel();
-      setTimeout(() => {
-        speak(message, language);
-      }, 100);
-    };
+    // Play immediately, then set up interval for repeat
+    speak(message, language);
     
-    // Play immediately
-    playMessage();
+    // Clear any existing interval first
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
     
     // Set up interval to repeat every 10 seconds
-    intervalRef.current = setInterval(playMessage, 10000);
+    intervalRef.current = setInterval(() => {
+      speak(message, language);
+    }, 10000);
     
     // Cleanup interval on unmount
     return () => {

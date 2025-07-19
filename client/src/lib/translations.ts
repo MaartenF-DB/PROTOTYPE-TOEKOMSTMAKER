@@ -2,7 +2,7 @@ export const translations = {
   nl: {
     // Entry Choice
     entryChoice: {
-      title: "Welkom bij Toekomstmakers!",
+      title: "Wat voor toekomstmaker ben jij?",
       checkIn: "Ik kom net binnen",
       checkOut: "Ik ben net klaar"
     },
@@ -128,7 +128,7 @@ export const translations = {
   en: {
     // Entry Choice
     entryChoice: {
-      title: "Welcome to Future Makers!",
+      title: "What kind of future maker are you?",
       checkIn: "I'm just arriving",
       checkOut: "I'm just finished"
     },
