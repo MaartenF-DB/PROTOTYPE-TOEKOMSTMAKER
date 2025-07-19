@@ -170,7 +170,7 @@ export default function Dashboard() {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Totaal Antwoorden</CardTitle>
@@ -211,37 +211,7 @@ export default function Dashboard() {
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Vertrouwen Verbetering</CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {stats.confidenceChanges.length > 0 ? 
-                  `${Math.round(stats.confidenceChanges.reduce((acc, item) => acc + item.change, 0) / stats.confidenceChanges.length * 100) / 100}` : 
-                  '0'
-                }
-              </div>
-              <p className="text-xs text-muted-foreground">gemiddeld verschil</p>
-            </CardContent>
-          </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Gevoel Verbetering</CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {stats.feelingChanges.length > 0 ? 
-                  `${Math.round(stats.feelingChanges.reduce((acc, item) => acc + item.change, 0) / stats.feelingChanges.length * 100) / 100}` : 
-                  '0'
-                }
-              </div>
-              <p className="text-xs text-muted-foreground">gemiddeld verschil</p>
-            </CardContent>
-          </Card>
         </div>
 
         {/* Improvement Charts */}
@@ -429,9 +399,25 @@ export default function Dashboard() {
                       return visitingOptions[value as keyof typeof visitingOptions] || value;
                     };
                     
+                    // Get emoji for visiting options
+                    const getVisitingEmoji = (value: string) => {
+                      if (value.startsWith('Anders:')) return '❓';
+                      const visitingEmojis = {
+                        'alone': '👤',
+                        'family': '👨‍👩‍👧‍👦',
+                        'school': '🏫',
+                        'babysitter': '👶👨',
+                        'other': '❓'
+                      };
+                      return visitingEmojis[value as keyof typeof visitingEmojis] || '❓';
+                    };
+                    
                     return (
                       <div key={visiting} className="flex items-center justify-between py-1">
-                        <span className="text-sm">{getVisitingLabel(visiting)}</span>
+                        <div className="flex items-center space-x-2">
+                          <span className="text-lg">{getVisitingEmoji(visiting)}</span>
+                          <span className="text-sm">{getVisitingLabel(visiting)}</span>
+                        </div>
                         <Badge variant="secondary">{count}</Badge>
                       </div>
                     );
