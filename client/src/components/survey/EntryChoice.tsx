@@ -18,8 +18,8 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
 
   useEffect(() => {
     const message = language === 'en' 
-      ? "Welcome to the exhibition! Are you just entering or have you already visited the exhibition?"
-      : "Welkom bij Toekomstmakers! Kom je net binnen of heb je de tentoonstelling al bezocht?";
+      ? "Welcome to Future Makers! What kind of futuremaker are you? Let's find out together! Are you a newcomer or have you just finished the exhibition?"
+      : "Welkom bij Toekomstmakers! Wat voor toekomstmaker ben jij? Laten we het samen uitzoeken! Kom je net binnen of ben je net klaar met de tentoonstelling?";
     speak(message, language);
   }, [speak, language]);
 
