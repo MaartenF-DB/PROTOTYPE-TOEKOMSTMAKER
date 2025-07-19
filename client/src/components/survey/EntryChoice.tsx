@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { translations } from '@/lib/translations';
 import { useSpeech } from '@/hooks/useSpeech';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { MysticalCard } from '@/components/fortune/FortuneTellerCharacter';
 import { BackgroundEmojis } from '@/components/fortune/BackgroundEmojis';
 import backgroundVideoPath from "@assets/HNI_afstuderen_(5)_1752931557943.mp4";
@@ -15,12 +15,36 @@ interface EntryChoiceProps {
 export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryChoiceProps) {
   const t = translations[language];
   const { speak } = useSpeech();
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const message = language === 'en' 
       ? "Welcome to Future Makers! What kind of futuremaker are you? Let's find out together! Are you a newcomer or have you just finished the exhibition?"
       : "Welkom bij Toekomstmakers! Wat voor toekomstmaker ben jij? Laten we het samen uitzoeken! Kom je net binnen of ben je net klaar met de tentoonstelling?";
-    speak(message, language);
+    
+    const playMessage = () => {
+      // Stop any existing speech before starting new one
+      window.speechSynthesis.cancel();
+      setTimeout(() => {
+        speak(message, language);
+      }, 100);
+    };
+    
+    // Play immediately
+    playMessage();
+    
+    // Set up interval to repeat every 10 seconds
+    intervalRef.current = setInterval(playMessage, 10000);
+    
+    // Cleanup interval on unmount
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      // Stop any ongoing speech when component unmounts
+      window.speechSynthesis.cancel();
+    };
   }, [speak, language]);
 
   return (
