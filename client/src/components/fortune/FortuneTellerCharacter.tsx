@@ -46,55 +46,53 @@ export function FortuneTellerCharacter({
   };
 
   return (
-    <div className={`relative flex flex-col items-center ${isVisible ? 'animate-floating' : 'opacity-0'}`}>
+    <div className={`relative flex flex-col items-center ${isVisible ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500`}>
       {/* Fortune Teller Figure */}
       <div className={`${sizeClasses[size]} relative mb-4`}>
         {/* Main character circle with mystical glow */}
-        <div className="w-full h-full rounded-full bg-gradient-to-br from-purple-400 via-indigo-500 to-purple-600 shadow-2xl border-4 border-yellow-400 animate-mystical-glow">
+        <div className="w-full h-full rounded-full bg-gradient-to-br from-purple-400 via-indigo-500 to-purple-600 shadow-2xl border-4 border-yellow-400">
           {/* Face/Avatar area */}
           <div className="absolute inset-2 rounded-full bg-gradient-to-br from-purple-300/50 to-purple-500/50 flex items-center justify-center">
-            <span className="text-4xl animate-twinkle">🔮</span>
+            <span className="text-4xl">🔮</span>
           </div>
           
           {/* Mystical aura rings */}
-          <div className="absolute inset-0 rounded-full border-2 border-yellow-300/30 animate-pulse"></div>
-          <div className="absolute -inset-2 rounded-full border border-purple-300/20 animate-pulse" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute inset-0 rounded-full border-2 border-yellow-300/30"></div>
+          <div className="absolute -inset-2 rounded-full border border-purple-300/20"></div>
         </div>
 
         {/* Floating mystical elements around character */}
         {showAnimation && (
           <>
-            <div className="absolute -top-2 -right-2 text-yellow-400 text-xl animate-twinkle" style={{ animationDelay: '0.5s' }}>✨</div>
-            <div className="absolute -bottom-2 -left-2 text-purple-300 text-lg animate-twinkle" style={{ animationDelay: '1.5s' }}>🌟</div>
-            <div className="absolute top-1/2 -left-4 text-pink-300 text-sm animate-twinkle" style={{ animationDelay: '2s' }}>💫</div>
-            <div className="absolute top-1/2 -right-4 text-blue-300 text-sm animate-twinkle" style={{ animationDelay: '2.5s' }}>⭐</div>
+            <div className="absolute -top-2 -right-2 text-yellow-400 text-xl">✨</div>
+            <div className="absolute -bottom-2 -left-2 text-purple-300 text-lg">🌟</div>
+            <div className="absolute top-1/2 -left-4 text-pink-300 text-sm">💫</div>
+            <div className="absolute top-1/2 -right-4 text-blue-300 text-sm">⭐</div>
           </>
         )}
       </div>
 
       {/* Crystal Ball */}
       <div className="relative mb-4">
-        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 shadow-xl animate-crystal-pulse">
+        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 shadow-xl">
           <div className="absolute inset-1 rounded-full bg-gradient-to-tr from-white/40 to-transparent"></div>
           <div className="absolute top-3 left-3 w-3 h-3 bg-white/60 rounded-full blur-sm"></div>
         </div>
-        {/* Mystical energy emanating from crystal ball */}
-        <div className="absolute inset-0 rounded-full bg-purple-400/20 animate-ping"></div>
       </div>
 
       {/* Fortune Teller's mystical accessories */}
       <div className="flex space-x-2 mb-3">
-        <span className="text-yellow-400 text-sm animate-twinkle">🕯️</span>
-        <span className="text-purple-400 text-sm animate-twinkle" style={{ animationDelay: '1s' }}>🧿</span>
-        <span className="text-pink-400 text-sm animate-twinkle" style={{ animationDelay: '2s' }}>🌙</span>
+        <span className="text-yellow-400 text-sm">🕯️</span>
+        <span className="text-purple-400 text-sm">🧿</span>
+        <span className="text-pink-400 text-sm">🌙</span>
       </div>
 
       {/* Mystical message */}
       <div className="text-center max-w-xs">
-        <p className="text-yellow-300 text-sm font-medium italic animate-mystical-shimmer">
+        <p className="text-yellow-300 text-sm font-medium italic">
           {messages[mood][language]}
         </p>
-        <div className="w-16 h-px bg-gradient-to-r from-transparent via-yellow-400 to-transparent mt-2 animate-pulse"></div>
+        <div className="w-16 h-px bg-gradient-to-r from-transparent via-yellow-400 to-transparent mt-2"></div>
       </div>
 
       {/* Ambient glow effect */}

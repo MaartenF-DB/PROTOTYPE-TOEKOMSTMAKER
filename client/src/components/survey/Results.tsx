@@ -6,6 +6,8 @@ import { exportToCSV } from '@/lib/csvExport';
 import { SurveyAnswers } from '@/types/survey';
 import { AnimatedResult } from './AnimatedResult';
 import { translations, Language } from '@/lib/translations';
+import { MysticalCard } from '@/components/fortune/FortuneTellerCharacter';
+import { BackgroundEmojis } from '@/components/fortune/BackgroundEmojis';
 
 interface ResultsProps {
   answers: SurveyAnswers;
@@ -121,27 +123,31 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
   };
 
   return (
-    <section 
-      className="min-h-screen flex flex-col items-center justify-center p-6 text-white"
-      style={{
-        background: topicData?.hexColor ? getTopicGradient(topicData.hexColor) : 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)'
-      }}
-    >
-      <div className="text-center max-w-2xl w-full">
+    <section className="min-h-screen flex flex-col items-center justify-center p-6 text-white relative">
+      <div className="text-center max-w-2xl w-full relative z-10">
+        {/* Mystical crystal ball with result */}
         <div className="mb-8">
-          <div className="w-32 h-32 mx-auto rounded-full shadow-2xl transition-all duration-1000 bg-white bg-opacity-20 backdrop-blur-sm">
+          <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-purple-400 via-blue-500 to-purple-600 shadow-2xl mb-6">
             <div className="w-full h-full rounded-full flex items-center justify-center text-6xl">
-              {topicData?.icon || '❓'}
+              {topicData?.icon || '🔮'}
             </div>
+          </div>
+          <div className="flex justify-center space-x-4 mb-4">
+            <span className="text-yellow-400 text-2xl">✨</span>
+            <span className="text-purple-300 text-xl">🌟</span>
+            <span className="text-pink-300 text-lg">💫</span>
           </div>
         </div>
         
-        <div className="bg-white bg-opacity-20 rounded-2xl p-8 mb-8">
-          <h2 className="text-4xl font-bold mb-6">
-            {language === 'en' ? 'You are a...' : 'Jij bent een...'}
+        <MysticalCard className="mb-8">
+          <h2 className="text-4xl font-bold mb-2 fortune-text-glow">
+            {language === 'en' ? 'The Crystal Ball Reveals...' : 'De Kristallen Bol Toont...'}
           </h2>
+          <p className="text-yellow-200 text-lg mb-6 italic">
+            {language === 'en' ? "Your mystical future identity is..." : "Jouw mystieke toekomst identiteit is..."}
+          </p>
           
-          <div className="text-6xl font-bold mb-4">
+          <div className="text-6xl font-bold mb-4 fortune-text-glow">
             {language === 'en' ? 
               (answers.actionChoice === 'uitvinden' ? 'INVENTOR' :
                answers.actionChoice === 'actie' ? 'ACTIVIST' :
@@ -152,29 +158,37 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
                answers.actionChoice === 'veranderen' ? 'VERANDERAAR' : 'TOEKOMSTMAKER')
             }
           </div>
-          <div className="text-3xl mb-6">
+          <div className="text-3xl mb-6 text-yellow-300">
             {language === 'en' ? 'for' : 'voor'}
           </div>
-          <div className="text-5xl font-bold text-yellow-300 mb-8">{getTopicName(answers.mostImportantTopic, language)}</div>
+          <div className="text-5xl font-bold text-yellow-300 mb-8 fortune-text-glow">{getTopicName(answers.mostImportantTopic, language)}</div>
           
-          <div className="bg-white bg-opacity-30 rounded-xl p-6 mt-6">
+          <div className="fortune-bg-secondary rounded-xl p-6 mt-6 border-2 border-yellow-400/30">
             <p className="text-xl font-medium text-white leading-relaxed">
               {motivationalMessage}
             </p>
           </div>
+        </MysticalCard>
+
+        {/* Mystical farewell */}
+        <div className="text-center mb-6">
+          <p className="text-yellow-300 text-sm italic">
+            {language === 'en' ? "The fortune teller's vision is complete..." : "De visie van de waarzegger is compleet..."}
+          </p>
         </div>
         
         <div className="flex justify-center">
           <Button 
             onClick={handleStop}
-            className="bg-red-600 hover:bg-red-700 px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg"
+            className="fortune-bg-accent hover:bg-yellow-600 text-purple-900 px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg border-2 border-purple-400/30 hover:border-purple-400/60"
           >
-            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-            {language === 'en' ? 'Stop' : 'Stop'}
+            <span className="mr-2">🔮</span>
+            {language === 'en' ? 'New Reading' : 'Nieuwe Lezing'}
           </Button>
         </div>
+
+        {/* Background emojis for results */}
+        <BackgroundEmojis sectionType="results" />
       </div>
     </section>
   );
