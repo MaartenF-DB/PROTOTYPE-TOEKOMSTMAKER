@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { TOPICS } from '@/types/survey';
 import { translations } from '@/lib/translations';
+import { useSpeech } from '@/hooks/useSpeech';
 
 interface RankingQuestionProps {
   ranking: string[];
@@ -20,13 +21,14 @@ const shuffleArray = (array: string[]) => {
 
 export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: RankingQuestionProps) {
   const t = translations[language];
+  const { speak } = useSpeech();
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
   const [shuffledTopics, setShuffledTopics] = useState<string[]>([]);
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
   const [touchStartY, setTouchStartY] = useState<number | null>(null);
   const [touchItem, setTouchItem] = useState<string | null>(null);
 
-  // Initialize shuffled topics once
+  // Initialize shuffled topics once and speak instructions
   useEffect(() => {
     if (shuffledTopics.length === 0) {
       const topicKeys = Object.keys(TOPICS);
@@ -36,8 +38,14 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
       if (ranking.length === 0) {
         onRankingChange(shuffled);
       }
+      
+      // Speak the instruction text when the component first loads
+      const instructionText = language === 'en' ? 
+        'Drag the topics to the right place.' : 
+        'Versleep de onderwerpen naar de goede plek.';
+      speak(instructionText, language);
     }
-  }, [ranking, onRankingChange, shuffledTopics.length]);
+  }, [ranking, onRankingChange, shuffledTopics.length, speak, language]);
 
   // Use the existing ranking or shuffled topics
   const displayRanking = ranking.length > 0 ? ranking : shuffledTopics;
@@ -121,7 +129,11 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
 
   return (
     <div className="w-full">
-      <p className="text-lg mb-4">{t.ranking.instructions}</p>
+      <div className="text-center mb-6">
+        <p className="text-white text-lg">
+          {language === 'en' ? 'Drag the topics to the right place.' : 'Versleep de onderwerpen naar de goede plek.'}
+        </p>
+      </div>
       <p className="text-sm mb-6 opacity-75">{t.ranking.clickForInfo}</p>
       
       <div className="grid grid-cols-6 gap-4 mb-6 p-4 bg-white bg-opacity-10 rounded-xl">

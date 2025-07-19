@@ -328,12 +328,7 @@ export default function Home() {
                 onValueChange={(value) => updateAnswers({ feelingBefore: value })}
                 language={language}
               />
-              {answers.feelingBefore !== null && (
-                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
-                  <p className="text-white font-semibold">{t.yourAnswer}:</p>
-                  <p className="text-white text-lg">{getLikertScale().find(opt => opt.value === answers.feelingBefore)?.label}</p>
-                </div>
-              )}
+
             </div>
           </Question>
         );
@@ -375,12 +370,7 @@ export default function Home() {
                 onValueChange={(value) => updateAnswers({ confidenceBefore: value })}
                 language={language}
               />
-              {answers.confidenceBefore !== null && (
-                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
-                  <p className="text-white font-semibold">{t.yourAnswer}:</p>
-                  <p className="text-white text-lg">{getConfidenceScale().find(opt => opt.value === answers.confidenceBefore)?.label}</p>
-                </div>
-              )}
+
             </div>
           </Question>
         );
