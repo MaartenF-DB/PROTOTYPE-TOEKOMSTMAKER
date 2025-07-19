@@ -154,14 +154,17 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
    setDeleteError('');
    
    try {
+     console.log('🚨 STARTING EXPORT AND CLEAR WITH CODE:', deleteCode);
      // First export the data
      exportAllData();
      
      // Wait a moment for download to start, then clear data
      setTimeout(() => {
+       console.log('🗑️ STARTING DATA CLEAR AFTER EXPORT');
        clearDataMutation.mutate(deleteCode);
      }, 1000);
    } catch (error) {
+     console.error('❌ Export and clear error:', error);
      setDeleteError('Er is een fout opgetreden bij het exporteren.');
    }
  };
@@ -171,6 +174,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
      setDeleteError('Onjuiste code. Gebruik "HNIlina" om data te wissen.');
      return;
    }
+   console.log('🗑️ STARTING DATA CLEAR ONLY WITH CODE:', deleteCode);
    setDeleteError('');
    clearDataMutation.mutate(deleteCode);
  };
@@ -374,12 +378,11 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
  <div className="flex space-x-3">
  <Button 
  onClick={handleExportAndClear}
- disabled={responses.length === 0 || clearDataMutation.isPending}
- className={`flex items-center space-x-2 font-bold border-2 shadow-lg ${
-   deleteCode === 'HNIlina' 
-     ? 'bg-red-600 hover:bg-red-700 text-white border-red-800' 
-     : 'bg-gray-400 hover:bg-gray-500 text-white border-gray-600'
- }`}
+ disabled={responses.length === 0 || clearDataMutation.isPending || deleteCode !== 'HNIlina'}
+ className={deleteCode === 'HNIlina' 
+   ? "flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white font-bold border-2 border-red-800 shadow-lg"
+   : "flex items-center space-x-2 bg-gray-400 hover:bg-gray-500 text-white font-bold border-2 border-gray-600 shadow-lg"
+ }
  >
  <Download className="h-5 w-5" />
  <Trash2 className="h-5 w-5" />
@@ -390,13 +393,11 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
  
  <Button 
  onClick={handleClearData}
- disabled={responses.length === 0 || clearDataMutation.isPending}
- variant="outline"
- className={`flex items-center space-x-2 ${
-   deleteCode === 'HNIlina' 
-     ? 'border-red-600 text-red-600 hover:bg-red-50' 
-     : 'border-gray-400 text-gray-400 hover:bg-gray-50'
- }`}
+ disabled={responses.length === 0 || clearDataMutation.isPending || deleteCode !== 'HNIlina'}
+ className={deleteCode === 'HNIlina' 
+   ? "flex items-center space-x-2 border-2 border-red-600 text-red-600 hover:bg-red-50 bg-white"
+   : "flex items-center space-x-2 border-2 border-gray-400 text-gray-400 hover:bg-gray-50 bg-white"
+ }
  >
  <Trash2 className="h-4 w-4" />
  <span>Alleen Wis Data</span>

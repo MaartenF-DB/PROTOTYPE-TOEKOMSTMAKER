@@ -128,12 +128,12 @@ The application follows a modern full-stack architecture with the following comp
 - **Enhanced Mystical Design**: Upgraded entry page with gradient borders, animated decorations, and premium button styling
 
 ### July 19, 2025 - Enhanced Name Conflict Resolution System (Updated)
-- **Mandatory Unique Names**: Users must manually enter unique names (with numbers) when name conflicts occur - no automatic generation
-- **Blocked Navigation**: Users cannot proceed in check-in or checkout if they enter an existing name
-- **Clear Error Messages**: Red warning boxes show exactly when a name conflict exists with instructions to add numbers (e.g., "Anna 1")
-- **Bilingual Support**: Updated Dutch/English translations for name conflict blocking and user guidance
-- **Consistent Validation**: Both check-in and checkout flows block duplicate names and require manual resolution
-- **User Control**: Users have full control over their naming convention (Anna 1, Anna 2, etc.) rather than system automation
+- **Smart Name Validation**: Users can use same name for check-in then check-out - warning only appears for names that completed BOTH parts
+- **Flexible Checkout Flow**: Same person can enter name for check-in, then use same name for checkout without conflict
+- **Clear Conflict Logic**: Name conflict only triggers when someone tries to reuse a name that already completed entire survey (feelingAfter !== null)
+- **Bilingual Support**: Updated Dutch/English translations for improved name conflict detection
+- **Enhanced Dashboard**: Red button styling that activates when correct security code "HNIlina" is entered
+- **Secure Data Management**: Download and delete functionality requires exact "HNIlina" code with visual feedback (red buttons)
 
 ### July 19, 2025 - Fortune Teller Mystical Theme Implementation
 - **Complete Fortune Teller Theme**: Replaced user theme customization with immersive mystical fortune teller atmosphere
