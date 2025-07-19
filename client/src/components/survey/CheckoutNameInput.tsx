@@ -72,12 +72,7 @@ export function CheckoutNameInput({ existingResponses, onNameConfirm, language =
               className="w-full p-4 text-2xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-blue-300 outline-none"
               onKeyPress={(e) => e.key === 'Enter' && handleNameSubmit()}
             />
-            {enteredName.length > 0 && (
-              <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
-                <p className="text-white font-semibold">{t.yourAnswer}:</p>
-                <p className="text-white text-lg">{enteredName}</p>
-              </div>
-            )}
+
           </div>
         </div>
         

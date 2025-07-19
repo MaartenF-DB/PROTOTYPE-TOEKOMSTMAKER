@@ -183,12 +183,7 @@ export default function Home() {
                   {t.validation.nameConflict}
                 </p>
               )}
-              {answers.name.length > 0 && (
-                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
-                  <p className="text-white font-semibold">{t.yourAnswer}:</p>
-                  <p className="text-white text-lg">{answers.name}</p>
-                </div>
-              )}
+
             </div>
           </Question>
         );
@@ -226,12 +221,7 @@ export default function Home() {
                 columns={8}
                 language={language}
               />
-              {answers.age.length > 0 && (
-                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
-                  <p className="text-white font-semibold">{t.yourAnswer}:</p>
-                  <p className="text-white text-lg">{answers.age === 'other' ? answers.age : `${answers.age} jaar`}</p>
-                </div>
-              )}
+
             </div>
           </Question>
         );
@@ -260,15 +250,6 @@ export default function Home() {
                 columns={5}
                 language={language}
               />
-              {answers.visitingWith.length > 0 && (
-                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm mt-8">
-                  <p className="text-white font-semibold">{t.yourAnswer}:</p>
-                  <p className="text-white text-lg">
-                    {answers.visitingWith === 'other' ? answers.visitingWithOther : 
-                     getVisitingOptions().find(opt => opt.value === answers.visitingWith)?.label}
-                  </p>
-                </div>
-              )}
             </div>
           </Question>
         );
@@ -512,12 +493,7 @@ export default function Home() {
                 columns={8}
                 language={language}
               />
-              {answers.age.length > 0 && (
-                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
-                  <p className="text-white font-semibold">{t.yourAnswer}:</p>
-                  <p className="text-white text-lg">{answers.age} {language === 'en' ? 'years old' : 'jaar oud'}</p>
-                </div>
-              )}
+
             </div>
           </Question>
         );
@@ -546,15 +522,6 @@ export default function Home() {
                 columns={5}
                 language={language}
               />
-              {answers.visitingWith.length > 0 && (
-                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm mt-8">
-                  <p className="text-white font-semibold">{t.yourAnswer}:</p>
-                  <p className="text-white text-lg">
-                    {answers.visitingWith === 'other' ? answers.visitingWithOther : 
-                     getVisitingOptions().find(opt => opt.value === answers.visitingWith)?.label}
-                  </p>
-                </div>
-              )}
             </div>
           </Question>
         );
@@ -626,12 +593,7 @@ export default function Home() {
               />
               
 
-              {answers.feelingAfter !== null && (
-                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
-                  <p className="text-white font-semibold">{t.yourAnswer}:</p>
-                  <p className="text-white text-lg">{getLikertScale().find(opt => opt.value === answers.feelingAfter)?.label}</p>
-                </div>
-              )}
+
             </div>
           </Question>
         );
@@ -678,15 +640,7 @@ export default function Home() {
                 language={language}
               />
               
-              {answers.actionChoice && (
-                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm mt-8">
-                  <p className="text-white font-semibold">{t.yourAnswer}:</p>
-                  <div className="flex items-center space-x-3">
-                    <span className="text-2xl">{getActionOptions().find(opt => opt.value === answers.actionChoice)?.icon}</span>
-                    <span className="text-white text-lg">{getActionOptions().find(opt => opt.value === answers.actionChoice)?.label}</span>
-                  </div>
-                </div>
-              )}
+
             </div>
           </Question>
         );
@@ -726,12 +680,7 @@ export default function Home() {
                 onValueChange={(value) => updateAnswers({ confidenceAfter: value })}
                 language={language}
               />
-              {answers.confidenceAfter !== null && (
-                <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
-                  <p className="text-white font-semibold">{t.yourAnswer}:</p>
-                  <p className="text-white text-lg">{getConfidenceScale().find(opt => opt.value === answers.confidenceAfter)?.label}</p>
-                </div>
-              )}
+
             </div>
           </Question>
         );

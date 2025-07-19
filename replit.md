@@ -133,6 +133,8 @@ The application follows a modern full-stack architecture with the following comp
 - **Gender-Neutral Text**: Changed "zijn magie" to "haar magie" in fortune teller loading message
 - **Improved Answer Spacing**: Added mt-8 margin to "Jouw antwoord:" sections to prevent overlap with answer options
 - **Removed Check-in Notice**: Removed "Je hebt al eerder de check-in ingevuld" message for existing users for cleaner checkout experience
+- **Removed All Answer Displays**: Completely removed all "Jouw antwoord:" sections throughout the application for cleaner interface
+- **Enhanced Audio Feedback**: All answer selections now trigger audio playback automatically when clicked
 - **Consistent Mystical Experience**: Applied fortune teller theme across all survey components with star-field background including name entry sections
 
 ### July 18, 2025 - Database Migration and Checkout Flow Fix

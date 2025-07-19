@@ -48,12 +48,7 @@ export function NameVerification({
           className="w-full p-4 text-2xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-indigo-300 outline-none"
         />
         
-        {nameVerification.length > 0 && (
-          <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
-            <p className="text-white font-semibold">Jouw antwoord:</p>
-            <p className="text-white text-lg">{nameVerification}</p>
-          </div>
-        )}
+
       </div>
     </Question>
   );

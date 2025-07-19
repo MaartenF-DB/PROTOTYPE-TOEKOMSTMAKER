@@ -89,14 +89,7 @@ export function NameMatching({ enteredName, existingNames, onNameMatch, onProcee
           </label>
         </div>
         
-        {(selectedName || proceedWithoutMatch) && (
-          <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
-            <p className="text-white font-semibold">Jouw keuze:</p>
-            <p className="text-white text-lg">
-              {selectedName || 'Nieuwe antwoorden geven'}
-            </p>
-          </div>
-        )}
+
       </div>
     </Question>
   );
