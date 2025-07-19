@@ -25,39 +25,29 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
 
   return (
     <section className="min-h-screen flex flex-col items-center justify-center p-6 text-white relative overflow-hidden">
-      {/* Background Video - Full Screen */}
+      {/* Background Video - Enlarged and Top Positioned */}
       <video 
         autoPlay 
         loop 
         muted 
         playsInline
-        className="absolute inset-0 w-full h-full object-cover z-0"
+        className="absolute z-0"
         style={{
-          width: '100vw',
-          height: '100vh',
-          objectFit: 'cover'
+          width: '120vw',
+          height: '120vh',
+          objectFit: 'cover',
+          top: '-10vh',
+          left: '-10vw'
         }}
       >
         <source src={backgroundVideoPath} type="video/mp4" />
       </video>
       
       {/* Dark overlay for better text readability */}
-      <div className="absolute inset-0 bg-black bg-opacity-40 z-1"></div>
+      <div className="absolute inset-0 bg-black bg-opacity-30 z-1"></div>
       
       <div className="text-center max-w-2xl w-full relative z-10">
-        {/* Mystical portal entrance */}
-        <div className="mb-8">
-          <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-purple-400 via-blue-500 to-purple-600 shadow-2xl mb-6">
-            <div className="w-full h-full rounded-full flex items-center justify-center text-6xl">
-              🔮
-            </div>
-          </div>
-          <div className="flex justify-center space-x-4 mb-4">
-            <span className="text-yellow-200 text-2xl">✨</span>
-            <span className="text-blue-300 text-xl">🌟</span>
-            <span className="text-orange-300 text-lg">💫</span>
-          </div>
-        </div>
+
         
         <MysticalCard className="mb-8 bg-black bg-opacity-70 backdrop-blur-sm border border-white border-opacity-30">
           <h1 className="text-4xl font-bold mb-6 text-white drop-shadow-lg">{t.entryChoice.title}</h1>
