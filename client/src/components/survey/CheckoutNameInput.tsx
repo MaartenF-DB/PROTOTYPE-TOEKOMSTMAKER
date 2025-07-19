@@ -18,8 +18,8 @@ export function CheckoutNameInput({ existingResponses, onNameConfirm, language =
   const { speak } = useSpeech();
 
   useEffect(() => {
-    speak(t.questions?.name || "What is your name?");
-  }, [speak, t.questions]);
+    speak(t.questions?.name || "What is your name?", language);
+  }, [speak, t.questions, language]);
 
   const handleNameSubmit = () => {
     if (!enteredName.trim()) return;

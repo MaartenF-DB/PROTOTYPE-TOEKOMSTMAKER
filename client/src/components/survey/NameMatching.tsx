@@ -4,23 +4,27 @@ import { useState } from 'react';
 import { useSpeech } from '@/hooks/useSpeech';
 import { useEffect } from 'react';
 import { Question } from './Question';
+import { Language } from '@/lib/translations';
 
 interface NameMatchingProps {
   enteredName: string;
   existingNames: string[];
   onNameMatch: (matchedName: string) => void;
   onProceedAnyway: () => void;
+  language?: Language;
 }
 
-export function NameMatching({ enteredName, existingNames, onNameMatch, onProceedAnyway }: NameMatchingProps) {
+export function NameMatching({ enteredName, existingNames, onNameMatch, onProceedAnyway, language = 'nl' }: NameMatchingProps) {
   const [selectedName, setSelectedName] = useState('');
   const [proceedWithoutMatch, setProceedWithoutMatch] = useState(false);
   const { speak } = useSpeech();
 
   useEffect(() => {
-    const message = `Er zijn meerdere namen gevonden. Kies je naam uit de lijst of ga verder met een nieuwe naam.`;
-    speak(message);
-  }, [speak]);
+    const message = language === 'en' 
+      ? `Multiple names found. Choose your name from the list or continue with a new name.`
+      : `Er zijn meerdere namen gevonden. Kies je naam uit de lijst of ga verder met een nieuwe naam.`;
+    speak(message, language);
+  }, [speak, language]);
 
   const handleNameSelect = (name: string) => {
     setSelectedName(name);

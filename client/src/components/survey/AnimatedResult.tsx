@@ -103,7 +103,7 @@ export function AnimatedResult({ finalResult, onComplete, language = 'nl' }: Ani
       <div className="text-center max-w-2xl w-full relative z-10">
         <div className="bg-white bg-opacity-40 rounded-2xl p-8 mb-8 backdrop-blur-sm border border-white border-opacity-30">
           <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
-            {language === 'en' ? 'The fortune teller reveals your personality... 🔮' : 'De waarzegster onthult je persoonlijkheid... 🔮'}
+            {language === 'en' ? 'The fortune teller reveals your personality... ' : 'De waarzegster onthult je persoonlijkheid... '}<span className="text-purple-300">🔮</span>
           </h2>
           <div className="text-2xl font-bold mb-4 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
             {timeRemaining} {language === 'en' ? 'seconds' : 'seconden'}

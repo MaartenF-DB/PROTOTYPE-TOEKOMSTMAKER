@@ -530,6 +530,7 @@ export default function Home() {
               updateAnswers({ isNewCheckoutUser: true });
               setCurrentSection('question-6');
             }}
+            language={language}
           />
         );
 

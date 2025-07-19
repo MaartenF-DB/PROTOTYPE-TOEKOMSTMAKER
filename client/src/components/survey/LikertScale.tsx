@@ -50,6 +50,12 @@ export function LikertScale({ options, value, onValueChange, language = 'nl' }: 
                 {value === option.value && <div className="w-3 h-3 rounded-full bg-blue-600" />}
               </div>
             </label>
+            {/* Show selected answer label below the circle */}
+            {value === option.value && (
+              <div className="text-xs text-white text-center px-2 py-1 bg-white bg-opacity-20 rounded">
+                {option.label}
+              </div>
+            )}
           </div>
         ))}
       </div>
