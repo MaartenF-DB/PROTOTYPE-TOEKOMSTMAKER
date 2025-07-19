@@ -16,39 +16,25 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
   const t = translations[language];
   const { speak } = useSpeech();
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const isPlayingRef = useRef(false);
 
   useEffect(() => {
     const message = language === 'en' 
-      ? "What kind of future maker are you?"
-      : "Wat voor toekomstmaker ben jij?";
+      ? "Welcome to Future Makers! What kind of futuremaker are you? Let's find out together! Are you a newcomer or have you just finished the exhibition?"
+      : "Welkom bij Toekomstmakers! Wat voor toekomstmaker ben jij? Laten we het samen uitzoeken! Kom je net binnen of ben je net klaar met de tentoonstelling?";
     
     const playMessage = () => {
-      if (isPlayingRef.current) return; // Prevent overlapping
-      
-      // Stop any existing speech
+      // Stop any existing speech before starting new one
       window.speechSynthesis.cancel();
-      
-      isPlayingRef.current = true;
-      
-      // Wait a bit then speak
       setTimeout(() => {
         speak(message, language);
-        
-        // Reset playing flag after estimated speech duration (3-4 seconds)
-        setTimeout(() => {
-          isPlayingRef.current = false;
-        }, 4000);
-      }, 200);
+      }, 100);
     };
     
     // Play immediately
     playMessage();
     
-    // Set up interval to repeat with proper 10 second gaps
-    intervalRef.current = setInterval(() => {
-      playMessage();
-    }, 15000); // 15 seconds total (4 sec speech + 10 sec pause + 1 sec buffer)
+    // Set up interval to repeat every 10 seconds
+    intervalRef.current = setInterval(playMessage, 10000);
     
     // Cleanup interval on unmount
     return () => {
@@ -56,7 +42,7 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
         clearInterval(intervalRef.current);
         intervalRef.current = null;
       }
-      isPlayingRef.current = false;
+      // Stop any ongoing speech when component unmounts
       window.speechSynthesis.cancel();
     };
   }, [speak, language]);
