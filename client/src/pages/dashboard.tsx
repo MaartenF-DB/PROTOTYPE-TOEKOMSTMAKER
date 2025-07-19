@@ -12,7 +12,6 @@ import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
 
 export default function Dashboard() {
   const [resetCode, setResetCode] = useState('');
@@ -24,136 +23,212 @@ export default function Dashboard() {
     select: (data) => data.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
   });
 
-  const resetMutation = useMutation({
+  const exportWithReset = useMutation({
     mutationFn: async (code: string) => {
-      try {
-        const response = await fetch('/api/survey-responses/reset', {
-          method: 'POST',
-          body: JSON.stringify({ code }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || 'Reset failed');
-        }
-        
-        return response.json();
-      } catch (error) {
-        console.error('Reset mutation error:', error);
-        throw error;
+      if (code !== 'NieuweInstituutLINA') {
+        throw new Error('Onjuiste authenticatiecode');
       }
+      
+      console.log('🔐 Authentication successful, starting export and reset');
+      
+      // Get current data before reset
+      const currentResponses = responses;
+      
+      // Generate CSV first
+      console.log('📊 Generating CSV...');
+      const csvContent = generateCSV(currentResponses);
+      downloadCSV(csvContent);
+      
+      // Small delay to ensure CSV download starts
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Generate PDF
+      console.log('📋 Generating PDF...');
+      generatePDF();
+      
+      // Small delay to ensure PDF is processed
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Reset data via API
+      console.log('🗑️ Resetting all survey data');
+      const response = await fetch('/api/survey-responses/reset', {
+        method: 'POST',
+        body: JSON.stringify({ code }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Reset failed');
+      }
+      
+      return response.json();
     },
     onSuccess: (data) => {
-      console.log('Reset successful:', data);
+      console.log('Export and reset successful:', data);
       queryClient.invalidateQueries({ queryKey: ['/api/survey-responses'] });
       toast({
-        title: "Succes",
-        description: "Alle data is gereset. Nieuwe antwoorden worden als nieuw gezien.",
+        title: "Export Voltooid",
+        description: "CSV en PDF gedownload, alle data is gereset. Nieuwe antwoorden worden nu als verse data behandeld.",
       });
       setResetCode('');
     },
     onError: (error: any) => {
-      console.error('Reset error:', error);
+      console.error('Export error:', error);
       toast({
-        title: "Fout",
-        description: error.message || "Ongeldige code of server fout",
+        title: "Export Fout",
+        description: error.message || "Er is een fout opgetreden tijdens het exporteren",
         variant: "destructive",
       });
     },
   });
 
   const generatePDF = () => {
-    if (responses.length === 0) {
+    try {
+      if (responses.length === 0) {
+        toast({
+          title: "Geen data",
+          description: "Er zijn geen antwoorden om een PDF van te maken",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      console.log('Starting PDF generation with', responses.length, 'responses');
+      
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.width;
+      
+      // Title page
+      doc.setFontSize(20);
+      doc.text('Museum Dashboard Rapport', pageWidth / 2, 30, { align: 'center' });
+      
+      doc.setFontSize(12);
+      doc.text(`Gegenereerd op: ${new Date().toLocaleDateString('nl-NL')}`, pageWidth / 2, 45, { align: 'center' });
+      doc.text(`Totaal aantal responses: ${responses.length}`, pageWidth / 2, 55, { align: 'center' });
+      
+      // Statistics section
+      doc.setFontSize(16);
+      doc.text('Statistieken', 20, 80);
+      
+      doc.setFontSize(10);
+      const statsY = 95;
+      doc.text(`Totaal antwoorden: ${stats.totalResponses}`, 20, statsY);
+      doc.text(`Complete responses: ${stats.completeResponses}`, 20, statsY + 10);
+      doc.text(`Check-in alleen: ${stats.checkInOnlyResponses}`, 20, statsY + 20);
+      doc.text(`Gemiddelde leeftijd: ${stats.averageAge} jaar`, 20, statsY + 30);
+      
+      // Topics section
+      doc.setFontSize(14);
+      doc.text('Populaire Onderwerpen', 20, statsY + 50);
+      
+      let topicY = statsY + 65;
+      Object.entries(stats.topTopics)
+        .sort(([,a], [,b]) => b - a)
+        .slice(0, 6)
+        .forEach(([topic, count], index) => {
+          doc.setFontSize(9);
+          doc.text(`${index + 1}. ${topic}: ${count} keer gekozen`, 20, topicY);
+          topicY += 10;
+        });
+
+      // Add new page for detailed responses
+      doc.addPage();
+      
+      // Detailed responses table
+      doc.setFontSize(16);
+      doc.text('Gedetailleerde Antwoorden', 20, 20);
+      
+      // Table headers
+      doc.setFontSize(9);
+      const startY = 35;
+      const rowHeight = 15;
+      let currentY = startY;
+      
+      // Headers
+      doc.setFont(undefined, 'bold');
+      doc.text('Naam', 15, currentY);
+      doc.text('Leeftijd', 45, currentY);
+      doc.text('Met wie', 70, currentY);
+      doc.text('Onderwerp', 105, currentY);
+      doc.text('Gevoel Voor/Na', 140, currentY);
+      doc.text('Actie & Result', 175, currentY);
+      currentY += rowHeight;
+      
+      // Draw header line
+      doc.line(10, currentY - 5, 200, currentY - 5);
+      
+      // Table rows
+      doc.setFont(undefined, 'normal');
+      doc.setFontSize(8);
+      
+      responses.forEach((response, index) => {
+        if (currentY > 260) { // New page if needed
+          doc.addPage();
+          currentY = 30;
+          
+          // Repeat headers on new page
+          doc.setFont(undefined, 'bold');
+          doc.setFontSize(9);
+          doc.text('Naam', 15, currentY);
+          doc.text('Leeftijd', 45, currentY);
+          doc.text('Met wie', 70, currentY);
+          doc.text('Onderwerp', 105, currentY);
+          doc.text('Gevoel Voor/Na', 140, currentY);
+          doc.text('Actie & Result', 175, currentY);
+          currentY += rowHeight;
+          doc.line(10, currentY - 5, 200, currentY - 5);
+          doc.setFont(undefined, 'normal');
+          doc.setFontSize(8);
+        }
+        
+        // Row data
+        doc.text(response.name || '', 15, currentY);
+        doc.text(response.age || '', 45, currentY);
+        doc.text(response.visitingWith || '', 70, currentY);
+        doc.text(response.mostImportantTopic || '', 105, currentY);
+        doc.text(`${response.feelingBefore || '-'}→${response.feelingAfter || '-'}`, 140, currentY);
+        doc.text(`${response.actionChoice || '-'}`, 175, currentY);
+        
+        // Second line for result if it exists
+        if (response.result) {
+          currentY += 8;
+          doc.setFontSize(7);
+          const resultText = response.result.length > 40 ? response.result.substring(0, 40) + '...' : response.result;
+          doc.text(resultText, 15, currentY);
+          doc.setFontSize(8);
+        }
+        
+        currentY += rowHeight;
+        
+        // Light separator line
+        if (index < responses.length - 1) {
+          doc.setDrawColor(220, 220, 220);
+          doc.line(10, currentY - 5, 200, currentY - 5);
+          doc.setDrawColor(0, 0, 0);
+        }
+      });
+
+      console.log('PDF generation completed, saving file');
+      
+      // Save the PDF
+      doc.save(`museum-dashboard-rapport-${new Date().toISOString().split('T')[0]}.pdf`);
+      
       toast({
-        title: "Geen data",
-        description: "Er zijn geen antwoorden om een PDF van te maken",
+        title: "PDF Rapport Gedownload",
+        description: "Gedetailleerd dashboard rapport met statistieken en tabellen",
+      });
+      
+    } catch (error) {
+      console.error('PDF generation error:', error);
+      toast({
+        title: "PDF Fout",
+        description: "Er is een fout opgetreden bij het genereren van de PDF",
         variant: "destructive",
       });
-      return;
     }
-
-    const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.width;
-    const pageHeight = doc.internal.pageSize.height;
-    
-    // Title page
-    doc.setFontSize(20);
-    doc.text('Museum Dashboard Rapport', pageWidth / 2, 30, { align: 'center' });
-    
-    doc.setFontSize(12);
-    doc.text(`Gegenereerd op: ${new Date().toLocaleDateString('nl-NL')}`, pageWidth / 2, 45, { align: 'center' });
-    doc.text(`Totaal aantal responses: ${responses.length}`, pageWidth / 2, 55, { align: 'center' });
-    
-    // Statistics section
-    doc.setFontSize(16);
-    doc.text('Statistieken', 20, 80);
-    
-    doc.setFontSize(10);
-    const statsY = 95;
-    doc.text(`Totaal antwoorden: ${stats.totalResponses}`, 20, statsY);
-    doc.text(`Complete responses: ${stats.completeResponses}`, 20, statsY + 10);
-    doc.text(`Check-in alleen: ${stats.checkInOnlyResponses}`, 20, statsY + 20);
-    doc.text(`Gemiddelde leeftijd: ${stats.averageAge} jaar`, 20, statsY + 30);
-    
-    // Topics section
-    doc.setFontSize(14);
-    doc.text('Populaire Onderwerpen', 20, statsY + 50);
-    
-    let topicY = statsY + 65;
-    Object.entries(stats.topTopics)
-      .sort(([,a], [,b]) => b - a)
-      .slice(0, 6)
-      .forEach(([topic, count], index) => {
-        doc.setFontSize(9);
-        doc.text(`${index + 1}. ${topic}: ${count} keer gekozen`, 20, topicY);
-        topicY += 10;
-      });
-
-    // Add new page for detailed responses
-    doc.addPage();
-    
-    // Detailed responses table
-    doc.setFontSize(16);
-    doc.text('Gedetailleerde Antwoorden', 20, 20);
-    
-    const tableData = responses.map(response => [
-      response.name,
-      response.age,
-      response.visitingWith,
-      response.mostImportantTopic,
-      response.feelingBefore || '-',
-      response.confidenceBefore || '-',
-      response.feelingAfter || '-',
-      response.actionChoice || '-',
-      response.confidenceAfter || '-',
-      response.result ? response.result.substring(0, 30) + '...' : '-',
-      new Date(response.createdAt).toLocaleDateString('nl-NL')
-    ]);
-
-    (doc as any).autoTable({
-      head: [['Naam', 'Leeftijd', 'Met wie', 'Onderwerp', 'Gevoel Voor', 'Vertrouwen Voor', 'Gevoel Na', 'Actie', 'Vertrouwen Na', 'Resultaat', 'Datum']],
-      body: tableData,
-      startY: 35,
-      styles: { fontSize: 7, cellPadding: 2 },
-      headStyles: { fillColor: [66, 139, 202] },
-      columnStyles: {
-        9: { cellWidth: 25 }, // Resultaat column
-      },
-      margin: { top: 35, left: 10, right: 10 },
-      pageBreak: 'auto',
-      showHead: 'everyPage'
-    });
-
-    // Save the PDF
-    doc.save(`museum-dashboard-rapport-${new Date().toISOString().split('T')[0]}.pdf`);
-    
-    toast({
-      title: "PDF Rapport Gedownload",
-      description: "Gedetailleerd dashboard rapport met statistieken en tabellen",
-    });
   };
 
   // Separate responses by type
@@ -206,98 +281,46 @@ export default function Dashboard() {
 
 
 
-  const exportAllDataAndReset = async () => {
-    if (responses.length === 0) {
-      toast({
-        title: "Geen data",
-        description: "Er zijn geen antwoorden om te exporteren",
-        variant: "destructive",
-      });
-      return;
-    }
+  // Helper functions for CSV generation
+  const generateCSV = (responseData: SurveyResponse[]) => {
+    const csvContent = responseData.map(response => ({
+      Naam: response.name,
+      Leeftijd: response.age,
+      'Bezoekt met': response.visitingWith,
+      'Andere begeleiding': response.visitingWithOther || '',
+      'Onderwerp ranking': response.topicRanking.join(', '),
+      'Belangrijkste onderwerp': response.mostImportantTopic,
+      'Gevoel voor (1-5)': response.feelingBefore || '',
+      'Vertrouwen voor (1-5)': response.confidenceBefore || '',
+      'Gevoel na (1-5)': response.feelingAfter || '',
+      'Actie keuze': response.actionChoice,
+      'Vertrouwen na (1-5)': response.confidenceAfter || '',
+      'Persoonlijkheid': response.result,
+      'Datum': new Date(response.createdAt).toLocaleDateString('nl-NL'),
+      'Tijd': new Date(response.createdAt).toLocaleTimeString('nl-NL')
+    }));
+    
+    const csvHeaders = Object.keys(csvContent[0]);
+    const csvRows = csvContent.map(row => Object.values(row).map(val => 
+      typeof val === 'string' && (val.includes(',') || val.includes('"') || val.includes('\n')) 
+        ? `"${val.replace(/"/g, '""')}"` 
+        : val
+    ));
+    
+    return [
+      csvHeaders.join(','),
+      ...csvRows.map(row => row.join(','))
+    ].join('\n');
+  };
 
-    if (!resetCode.trim()) {
-      toast({
-        title: "Code vereist",
-        description: "Voer de authenticatiecode in om data te exporteren en resetten",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (resetCode !== "NieuweInstituutLINA") {
-      toast({
-        title: "Ongeldige code",
-        description: "De authenticatiecode is onjuist",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    try {
-      // First export the data
-      const csvContent = responses.map(response => ({
-        Naam: response.name,
-        Leeftijd: response.age,
-        'Bezoekt met': response.visitingWith,
-        'Andere begeleiding': response.visitingWithOther || '',
-        'Onderwerp ranking': response.topicRanking.join(', '),
-        'Belangrijkste onderwerp': response.mostImportantTopic,
-        'Gevoel voor (1-5)': response.feelingBefore || '',
-        'Vertrouwen voor (1-5)': response.confidenceBefore || '',
-        'Gevoel na (1-5)': response.feelingAfter || '',
-        'Actie keuze': response.actionChoice,
-        'Vertrouwen na (1-5)': response.confidenceAfter || '',
-        'Persoonlijkheid': response.result,
-        'Datum': new Date(response.createdAt).toLocaleDateString('nl-NL'),
-        'Tijd': new Date(response.createdAt).toLocaleTimeString('nl-NL')
-      }));
-      
-      // Create properly formatted CSV with clear structure
-      const csvHeaders = Object.keys(csvContent[0]);
-      const csvRows = csvContent.map(row => Object.values(row).map(val => 
-        typeof val === 'string' && (val.includes(',') || val.includes('"') || val.includes('\n')) 
-          ? `"${val.replace(/"/g, '""')}"` 
-          : val
-      ));
-      
-      const csv = [
-        csvHeaders.join(','),
-        ...csvRows.map(row => row.join(','))
-      ].join('\n');
-      
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `museum-responses-${new Date().toISOString().split('T')[0]}.csv`;
-      a.click();
-      URL.revokeObjectURL(url);
-
-      toast({
-        title: "CSV Gedownload",
-        description: "CSV bestand is gedownload. PDF wordt nu gegenereerd...",
-      });
-
-      // Wait a moment before generating PDF
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      // Generate PDF report
-      generatePDF();
-
-      // Wait a moment before resetting to ensure both downloads completed
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      // Then reset all data
-      resetMutation.mutate(resetCode);
-    } catch (error) {
-      console.error('Export error:', error);
-      toast({
-        title: "Export Fout",
-        description: "Er is een fout opgetreden bij het exporteren",
-        variant: "destructive",
-      });
-    }
+  const downloadCSV = (csvContent: string) => {
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `museum-responses-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   if (isLoading) {
@@ -551,7 +574,7 @@ export default function Dashboard() {
                   placeholder="Voer authenticatiecode in..."
                   value={resetCode}
                   onChange={(e) => setResetCode(e.target.value)}
-                  disabled={resetMutation.isPending}
+                  disabled={exportWithReset.isPending}
                 />
                 <p className="text-sm text-gray-500">
                   Code vereist voor export en reset functionaliteit
@@ -559,11 +582,11 @@ export default function Dashboard() {
               </div>
               <div className="flex flex-col justify-end">
                 <Button 
-                  onClick={exportAllDataAndReset}
-                  disabled={responses.length === 0 || !resetCode.trim() || resetMutation.isPending}
+                  onClick={() => exportWithReset.mutate(resetCode)}
+                  disabled={responses.length === 0 || !resetCode.trim() || exportWithReset.isPending}
                   className="bg-red-600 hover:bg-red-700 text-white"
                 >
-                  {resetMutation.isPending ? (
+                  {exportWithReset.isPending ? (
                     <>
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                       Bezig...
