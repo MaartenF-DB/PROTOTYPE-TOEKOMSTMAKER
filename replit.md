@@ -119,7 +119,8 @@ The application follows a modern full-stack architecture with the following comp
 - **Enhanced Results Page**: Completely redesigned Results component with mystical crystal ball theme matching homepage atmosphere
 - **Discrete Dashboard**: Made dashboard link less prominent for museum staff use only
 - **Simplified Entry Screen**: Removed extra text and decorative emojis from choice buttons for cleaner interface
-- **Consistent Mystical Experience**: Applied fortune teller theme across all survey components with star-field background
+- **Name Input Background**: Added BackgroundEmojis component to all name input pages (CheckoutNameInput, CheckInIntro, NameMatching, NameVerification)
+- **Consistent Mystical Experience**: Applied fortune teller theme across all survey components with star-field background including name entry sections
 
 ### July 18, 2025 - Database Migration and Checkout Flow Fix
 - **Database Migration**: Replaced in-memory storage with PostgreSQL database to ensure data persistence

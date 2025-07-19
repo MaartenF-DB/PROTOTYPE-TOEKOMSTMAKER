@@ -4,6 +4,7 @@ import { Check, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { translations, Language } from '@/lib/translations';
 import { useSpeech } from '@/hooks/useSpeech';
+import { BackgroundEmojis } from '@/components/fortune/BackgroundEmojis';
 
 interface CheckoutNameInputProps {
   existingResponses: any[];
@@ -58,8 +59,8 @@ export function CheckoutNameInput({ existingResponses, onNameConfirm, language =
   };
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-blue-500 to-teal-500 text-white">
-      <div className="text-center max-w-5xl w-full">
+    <section className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-blue-500 to-teal-500 text-white relative">
+      <div className="text-center max-w-5xl w-full relative z-10">
         <div className="bg-white bg-opacity-20 rounded-2xl p-8 mb-8">
           <h2 className="text-3xl font-bold mb-6">{t.questions?.name || "What is your name?"}</h2>
           
@@ -93,6 +94,9 @@ export function CheckoutNameInput({ existingResponses, onNameConfirm, language =
           </Button>
         </div>
       </div>
+
+      {/* Background emojis for name input */}
+      <BackgroundEmojis sectionType="checkout" />
     </section>
   );
 }

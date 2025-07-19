@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { useSpeech } from '@/hooks/useSpeech';
 import { useEffect } from 'react';
 import { translations } from '@/lib/translations';
+import { BackgroundEmojis } from '@/components/fortune/BackgroundEmojis';
 
 interface CheckInIntroProps {
   onStart: () => void;
@@ -20,8 +21,8 @@ export function CheckInIntro({ onStart, language = 'nl' }: CheckInIntroProps) {
   }, [speak, language]);
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-purple-600 to-blue-600 text-white">
-      <div className="text-center max-w-2xl">
+    <section className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-purple-600 to-blue-600 text-white relative">
+      <div className="text-center max-w-2xl relative z-10">
         <div className="mb-8">
           <div className="w-24 h-24 mx-auto rounded-full bg-white bg-opacity-20 flex items-center justify-center">
             <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -40,6 +41,9 @@ export function CheckInIntro({ onStart, language = 'nl' }: CheckInIntroProps) {
           {t.checkInIntro.start}
         </Button>
       </div>
+
+      {/* Background emojis for check-in intro */}
+      <BackgroundEmojis sectionType="checkin" />
     </section>
   );
 }
