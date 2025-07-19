@@ -15,8 +15,8 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
 
   useEffect(() => {
     const message = "Welkom bij de tentoonstelling! Kom je net binnen of heb je de tentoonstelling al bezocht?";
-    speak(message);
-  }, [speak]);
+    speak(message, language);
+  }, [speak, language]);
 
   return (
     <section className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-indigo-500 to-purple-600 text-white">

@@ -60,24 +60,31 @@ export function useSpeech() {
       }
     } else {
       utterance.lang = 'nl-NL';
-      utterance.rate = 0.9; // Faster, more natural
-      utterance.pitch = 0.95; // Lower, more human-like
-      utterance.volume = 0.8; // Softer, more gentle
+      utterance.rate = 0.85; // Slightly slower for more clarity
+      utterance.pitch = 1.05; // Higher pitch for more feminine voice
+      utterance.volume = 0.9; // Slightly louder for better clarity
       
       // Find the best female Dutch voice with strict language matching
       const voices = speechSynthesis.getVoices();
+      console.log('Available Dutch voices:', voices.filter(v => v.lang.startsWith('nl')).map(v => ({ name: v.name, lang: v.lang })));
+      
+      // Prioritize Google voices as they often sound more natural and feminine
       const preferredVoice = voices.find(voice => 
+        voice.lang === 'nl-NL' && 
+        voice.name.toLowerCase().includes('google')
+      ) || voices.find(voice => 
         voice.lang === 'nl-NL' && 
         (voice.name.toLowerCase().includes('claire') || 
          voice.name.toLowerCase().includes('female') ||
          voice.name.toLowerCase().includes('saskia') ||
-         voice.name.toLowerCase().includes('lotte'))
-      ) || voices.find(voice => 
-        voice.lang === 'nl-NL' && voice.name.toLowerCase().includes('google')
+         voice.name.toLowerCase().includes('lotte') ||
+         voice.name.toLowerCase().includes('fenna'))
       ) || voices.find(voice => 
         voice.lang === 'nl-NL' && 
         !voice.name.toLowerCase().includes('frank') && 
-        !voice.name.toLowerCase().includes('male')
+        !voice.name.toLowerCase().includes('male') &&
+        !voice.name.toLowerCase().includes('ruben') &&
+        !voice.name.toLowerCase().includes('jeroen')
       ) || voices.find(voice => 
         voice.lang === 'nl-NL'
       ) || voices.find(voice => voice.lang.startsWith('nl-'));
@@ -85,6 +92,16 @@ export function useSpeech() {
       if (preferredVoice) {
         utterance.voice = preferredVoice;
         console.log('Selected Dutch voice:', preferredVoice.name, preferredVoice.lang);
+        
+        // If we ended up with a male voice (like Frank), adjust settings to sound more feminine
+        if (preferredVoice.name.toLowerCase().includes('frank') || 
+            preferredVoice.name.toLowerCase().includes('male')) {
+          utterance.pitch = 1.15; // Higher pitch for more feminine sound
+          utterance.rate = 0.8; // Slightly slower and more gentle
+          console.log('Adjusting settings for male voice to sound more feminine');
+        }
+      } else {
+        console.log('No specific Dutch voice found, using default');
       }
     }
 
