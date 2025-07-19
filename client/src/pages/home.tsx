@@ -625,12 +625,7 @@ export default function Home() {
                 language={language}
               />
               
-              {/* Show read-only notice for existing users */}
-              {!checkoutOnly && answers.feelingBefore !== null && (
-                <div className="mt-4 p-3 bg-blue-100 rounded-lg text-blue-800 text-sm">
-                  Je hebt al eerder de check-in ingevuld. Je antwoorden worden gebruikt voor vergelijking.
-                </div>
-              )}
+
               {answers.feelingAfter !== null && (
                 <div className="bg-white bg-opacity-20 rounded-xl p-4 backdrop-blur-sm">
                   <p className="text-white font-semibold">{t.yourAnswer}:</p>

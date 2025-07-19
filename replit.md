@@ -131,6 +131,8 @@ The application follows a modern full-stack architecture with the following comp
 - **Button Border Removal**: Removed borders from entry choice buttons for cleaner appearance
 - **Larger Action Emojis**: Increased emoji size from text-4xl to text-6xl in action choice questions
 - **Gender-Neutral Text**: Changed "zijn magie" to "haar magie" in fortune teller loading message
+- **Improved Answer Spacing**: Added mt-8 margin to "Jouw antwoord:" sections to prevent overlap with answer options
+- **Removed Check-in Notice**: Removed "Je hebt al eerder de check-in ingevuld" message for existing users for cleaner checkout experience
 - **Consistent Mystical Experience**: Applied fortune teller theme across all survey components with star-field background including name entry sections
 
 ### July 18, 2025 - Database Migration and Checkout Flow Fix
