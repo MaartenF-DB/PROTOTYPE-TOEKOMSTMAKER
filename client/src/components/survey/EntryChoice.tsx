@@ -68,6 +68,9 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
             {language === 'en' ? "The fortune teller awaits your choice..." : "De waarzegger wacht op jouw keuze..."}
           </p>
         </div>
+
+        {/* Background emojis */}
+        <BackgroundEmojis sectionType="entry" />
       </div>
     </section>
   );
