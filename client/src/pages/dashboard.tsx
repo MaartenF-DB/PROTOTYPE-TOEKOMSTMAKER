@@ -213,7 +213,6 @@ import { useQuery } from '@tanstack/react-query';
  </CardContent>
  </Card>
  </div>
- </div>
 
  {/* Topic Distribution */}
  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">

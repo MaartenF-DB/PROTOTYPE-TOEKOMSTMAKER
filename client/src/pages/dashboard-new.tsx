@@ -64,6 +64,17 @@ export default function Dashboard() {
       }
       return acc;
     }, {} as Record<string, number>),
+    ageDistribution: responses.reduce((acc, r) => {
+      acc[r.age] = (acc[r.age] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>),
+    visitingDistribution: responses.reduce((acc, r) => {
+      const visiting = r.visitingWith === 'other' && r.visitingWithOther 
+        ? `Anders: ${r.visitingWithOther}` 
+        : r.visitingWith;
+      acc[visiting] = (acc[visiting] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>),
     feelingChanges: completeResponses.filter(r => r.feelingBefore !== null && r.feelingAfter !== null).map(r => ({
       topic: r.mostImportantTopic,
       before: r.feelingBefore!,
@@ -175,7 +186,7 @@ export default function Dashboard() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Check-in Only</CardTitle>
-              <Badge className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1">Incomplete</Badge>
+              <Badge className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1">Zonder Check-out</Badge>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats.checkInOnlyResponses}</div>
@@ -219,8 +230,8 @@ export default function Dashboard() {
           </Card>
         </div>
 
-        {/* Topic Distribution */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        {/* Age and Visiting Distribution */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-8 mb-8">
           <Card>
             <CardHeader>
               <CardTitle>Meest Populaire Onderwerpen</CardTitle>
@@ -267,6 +278,57 @@ export default function Dashboard() {
                           <span className="text-2xl">{actionData?.icon || '❓'}</span>
                           <div className="font-medium">{actionData?.label || action}</div>
                         </div>
+                        <Badge variant="secondary">{count}</Badge>
+                      </div>
+                    );
+                  })}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Leeftijd Verdeling</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {Object.entries(stats.ageDistribution)
+                  .sort(([a], [b]) => parseInt(a) - parseInt(b))
+                  .map(([age, count]) => (
+                    <div key={age} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div className="font-medium">{count} {count === 1 ? 'persoon is' : 'mensen zijn'} {age} jaar</div>
+                      <Badge variant="secondary">{count}</Badge>
+                    </div>
+                  ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Bezoek Met</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {Object.entries(stats.visitingDistribution)
+                  .sort(([,a], [,b]) => b - a)
+                  .map(([visiting, count]) => {
+                    // Get the proper label for visiting options
+                    const getVisitingLabel = (value: string) => {
+                      if (value.startsWith('Anders:')) return value;
+                      const visitingOptions = {
+                        'alone': 'Alleen',
+                        'family': 'Met familie',
+                        'school': 'Met school',
+                        'babysitter': 'Met oppas',
+                        'other': 'Anders'
+                      };
+                      return visitingOptions[value as keyof typeof visitingOptions] || value;
+                    };
+                    
+                    return (
+                      <div key={visiting} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div className="font-medium">{count} {count === 1 ? 'persoon bezoekt' : 'mensen bezoeken'} {getVisitingLabel(visiting)}</div>
                         <Badge variant="secondary">{count}</Badge>
                       </div>
                     );
