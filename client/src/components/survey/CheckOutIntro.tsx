@@ -14,9 +14,11 @@ export function CheckOutIntro({ onStart, mostImportantTopic, language = 'nl' }: 
   const { speak } = useSpeech();
 
   useEffect(() => {
-    const text = "Kom je aan het einde van de tentoonstelling terug? Dan onderzoeken we verder wat voor toekomstmaker jij bent!";
-    speak(text);
-  }, [speak]);
+    const text = language === 'en' 
+      ? "Are you coming back at the end of the exhibition? Then we'll explore further what kind of future maker you are!"
+      : "Kom je aan het einde van de tentoonstelling terug? Dan onderzoeken we verder wat voor toekomstmaker jij bent!";
+    speak(text, language);
+  }, [speak, language]);
 
   return (
     <section className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-green-600 to-teal-600 text-white">

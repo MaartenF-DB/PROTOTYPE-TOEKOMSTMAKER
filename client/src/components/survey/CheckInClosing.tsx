@@ -11,7 +11,7 @@ export function CheckInClosing({ onComplete }: CheckInClosingProps) {
 
   useEffect(() => {
     const text = "Kom je aan het einde van de tentoonstelling terug? Dan onderzoeken we verder wat voor toekomstmaker jij bent!";
-    speak(text);
+    speak(text, 'nl');
   }, [speak]);
 
   return (

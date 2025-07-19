@@ -88,7 +88,7 @@ export function useSpeech() {
         // Dutch female voice configuration
         utterance.lang = 'nl-NL';
         utterance.rate = 0.85;
-        utterance.pitch = 1.25;
+        utterance.pitch = 1.0; // Standard pitch for more natural Dutch female voice
         utterance.volume = 0.9;
         
         const voices = speechSynthesis.getVoices();
@@ -122,8 +122,8 @@ export function useSpeech() {
           utterance.voice = femaleVoice;
           console.log('✓ Selected Dutch female voice:', femaleVoice.name);
         } else {
-          console.log('⚠️ No Dutch female voice found, using default with feminine settings');
-          utterance.pitch = 1.4; // Higher pitch to compensate
+          console.log('⚠️ No Dutch female voice found, using default with standard settings');
+          utterance.pitch = 1.1; // Slightly higher pitch to compensate, but not too high
         }
       }
 
