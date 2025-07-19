@@ -158,7 +158,7 @@ The application follows a modern full-stack architecture with the following comp
 - **Enhanced Emoji Visibility**: Updated emoji colors to brighter shades (yellow-200, blue-300, orange-300) for better visibility
 - **Ranking Instructions**: Simplified to only "Versleep de onderwerpen naar de goede plek." with speech synthesis
 - **Results Text Consistency**: All result text now uses same golden color instead of topic-specific colors
-- **Auto-redirect Feature**: Results page automatically returns to homepage after 1 minute if "Nieuwe Lezing" button not clicked
+- **Auto-redirect Feature**: Results page automatically returns to homepage after 30 seconds if "Nieuwe Lezing" button not clicked
 - **Button Border Removal**: Removed borders from entry choice buttons for cleaner appearance
 - **Larger Action Emojis**: Increased emoji size from text-4xl to text-6xl in action choice questions
 - **Gender-Neutral Text**: Changed "zijn magie" to "haar magie" in fortune teller loading message

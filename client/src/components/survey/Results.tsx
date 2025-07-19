@@ -61,13 +61,13 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
     console.log('Results component mounted, showAnimatedResult:', showAnimatedResult);
   }, [showAnimatedResult]);
 
-  // Auto-redirect to homepage after 1 minute if "Nieuwe Lezing" button is not clicked
+  // Auto-redirect to homepage after 30 seconds if "Nieuwe Lezing" button is not clicked
   useEffect(() => {
     if (!showAnimatedResult && animationComplete) {
       const timer = setTimeout(() => {
-        console.log('🕒 Auto-redirecting to homepage after 1 minute');
+        console.log('🕒 Auto-redirecting to homepage after 30 seconds');
         setLocation('/');
-      }, 60000); // 1 minute = 60000ms
+      }, 30000); // 30 seconds = 30000ms
 
       return () => clearTimeout(timer);
     }
