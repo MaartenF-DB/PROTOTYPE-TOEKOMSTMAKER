@@ -36,7 +36,7 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
     const t = translations[language];
     if (!confidenceLevel) return t.results.motivationalMessages[1];
     
-    return t.results.motivationalMessages[confidenceLevel] || t.results.motivationalMessages[1];
+    return t.results.motivationalMessages[confidenceLevel as keyof typeof t.results.motivationalMessages] || t.results.motivationalMessages[1];
   };
   
   const motivationalMessage = getMotivationalMessage(answers.confidenceAfter);
@@ -145,7 +145,7 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
                 if (voices.length > 0) {
                   resolve();
                 } else {
-                  speechSynthesis.addEventListener('voiceschanged', resolve, { once: true });
+                  speechSynthesis.addEventListener('voiceschanged', () => resolve(), { once: true });
                   // Trigger voice loading
                   speechSynthesis.getVoices();
                 }
@@ -192,30 +192,60 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
                   console.log('⚠️ No English female voice found, using default');
                 }
               } else {
-                // Dutch female voice selection
+                // Dutch female voice selection - CONSISTENT WITH useSpeech.ts
                 console.log('Available Dutch voices:', voices.filter(v => v.lang.startsWith('nl')).map(v => ({ name: v.name, lang: v.lang })));
                 
+                // SAME LOGIC AS useSpeech.ts - TRUE FEMALE VOICES ONLY
                 const dutchFemaleVoice = voices.find(voice => 
                   voice.lang === 'nl-NL' && 
-                  (voice.name.toLowerCase().includes('female') ||
-                   voice.name.toLowerCase().includes('claire') ||
+                  (voice.name.toLowerCase().includes('claire') ||
+                   voice.name.toLowerCase().includes('ellen') ||
                    voice.name.toLowerCase().includes('saskia') ||
-                   voice.name.toLowerCase().includes('lotte'))
+                   voice.name.toLowerCase().includes('lotte') ||
+                   voice.name.toLowerCase().includes('fenna') ||
+                   voice.name.toLowerCase().includes('emma') ||
+                   voice.name.toLowerCase().includes('anna') ||
+                   voice.name.toLowerCase().includes('female') ||
+                   voice.name.toLowerCase().includes('premium'))
+                ) || voices.find(voice => 
+                  voice.lang === 'nl-BE' && 
+                  voice.name.toLowerCase().includes('ellen')  // Ellen (nl-BE) is female
                 ) || voices.find(voice => 
                   voice.lang === 'nl-NL' && 
                   voice.name.toLowerCase().includes('google') &&
+                  voice.name.toLowerCase().includes('nederlands') &&
                   !voice.name.toLowerCase().includes('male')
                 ) || voices.find(voice => 
-                  voice.lang === 'nl-NL' &&
+                  (voice.lang === 'nl-NL' || voice.lang === 'nl-BE') && 
                   !voice.name.toLowerCase().includes('frank') &&
-                  !voice.name.toLowerCase().includes('male')
+                  !voice.name.toLowerCase().includes('xander') &&  // EXCLUDE XANDER - HE IS MALE
+                  !voice.name.toLowerCase().includes('male') &&
+                  !voice.name.toLowerCase().includes('ruben') &&
+                  !voice.name.toLowerCase().includes('jeroen') &&
+                  !voice.name.toLowerCase().includes('david') &&
+                  !voice.name.toLowerCase().includes('mark') &&
+                  !voice.name.toLowerCase().includes('bas') &&
+                  !voice.name.toLowerCase().includes('tim') &&
+                  !voice.name.toLowerCase().includes('rob')
                 );
                 
                 if (dutchFemaleVoice) {
                   utterance.voice = dutchFemaleVoice;
                   console.log('✓ Selected Dutch female voice:', dutchFemaleVoice.name);
+                  
+                  // Apply same voice-specific optimizations as useSpeech.ts
+                  if (dutchFemaleVoice.name.toLowerCase().includes('ellen')) {
+                    utterance.pitch = 1.0; // Ellen has natural female tone
+                    utterance.rate = 0.9;  // Standard rate for Ellen
+                  } else if (dutchFemaleVoice.name.toLowerCase().includes('google')) {
+                    utterance.pitch = 1.1; // Slight adjustment for Google voices
+                    utterance.rate = 0.9;
+                  }
                 } else {
-                  console.log('⚠️ No Dutch female voice found, using default');
+                  console.log('⚠️ No true Dutch female voice found, applying feminine fallback');
+                  // Apply maximum feminine settings to ensure female sound
+                  utterance.pitch = 1.3; // Higher pitch for feminine sound
+                  utterance.rate = 0.85; // Slower for femininity
                 }
               }
               
