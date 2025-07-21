@@ -2,7 +2,6 @@ import { Button } from '@/components/ui/button';
 import { translations } from '@/lib/translations';
 import { useSpeech } from '@/hooks/useSpeech';
 import { useEffect, useRef } from 'react';
-import { MysticalCard } from '@/components/fortune/FortuneTellerCharacter';
 import { BackgroundEmojis } from '@/components/fortune/BackgroundEmojis';
 import backgroundVideoPath from "@assets/Ontwerp zonder titel_1753124622020.mp4";
 
