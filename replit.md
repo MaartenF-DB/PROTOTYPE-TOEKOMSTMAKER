@@ -113,6 +113,9 @@ The application follows a modern full-stack architecture with the following comp
 - **Apple Device Audio**: Enhanced Dutch female voice selection for iOS/iPad with Xander fallback
 - **Apple Emoji Support**: Added CSS to ensure consistent Apple emoji rendering across devices
 - **Drag Feedback**: Topics now speak their descriptions immediately when repositioned
+- **Dutch Female Voice Fix**: Completely revised voice selection to exclude all male voices (Xander, Frank) and prioritize true female voices (Ellen, Google Nederlands)
+- **Language Selector Repositioning**: Moved Dutch/English flags 30px up and 30px left from bottom-right corner (bottom-12 right-20)
+- **FortuneTellerCharacter Removal**: Updated component to return null, effectively hiding fortune teller character from UI while maintaining API compatibility
 
 ### July 19, 2025 - Background Video Implementation
 - **Full-Screen Video Background**: Added HNI_afstuderen_(5)_1752931557943.mp4 as background video on welcome/entry page

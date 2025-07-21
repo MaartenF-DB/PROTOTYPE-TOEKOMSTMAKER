@@ -7,7 +7,7 @@ interface LanguageSelectorProps {
 
 export function LanguageSelector({ onLanguageChange, currentLanguage }: LanguageSelectorProps) {
   return (
-    <div className="fixed bottom-4 right-4 flex space-x-2 z-50">
+    <div className="fixed bottom-12 right-20 flex space-x-2 z-50">
       <button
         onClick={() => onLanguageChange('nl')}
         className={`w-12 h-12 rounded-full overflow-hidden border-2 transition-all ${
