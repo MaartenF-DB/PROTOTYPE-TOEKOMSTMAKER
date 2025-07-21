@@ -195,11 +195,15 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
                 // Dutch female voice selection - CONSISTENT WITH useSpeech.ts
                 console.log('Available Dutch voices:', voices.filter(v => v.lang.startsWith('nl')).map(v => ({ name: v.name, lang: v.lang })));
                 
-                // SAME LOGIC AS useSpeech.ts - TRUE FEMALE VOICES ONLY
+                // NETHERLANDS DUTCH ONLY (nl-NL) - NO BELGIAN DUTCH
                 const dutchFemaleVoice = voices.find(voice => 
                   voice.lang === 'nl-NL' && 
+                  voice.name.toLowerCase().includes('google') &&
+                  voice.name.toLowerCase().includes('nederlands') &&
+                  !voice.name.toLowerCase().includes('male')
+                ) || voices.find(voice => 
+                  voice.lang === 'nl-NL' && 
                   (voice.name.toLowerCase().includes('claire') ||
-                   voice.name.toLowerCase().includes('ellen') ||
                    voice.name.toLowerCase().includes('saskia') ||
                    voice.name.toLowerCase().includes('lotte') ||
                    voice.name.toLowerCase().includes('fenna') ||
@@ -208,17 +212,9 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
                    voice.name.toLowerCase().includes('female') ||
                    voice.name.toLowerCase().includes('premium'))
                 ) || voices.find(voice => 
-                  voice.lang === 'nl-BE' && 
-                  voice.name.toLowerCase().includes('ellen')  // Ellen (nl-BE) is female
-                ) || voices.find(voice => 
                   voice.lang === 'nl-NL' && 
-                  voice.name.toLowerCase().includes('google') &&
-                  voice.name.toLowerCase().includes('nederlands') &&
-                  !voice.name.toLowerCase().includes('male')
-                ) || voices.find(voice => 
-                  (voice.lang === 'nl-NL' || voice.lang === 'nl-BE') && 
                   !voice.name.toLowerCase().includes('frank') &&
-                  !voice.name.toLowerCase().includes('xander') &&  // EXCLUDE XANDER - HE IS MALE
+                  !voice.name.toLowerCase().includes('xander') &&
                   !voice.name.toLowerCase().includes('male') &&
                   !voice.name.toLowerCase().includes('ruben') &&
                   !voice.name.toLowerCase().includes('jeroen') &&
@@ -234,10 +230,7 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
                   console.log('✓ Selected Dutch female voice:', dutchFemaleVoice.name);
                   
                   // Apply same voice-specific optimizations as useSpeech.ts
-                  if (dutchFemaleVoice.name.toLowerCase().includes('ellen')) {
-                    utterance.pitch = 1.0; // Ellen has natural female tone
-                    utterance.rate = 0.9;  // Standard rate for Ellen
-                  } else if (dutchFemaleVoice.name.toLowerCase().includes('google')) {
+                  if (dutchFemaleVoice.name.toLowerCase().includes('google')) {
                     utterance.pitch = 1.1; // Slight adjustment for Google voices
                     utterance.rate = 0.9;
                   }

@@ -113,7 +113,8 @@ The application follows a modern full-stack architecture with the following comp
 - **Apple Device Audio**: Enhanced Dutch female voice selection for iOS/iPad with Xander fallback
 - **Apple Emoji Support**: Added CSS to ensure consistent Apple emoji rendering across devices
 - **Drag Feedback**: Topics now speak their descriptions immediately when repositioned
-- **Dutch Female Voice Fix**: Completely revised voice selection to exclude all male voices (Xander, Frank) and prioritize true female voices (Ellen, Google Nederlands)
+- **Dutch Female Voice Fix**: Completely revised voice selection to exclude all male voices (Xander, Frank) and prioritize Netherlands Dutch female voices only (Google Nederlands, Claire, Saskia, etc.) - no Belgian Dutch
+- **Netherlands Dutch Priority**: Updated both useSpeech.ts and Results.tsx to only use nl-NL voices, eliminating Belgian (nl-BE) Ellen voice for proper Netherlands accent
 - **Language Selector Repositioning**: Moved Dutch/English flags 30px up and 30px left from bottom-right corner (bottom-12 right-20)
 - **FortuneTellerCharacter Removal**: Updated component to return null, effectively hiding fortune teller character from UI while maintaining API compatibility
 
