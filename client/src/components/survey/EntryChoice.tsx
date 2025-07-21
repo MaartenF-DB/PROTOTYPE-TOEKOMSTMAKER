@@ -4,7 +4,7 @@ import { useSpeech } from '@/hooks/useSpeech';
 import { useEffect, useRef } from 'react';
 import { MysticalCard } from '@/components/fortune/FortuneTellerCharacter';
 import { BackgroundEmojis } from '@/components/fortune/BackgroundEmojis';
-import backgroundVideoPath from "@assets/HNI_afstuderen_(5)_1752931557943.mp4";
+import backgroundVideoPath from "@assets/Ontwerp zonder titel_1753124622020.mp4";
 
 interface EntryChoiceProps {
   onCheckIn: () => void;

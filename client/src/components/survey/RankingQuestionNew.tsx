@@ -97,6 +97,13 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
     newRanking.splice(targetPosition, 0, draggedItem);
 
     onRankingChange(newRanking);
+    
+    // Show explanation after dropping
+    const explanation = getTopicDescription(draggedItem);
+    if (explanation) {
+      speak(explanation, language);
+    }
+    
     setDraggedItem(null);
   };
 
@@ -161,6 +168,12 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
         newRanking.splice(closestZone, 0, touchItem);
 
         onRankingChange(newRanking);
+        
+        // Show explanation after touch drop
+        const explanation = getTopicDescription(touchItem);
+        if (explanation) {
+          speak(explanation, language);
+        }
       }
     }
 

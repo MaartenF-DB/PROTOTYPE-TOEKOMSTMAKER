@@ -104,6 +104,16 @@ The application follows a modern full-stack architecture with the following comp
 
 ## Recent Changes
 
+### July 21, 2025 - Homepage Layout & Apple Device Optimization
+- **Video Replacement**: Updated homepage video to new "Ontwerp zonder titel" video
+- **Two Column Layout**: Video left, text right with matching heights (32-36rem)
+- **Video Zoom**: Applied 1.1x scale to remove white borders and improve framing
+- **Background Cleanup**: Removed top-left illustrations and emojis as requested
+- **Topic Selection Enhancement**: Added automatic explanations when dragging/dropping topics
+- **Apple Device Audio**: Enhanced Dutch female voice selection for iOS/iPad with Xander fallback
+- **Apple Emoji Support**: Added CSS to ensure consistent Apple emoji rendering across devices
+- **Drag Feedback**: Topics now speak their descriptions immediately when repositioned
+
 ### July 19, 2025 - Background Video Implementation
 - **Full-Screen Video Background**: Added HNI_afstuderen_(5)_1752931557943.mp4 as background video on welcome/entry page
 - **Video Optimization**: Video is auto-playing, looping, muted with full viewport coverage

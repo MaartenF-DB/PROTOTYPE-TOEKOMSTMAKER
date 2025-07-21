@@ -97,17 +97,17 @@ export function useSpeech() {
         const voices = speechSynthesis.getVoices();
         console.log('Available Dutch voices:', voices.filter(v => v.lang.startsWith('nl')).map(v => ({ name: v.name, lang: v.lang })));
         
-        // Enhanced priority order for Dutch female voices - iPad optimized
+        // Enhanced priority order for Dutch female voices - Apple iOS/iPad optimized
         const femaleVoice = voices.find(voice => 
           voice.lang === 'nl-NL' && 
           (voice.name.toLowerCase().includes('claire') ||
+           voice.name.toLowerCase().includes('xander') ||  // iOS Xander can sound feminine with high pitch
            voice.name.toLowerCase().includes('saskia') ||
            voice.name.toLowerCase().includes('lotte') ||
            voice.name.toLowerCase().includes('fenna') ||
            voice.name.toLowerCase().includes('emma') ||
            voice.name.toLowerCase().includes('anna') ||
            voice.name.toLowerCase().includes('female') ||
-           voice.name.toLowerCase().includes('xander') && voice.name.toLowerCase().includes('enhanced') ||
            voice.name.toLowerCase().includes('premium'))
         ) || voices.find(voice => 
           voice.lang === 'nl-NL' && 
@@ -132,22 +132,31 @@ export function useSpeech() {
           voice.lang.startsWith('nl') && 
           voice.name.toLowerCase().includes('compact') &&
           !voice.name.toLowerCase().includes('male')
+        ) || voices.find(voice => 
+          voice.lang.startsWith('nl') && 
+          voice.name.toLowerCase().includes('xander')  // Fallback to Xander with high pitch
         );
         
         if (femaleVoice) {
           utterance.voice = femaleVoice;
           console.log('✓ Selected Dutch female voice:', femaleVoice.name);
+          
+          // Apply Apple device specific adjustments for consistent femininity
+          if (femaleVoice.name.toLowerCase().includes('xander')) {
+            utterance.pitch = 1.4; // Higher pitch for Xander to sound feminine
+            utterance.rate = 0.8;  // Slower for clearer feminine delivery
+          }
         } else {
-          console.log('⚠️ No Dutch female voice found, applying iPad-optimized female voice settings');
-          // Force feminine voice characteristics for iPad
-          utterance.pitch = 1.3; // Higher pitch for feminine sound
-          utterance.rate = 0.85; // Slightly slower for clarity
+          console.log('⚠️ No Dutch female voice found, applying Apple device optimized settings');
+          // Force feminine voice characteristics for Apple devices
+          utterance.pitch = 1.4; // Very high pitch for feminine sound
+          utterance.rate = 0.8;  // Slower for clarity and femininity
           
           // Try to find any available Dutch voice and modify it
           const anyDutchVoice = voices.find(voice => voice.lang.startsWith('nl'));
           if (anyDutchVoice) {
             utterance.voice = anyDutchVoice;
-            console.log('🔧 Using Dutch voice with feminine adjustments:', anyDutchVoice.name);
+            console.log('🔧 Using Dutch voice with Apple-optimized feminine adjustments:', anyDutchVoice.name);
           }
         }
       }
