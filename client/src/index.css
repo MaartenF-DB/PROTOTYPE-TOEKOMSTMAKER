@@ -75,6 +75,9 @@
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -webkit-tap-highlight-color: transparent;
+    /* iPad text sizing optimization */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   /* Touch-friendly button styling */
@@ -89,6 +92,29 @@
   video {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
+  }
+
+  /* iPad-specific optimizations */
+  @media screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+    /* Ensure minimum text sizes are readable on iPad */
+    h1 { font-size: clamp(2rem, 5vw, 4rem) !important; }
+    h2 { font-size: clamp(1.5rem, 4vw, 3rem) !important; }
+    h3 { font-size: clamp(1.25rem, 3vw, 2rem) !important; }
+    p, span, div { font-size: clamp(1rem, 2.5vw, 1.5rem) !important; }
+    button { font-size: clamp(1.125rem, 3vw, 2rem) !important; }
+    
+    /* Ensure buttons are properly sized for touch */
+    button {
+      min-height: 3.5rem !important;
+      min-width: 100% !important;
+      padding: 1rem 1.5rem !important;
+    }
+  }
+
+  /* iPad Pro specific adjustments */
+  @media screen and (min-device-width: 1024px) and (max-device-width: 1366px) {
+    h1 { font-size: clamp(2.5rem, 6vw, 5rem) !important; }
+    button { font-size: clamp(1.25rem, 3.5vw, 2.5rem) !important; }
   }
 }
 

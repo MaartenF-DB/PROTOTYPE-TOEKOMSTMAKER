@@ -33,7 +33,10 @@ export function useSpeech() {
         if (voices.length > 0) {
           resolve();
         } else {
-          speechSynthesis.addEventListener('voiceschanged', resolve, { once: true });
+          const handleVoicesChanged = () => {
+            resolve();
+          };
+          speechSynthesis.addEventListener('voiceschanged', handleVoicesChanged, { once: true });
         }
       });
     };
@@ -94,7 +97,7 @@ export function useSpeech() {
         const voices = speechSynthesis.getVoices();
         console.log('Available Dutch voices:', voices.filter(v => v.lang.startsWith('nl')).map(v => ({ name: v.name, lang: v.lang })));
         
-        // Priority order for Dutch female voices
+        // Enhanced priority order for Dutch female voices - iPad optimized
         const femaleVoice = voices.find(voice => 
           voice.lang === 'nl-NL' && 
           (voice.name.toLowerCase().includes('claire') ||
@@ -103,27 +106,49 @@ export function useSpeech() {
            voice.name.toLowerCase().includes('fenna') ||
            voice.name.toLowerCase().includes('emma') ||
            voice.name.toLowerCase().includes('anna') ||
-           voice.name.toLowerCase().includes('female'))
+           voice.name.toLowerCase().includes('female') ||
+           voice.name.toLowerCase().includes('xander') && voice.name.toLowerCase().includes('enhanced') ||
+           voice.name.toLowerCase().includes('premium'))
         ) || voices.find(voice => 
           voice.lang === 'nl-NL' && 
           voice.name.toLowerCase().includes('google') &&
           !voice.name.toLowerCase().includes('male')
         ) || voices.find(voice => 
           voice.lang === 'nl-NL' && 
+          voice.name.toLowerCase().includes('enhanced') &&
+          !voice.name.toLowerCase().includes('male')
+        ) || voices.find(voice => 
+          (voice.lang === 'nl-NL' || voice.lang === 'nl-BE') && 
           !voice.name.toLowerCase().includes('frank') &&
           !voice.name.toLowerCase().includes('male') &&
           !voice.name.toLowerCase().includes('ruben') &&
           !voice.name.toLowerCase().includes('jeroen') &&
           !voice.name.toLowerCase().includes('david') &&
-          !voice.name.toLowerCase().includes('mark')
+          !voice.name.toLowerCase().includes('mark') &&
+          !voice.name.toLowerCase().includes('bas') &&
+          !voice.name.toLowerCase().includes('tim') &&
+          !voice.name.toLowerCase().includes('rob')
+        ) || voices.find(voice => 
+          voice.lang.startsWith('nl') && 
+          voice.name.toLowerCase().includes('compact') &&
+          !voice.name.toLowerCase().includes('male')
         );
         
         if (femaleVoice) {
           utterance.voice = femaleVoice;
           console.log('✓ Selected Dutch female voice:', femaleVoice.name);
         } else {
-          console.log('⚠️ No Dutch female voice found, using optimized fallback settings');
-          utterance.pitch = 1.2; // Higher pitch to compensate for lack of female voice
+          console.log('⚠️ No Dutch female voice found, applying iPad-optimized female voice settings');
+          // Force feminine voice characteristics for iPad
+          utterance.pitch = 1.3; // Higher pitch for feminine sound
+          utterance.rate = 0.85; // Slightly slower for clarity
+          
+          // Try to find any available Dutch voice and modify it
+          const anyDutchVoice = voices.find(voice => voice.lang.startsWith('nl'));
+          if (anyDutchVoice) {
+            utterance.voice = anyDutchVoice;
+            console.log('🔧 Using Dutch voice with feminine adjustments:', anyDutchVoice.name);
+          }
         }
       }
 
