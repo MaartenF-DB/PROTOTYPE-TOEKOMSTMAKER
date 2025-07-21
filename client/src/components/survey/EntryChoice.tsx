@@ -53,23 +53,22 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
         
         {/* Left column - Video */}
         <div className="order-1 lg:order-1">
-          <div className="rounded-2xl overflow-hidden shadow-2xl">
-            <video 
-              autoPlay 
-              loop 
-              muted 
-              playsInline
-              className="w-full h-64 sm:h-80 md:h-96 lg:h-[24rem] xl:h-[28rem] object-cover"
-            >
-              <source src={backgroundVideoPath} type="video/mp4" />
-            </video>
-          </div>
+          <video 
+            autoPlay 
+            loop 
+            muted 
+            playsInline
+            className="w-full h-64 sm:h-80 md:h-96 lg:h-[32rem] xl:h-[36rem] object-cover rounded-2xl shadow-2xl"
+            style={{ objectPosition: 'center center', transform: 'scale(1.1)' }}
+          >
+            <source src={backgroundVideoPath} type="video/mp4" />
+          </video>
         </div>
 
         {/* Right column - Text and buttons */}
         <div className="order-2 lg:order-2">
-          {/* Main content card - Clean design without decorations */}
-          <div className="bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 rounded-3xl p-6 md:p-8 lg:p-10 shadow-2xl border border-purple-300 border-opacity-50">
+          {/* Main content card - Clean design without decorations, matching video height */}
+          <div className="bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 rounded-3xl p-6 md:p-8 lg:p-10 shadow-2xl border border-purple-300 border-opacity-50 h-64 sm:h-80 md:h-96 lg:h-[32rem] xl:h-[36rem] flex flex-col justify-center">
             
             {/* Title with enhanced styling */}
             <div className="text-center mb-8 md:mb-10">

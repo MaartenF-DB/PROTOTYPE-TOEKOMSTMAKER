@@ -150,7 +150,14 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
               onTouchStart={(e) => handleTouchStart(e, topic)}
               onTouchMove={handleTouchMove}
               onTouchEnd={(e) => handleTouchEnd(e, topic)}
-              onClick={() => setSelectedTopic(selectedTopic === topic ? null : topic)}
+              onClick={() => {
+                const newSelected = selectedTopic === topic ? null : topic;
+                setSelectedTopic(newSelected);
+                // Show explanation immediately on click
+                if (newSelected && topicData?.description) {
+                  speak(topicData.description, language);
+                }
+              }}
               className={`p-4 rounded-xl cursor-move shadow-lg transform hover:scale-105 transition-all text-white border-2 select-none ${
                 draggedItem === topic || touchItem === topic
                   ? 'opacity-50 border-yellow-400' 
@@ -158,11 +165,11 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
               }`}
               style={{ backgroundColor: topicData?.hexColor || '#6B7280' }}
             >
-              <div className="text-5xl mb-2 text-center">{topicData?.icon || '❓'}</div>
-              <h3 className="text-sm font-bold text-center">{topic}</h3>
+              <div className="text-6xl mb-2 text-center">{topicData?.icon || '❓'}</div>
+              <h3 className="text-lg font-bold text-center leading-tight px-1">{topic}</h3>
               
               {selectedTopic === topic && (
-                <div className="mt-3 p-2 bg-white bg-opacity-20 rounded text-xs text-white text-center">
+                <div className="mt-3 p-3 bg-white bg-opacity-30 rounded-lg text-sm text-white text-center font-medium leading-tight">
                   {topicData?.description}
                 </div>
               )}

@@ -197,7 +197,7 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
                 onDragOver={handleDragOver}
                 onDrop={(e) => handleDrop(e, position)}
               >
-                <div className="h-48 border-2 border-dashed border-white border-opacity-50 rounded-xl flex flex-col items-center justify-center bg-white bg-opacity-10 hover:bg-opacity-20 transition-all relative">
+                <div className="h-64 border-2 border-dashed border-white border-opacity-50 rounded-xl flex flex-col items-center justify-center bg-white bg-opacity-10 hover:bg-opacity-20 transition-all relative">
                   {/* Position indicator */}
                   <div className="absolute top-3 left-3 w-8 h-8 bg-white rounded-full flex items-center justify-center">
                     <span className="text-gray-800 text-lg font-bold">{6 - position}</span>
@@ -215,7 +215,11 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
                       onClick={() => {
                         const newSelected = selectedTopic === topicAtPosition ? null : topicAtPosition;
                         setSelectedTopic(newSelected);
-                        // Remove audio when clicking on topics
+                        // Show explanation immediately on click
+                        if (newSelected) {
+                          const explanation = getTopicDescription(newSelected);
+                          speak(explanation, language);
+                        }
                       }}
                       className={`p-4 rounded-lg cursor-move shadow-lg transform hover:scale-105 transition-all duration-300 text-white border-2 select-none w-full ${
                         isBeingDragged
@@ -224,11 +228,11 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
                       }`}
                       style={{ backgroundColor: topicData.hexColor || '#6B7280' }}
                     >
-                      <div className="text-3xl mb-1 text-center">{topicData.icon}</div>
-                      <h3 className="text-xs font-bold text-center">{getTopicName(topicAtPosition)}</h3>
+                      <div className="text-6xl mb-2 text-center">{topicData.icon}</div>
+                      <h3 className="text-lg font-bold text-center leading-tight px-1">{getTopicName(topicAtPosition)}</h3>
                       
                       {selectedTopic === topicAtPosition && (
-                        <div className="mt-2 p-2 bg-white bg-opacity-20 rounded text-xs text-white text-center">
+                        <div className="mt-3 p-3 bg-white bg-opacity-30 rounded-lg text-sm text-white text-center font-medium leading-tight">
                           {getTopicDescription(topicAtPosition)}
                         </div>
                       )}
