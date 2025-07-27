@@ -31,7 +31,7 @@ export function LikertScale({ options, value, onValueChange, language = 'nl' }: 
     <div className="flex flex-col space-y-6 w-full max-w-4xl mx-auto choice-card">
       <div className="flex justify-between items-center px-8">
         {options.map((option) => (
-          <div key={option.value} className="flex flex-col items-center justify-start space-y-2 min-h-[6rem]">
+          <div key={option.value} className="flex flex-col items-center justify-start space-y-3 min-h-[8rem]">
             <button
               onClick={() => handleValueChange(option.value)}
               className={`text-4xl emoji-container likert-emoji cursor-pointer touch-target ${
@@ -41,6 +41,22 @@ export function LikertScale({ options, value, onValueChange, language = 'nl' }: 
             >
               {option.emoji}
             </button>
+            
+            {/* Clickable radio button */}
+            <button
+              onClick={() => handleValueChange(option.value)}
+              className="flex items-center cursor-pointer touch-target"
+              type="button"
+            >
+              <div className={`w-6 h-6 rounded-full border-2 border-white flex items-center justify-center transition-all ${
+                value === option.value 
+                  ? 'bg-white' 
+                  : 'bg-transparent hover:bg-white hover:bg-opacity-20'
+              }`}>
+                {value === option.value && <div className="w-3 h-3 rounded-full bg-blue-600" />}
+              </div>
+            </button>
+            
             {/* Hidden radio input for form compatibility */}
             <input
               type="radio"
@@ -50,6 +66,7 @@ export function LikertScale({ options, value, onValueChange, language = 'nl' }: 
               onChange={() => handleValueChange(option.value)}
               className="sr-only"
             />
+            
             {/* Show selected answer label when selected */}
             {value === option.value && (
               <div className="text-xs text-white text-center px-2 py-1 bg-white bg-opacity-20 rounded">
