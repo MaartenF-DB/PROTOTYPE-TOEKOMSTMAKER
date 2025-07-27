@@ -54,10 +54,14 @@ export default function Dashboard() {
       'Belangrijkste onderwerp': response.mostImportantTopic,
       'Gevoel voor (1-5)': response.feelingBefore || '',
       'Vertrouwen voor (1-5)': response.confidenceBefore || '',
+      'Kennis voor (1-5)': response.knowledgeBefore || '',
       'Gevoel na (1-5)': response.feelingAfter || '',
-      'Actie keuze': response.actionChoice,
+      'Actie keuze': response.actionChoice || '',
       'Vertrouwen na (1-5)': response.confidenceAfter || '',
-      'Persoonlijkheid': response.result,
+      'Iets nieuws geleerd (1-5)': response.learnedSomethingNew || '',
+      'Interessantste geleerd': response.mostInterestingLearned || '',
+      'Persoonlijkheid': response.result || '',
+      'Is checkout-only gebruiker': response.isNewCheckoutUser ? 'Ja' : 'Nee',
       'Datum': new Date(response.createdAt).toLocaleDateString('nl-NL'),
       'Tijd': new Date(response.createdAt).toLocaleTimeString('nl-NL')
     }));

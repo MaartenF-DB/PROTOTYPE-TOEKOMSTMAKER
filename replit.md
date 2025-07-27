@@ -116,6 +116,8 @@ The application follows a modern full-stack architecture with the following comp
 - **Enhanced Likert Scale Buttons**: Improved emoji buttons with professional 3D styling, inset shadows, gradients, and ::before pseudo-elements for polished appearance
 - **Dual Click Interface**: Added both emoji buttons and traditional radio buttons under emojis for familiar interaction patterns
 - **Action Question Spacing**: Increased spacing between action choice answers and navigation buttons by 2cm for better visual separation
+- **Language Selector Repositioning**: Moved language selector 3cm to the left (from right-12 to right-20) for better iPad accessibility
+- **Comprehensive CSV Export**: Enhanced dashboard CSV export to include all survey questions: knowledge before, learned something new, most interesting learned, and checkout user status fields
 
 ### July 27, 2025 - Project Migration and Question Updates
 - **Migration to Replit**: Successfully migrated project from Replit Agent to standard Replit environment
