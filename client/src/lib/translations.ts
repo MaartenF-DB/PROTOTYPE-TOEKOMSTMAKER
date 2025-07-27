@@ -41,7 +41,7 @@ export const translations = {
       feelingAfter: "Hoe denk jij nu over {topic} in de toekomst?",
       learnedSomethingNew: "Heb je iets nieuws geleerd over {topic}?",
       mostInterestingLearned: "Wat was het meest interessante dat je hebt geleerd?",
-      actionChoice: "Wat zou je doen voor {topic} in de toekomst?",
+      actionChoice: "Wat zou jij zelf willen doen voor {topic} in de toekomst?",
       confidenceAfter: "Hoeveel vertrouwen heb je dat je iets kan veranderen aan {topic} in de toekomst?"
     },
     
@@ -68,7 +68,7 @@ export const translations = {
     // Check Out Questions
     checkOutQuestions: {
       feeling: "Hoe denk je nu over",
-      action: "Wat zou je doen voor",
+      action: "Wat zou jij zelf willen doen voor",
       confidence: "Hoeveel vertrouwen heb je dat je iets kan veranderen aan",
       future: "in de toekomst",
       selectFromList: "Of kies je naam uit de lijst",
@@ -170,7 +170,7 @@ export const translations = {
       feelingAfter: "What do you think about {topic} in the future now?",
       learnedSomethingNew: "Did you learn something new about {topic}?",
       mostInterestingLearned: "What was the most interesting thing you learned?",
-      actionChoice: "What would you do for {topic} in the future?",
+      actionChoice: "What would you yourself want to do for {topic} in the future?",
       confidenceAfter: "How confident are you that you can make a change regarding {topic} in the future?"
     },
     
@@ -231,7 +231,7 @@ export const translations = {
     // Check Out Questions
     checkOutQuestions: {
       feeling: "What do you think about the topic",
-      action: "What would you do for",
+      action: "What would you yourself want to do for",
       confidence: "How confident are you that you can change something about",
       future: "in the future",
       selectFromList: "Or choose your name from the list",
