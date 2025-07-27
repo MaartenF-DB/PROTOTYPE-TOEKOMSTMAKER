@@ -28,7 +28,7 @@ export function LikertScale({ options, value, onValueChange, language = 'nl' }: 
   // Keep all options visible - no simplified display
 
   return (
-    <div className="flex flex-col space-y-6 w-full max-w-4xl mx-auto">
+    <div className="flex flex-col space-y-6 w-full max-w-2xl mx-auto">
       <div className="flex justify-between items-center px-8">
         {options.map((option) => (
           <div key={option.value} className="flex flex-col items-center space-y-2">
