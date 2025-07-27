@@ -21,10 +21,10 @@ export function CheckInIntro({ onStart, language = 'nl' }: CheckInIntroProps) {
     // Initial speech
     speak(text, language);
     
-    // Set up 15-second loop
+    // Set up 8-second loop
     const speechLoop = setInterval(() => {
       speak(text, language);
-    }, 15000); // 15 seconds
+    }, 8000); // 8 seconds
     
     // Cleanup interval on unmount
     return () => {

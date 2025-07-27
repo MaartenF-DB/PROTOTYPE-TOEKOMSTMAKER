@@ -45,10 +45,10 @@ export function Question({
       // Initial speech
       speak(question, language);
       
-      // Set up 15-second loop
+      // Set up 8-second loop
       const speechLoop = setInterval(() => {
         speak(question, language);
-      }, 15000); // 15 seconds
+      }, 8000); // 8 seconds
       
       // Cleanup interval on unmount or question change
       return () => {

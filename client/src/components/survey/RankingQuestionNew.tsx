@@ -57,10 +57,10 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
       speak(fullText, language);
       setHasSpoken(true);
       
-      // Set up 15-second loop
+      // Set up 8-second loop
       const speechLoop = setInterval(() => {
         speak(fullText, language);
-      }, 15000); // 15 seconds
+      }, 8000); // 8 seconds
       
       // Cleanup interval on unmount
       return () => {

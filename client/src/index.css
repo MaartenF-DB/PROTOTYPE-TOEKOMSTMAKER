@@ -185,10 +185,10 @@
       min-height: 18rem !important;
     }
     
-    /* Position language selector in bottom right, 1cm left from original position */
+    /* Position language selector 3cm from right edge of iPad */
     .language-selector {
       bottom: 3rem !important;
-      right: 19px !important; /* 1.5cm - 1cm = 0.5cm ≈ 19px */
+      right: 113.4px !important; /* 3cm = 113.4px */
     }
     
     /* Reset all other text sizes to normal */
