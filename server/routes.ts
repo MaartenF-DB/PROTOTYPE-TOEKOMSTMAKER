@@ -45,6 +45,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Update survey response (for checkout completion)
+  app.put("/api/survey-responses/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const validatedData = insertSurveyResponseSchema.partial().parse(req.body);
+      const response = await storage.updateSurveyResponse(id, validatedData);
+      if (!response) {
+        res.status(404).json({ error: "Survey response not found" });
+        return;
+      }
+      res.json(response);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: "Invalid data", details: error.errors });
+        return;
+      }
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
+  // Find survey response by name
+  app.get("/api/survey-responses/name/:name", async (req, res) => {
+    try {
+      const name = req.params.name;
+      const response = await storage.findSurveyResponseByName(name);
+      if (!response) {
+        res.status(404).json({ error: "Survey response not found" });
+        return;
+      }
+      res.json(response);
+    } catch (error) {
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
   // Reset all survey responses with authentication
   app.post("/api/survey-responses/reset", async (req, res) => {
     try {

@@ -60,6 +60,21 @@ export function useSurvey() {
     }
   });
 
+  const updateResponseMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: number; data: any }) => {
+      console.log('🔄 UPDATING CHECKOUT DATA FOR EXISTING USER:', { id, data });
+      const response = await apiRequest('PUT', `/api/survey-responses/${id}`, data);
+      return response;
+    },
+    onSuccess: () => {
+      console.log('✅ Checkout data updated successfully!');
+      queryClient.invalidateQueries({ queryKey: ['/api/survey-responses'] });
+    },
+    onError: (error) => {
+      console.error('❌ Failed to update checkout data:', error);
+    }
+  });
+
   const updateAnswers = useCallback((updates: Partial<SurveyAnswers>) => {
     setState(prev => ({
       ...prev,
@@ -108,11 +123,28 @@ export function useSurvey() {
     });
   }, [saveResponseMutation, state.answers]);
 
-  const completeSurvey = useCallback(() => {
+  const completeSurvey = useCallback((existingResponseId?: number) => {
     const result = generateResult();
     setState(prev => ({ ...prev, isComplete: true }));
-    saveResponseMutation.mutate({ ...state.answers, result });
-  }, [generateResult, saveResponseMutation, state.answers]);
+    
+    if (existingResponseId) {
+      // Update existing check-in record with checkout data
+      updateResponseMutation.mutate({
+        id: existingResponseId,
+        data: {
+          feelingAfter: state.answers.feelingAfter,
+          actionChoice: state.answers.actionChoice,
+          confidenceAfter: state.answers.confidenceAfter,
+          learnedSomethingNew: state.answers.learnedSomethingNew,
+          mostInterestingLearned: state.answers.mostInterestingLearned,
+          result
+        }
+      });
+    } else {
+      // Create new complete response
+      saveResponseMutation.mutate({ ...state.answers, result });
+    }
+  }, [generateResult, saveResponseMutation, updateResponseMutation, state.answers]);
 
   const resetSurvey = useCallback(() => {
     setState({

@@ -10,6 +10,8 @@ export interface IStorage {
   getSurveyResponse(id: number): Promise<SurveyResponse | undefined>;
   createSurveyResponse(response: InsertSurveyResponse): Promise<SurveyResponse>;
   getAllSurveyResponses(): Promise<SurveyResponse[]>;
+  updateSurveyResponse(id: number, data: Partial<InsertSurveyResponse>): Promise<SurveyResponse | undefined>;
+  findSurveyResponseByName(name: string): Promise<SurveyResponse | undefined>;
   clearAllSurveyResponses(): Promise<void>;
 }
 
@@ -42,6 +44,33 @@ export class DbStorage implements IStorage {
       return results;
     } catch (error) {
       console.error('Error getting all survey responses:', error);
+      throw error;
+    }
+  }
+
+  async updateSurveyResponse(id: number, data: Partial<InsertSurveyResponse>): Promise<SurveyResponse | undefined> {
+    try {
+      console.log('🔄 UPDATING SURVEY RESPONSE:', { id, data });
+      const results = await db.update(surveyResponses)
+        .set(data)
+        .where(eq(surveyResponses.id, id))
+        .returning();
+      console.log('✅ UPDATED SURVEY RESPONSE:', results[0]);
+      return results[0];
+    } catch (error) {
+      console.error('Error updating survey response:', error);
+      throw error;
+    }
+  }
+
+  async findSurveyResponseByName(name: string): Promise<SurveyResponse | undefined> {
+    try {
+      console.log('🔍 FINDING SURVEY RESPONSE BY NAME:', name);
+      const results = await db.select().from(surveyResponses).where(eq(surveyResponses.name, name.toLowerCase()));
+      console.log('📍 FOUND RESPONSE:', results[0]);
+      return results[0];
+    } catch (error) {
+      console.error('Error finding survey response by name:', error);
       throw error;
     }
   }
