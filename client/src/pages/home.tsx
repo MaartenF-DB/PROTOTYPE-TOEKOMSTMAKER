@@ -19,11 +19,15 @@ import {
   ACTION_OPTIONS, 
   LIKERT_SCALE, 
   CONFIDENCE_SCALE, 
+  KNOWLEDGE_SCALE,
+  LEARNED_SCALE,
   TOPICS,
   VISITING_OPTIONS_EN,
   ACTION_OPTIONS_EN,
   LIKERT_SCALE_EN,
-  CONFIDENCE_SCALE_EN
+  CONFIDENCE_SCALE_EN,
+  KNOWLEDGE_SCALE_EN,
+  LEARNED_SCALE_EN
 } from '@/types/survey';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
@@ -64,6 +68,8 @@ export default function Home() {
   const getActionOptions = () => language === 'en' ? ACTION_OPTIONS_EN : ACTION_OPTIONS;
   const getLikertScale = () => language === 'en' ? LIKERT_SCALE_EN : LIKERT_SCALE;
   const getConfidenceScale = () => language === 'en' ? CONFIDENCE_SCALE_EN : CONFIDENCE_SCALE;
+  const getKnowledgeScale = () => language === 'en' ? KNOWLEDGE_SCALE_EN : KNOWLEDGE_SCALE;
+  const getLearnedScale = () => language === 'en' ? LEARNED_SCALE_EN : LEARNED_SCALE;
 
   const progressPercentage = getCurrentProgress();
   
@@ -305,7 +311,7 @@ export default function Home() {
             bgGradient={topicData?.hexColor ? '' : 'from-red-500 to-pink-500'}
             buttonColor={topicData?.hexColor ? '' : 'bg-red-600 hover:bg-red-700'}
             style={topicData?.hexColor ? { background: getTopicGradient(topicData.hexColor) } : {}}
-            onNext={() => setCurrentSection('question-5')}
+            onNext={() => setCurrentSection('question-4b')}
             onPrevious={() => setCurrentSection('question-3')}
             showPrevious={true}
             showNext={true}
@@ -334,6 +340,43 @@ export default function Home() {
           </Question>
         );
 
+      case 'question-4b':
+        return (
+          <Question
+            questionNumber={4}
+            question={`${t.questions.knowledgeBefore.replace('{topic}', language === 'en' ? topicData?.nameEn || answers.mostImportantTopic : answers.mostImportantTopic)}`}
+            bgGradient={topicData?.hexColor ? '' : 'from-indigo-500 to-purple-500'}
+            buttonColor={topicData?.hexColor ? '' : 'bg-indigo-600 hover:bg-indigo-700'}
+            style={topicData?.hexColor ? { background: getTopicGradient(topicData.hexColor) } : {}}
+            onNext={() => setCurrentSection('question-5')}
+            onPrevious={() => setCurrentSection('question-4')}
+            showPrevious={true}
+            showNext={true}
+            isValid={answers.knowledgeBefore !== null}
+            language={language}
+          >
+            <div className="space-y-6">
+              {topicData && (
+                <div className="mb-6 p-8 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
+                  <div className="text-9xl mb-4 text-center">{topicData.icon}</div>
+                  <div className="text-2xl font-semibold text-white mb-2 text-center">{language === 'en' ? topicData.nameEn : answers.mostImportantTopic}</div>
+                  <div className="text-base text-white opacity-90 max-w-lg mx-auto text-center">
+                    {language === 'en' ? topicData.descriptionEn : topicData.description}
+                  </div>
+                </div>
+              )}
+              
+              <LikertScale
+                options={getKnowledgeScale()}
+                value={answers.knowledgeBefore}
+                onValueChange={(value) => updateAnswers({ knowledgeBefore: value })}
+                language={language}
+              />
+
+            </div>
+          </Question>
+        );
+
       case 'question-5':
         return (
           <Question
@@ -348,7 +391,7 @@ export default function Home() {
               saveCheckInData();
               setCurrentSection('checkin-closing');
             }}
-            onPrevious={() => setCurrentSection('question-4')}
+            onPrevious={() => setCurrentSection('question-4b')}
             showPrevious={true}
             showComplete={true}
             isValid={answers.confidenceBefore !== null}
@@ -543,7 +586,7 @@ export default function Home() {
             bgGradient={topicData?.hexColor ? '' : 'from-pink-500 to-red-500'}
             buttonColor={topicData?.hexColor ? '' : 'bg-pink-600 hover:bg-pink-700'}
             style={topicData?.hexColor ? { background: getTopicGradient(topicData.hexColor) } : {}}
-            onNext={() => setCurrentSection('question-7')}
+            onNext={() => setCurrentSection('question-6b')}
             onPrevious={() => {
               if (checkoutOnly) {
                 // For checkout-only users, go back to topic selection
@@ -590,6 +633,83 @@ export default function Home() {
           </Question>
         );
 
+      case 'question-6b':
+        return (
+          <Question
+            questionNumber={6}
+            question={`${t.questions.learnedSomethingNew.replace('{topic}', language === 'en' ? topicData?.nameEn || answers.mostImportantTopic : answers.mostImportantTopic)}`}
+            bgGradient={topicData?.hexColor ? '' : 'from-indigo-500 to-purple-500'}
+            buttonColor={topicData?.hexColor ? '' : 'bg-indigo-600 hover:bg-indigo-700'}
+            style={topicData?.hexColor ? { background: getTopicGradient(topicData.hexColor) } : {}}
+            onNext={() => setCurrentSection('question-6c')}
+            onPrevious={() => setCurrentSection('question-6')}
+            showPrevious={true}
+            showNext={true}
+            isValid={answers.learnedSomethingNew !== null}
+            language={language}
+          >
+            <div className="space-y-6">
+              {topicData && (
+                <div className="mb-6 p-8 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
+                  <div className="text-9xl mb-4 text-center">{topicData.icon}</div>
+                  <div className="text-2xl font-semibold text-white mb-2 text-center">{language === 'en' ? topicData.nameEn : answers.mostImportantTopic}</div>
+                  <div className="text-base text-white opacity-90 max-w-lg mx-auto text-center">
+                    {language === 'en' ? topicData.descriptionEn : topicData.description}
+                  </div>
+                </div>
+              )}
+              
+              <LikertScale
+                options={getLearnedScale()}
+                value={answers.learnedSomethingNew}
+                onValueChange={(value) => updateAnswers({ learnedSomethingNew: value })}
+                language={language}
+              />
+
+            </div>
+          </Question>
+        );
+
+      case 'question-6c':
+        return (
+          <Question
+            questionNumber={6}
+            question={t.questions.mostInterestingLearned}
+            bgGradient={topicData?.hexColor ? '' : 'from-green-500 to-teal-500'}
+            buttonColor={topicData?.hexColor ? '' : 'bg-green-600 hover:bg-green-700'}
+            style={topicData?.hexColor ? { background: getTopicGradient(topicData.hexColor) } : {}}
+            onNext={() => setCurrentSection('question-7')}
+            onPrevious={() => setCurrentSection('question-6b')}
+            showPrevious={true}
+            showNext={true}
+            isValid={answers.mostInterestingLearned.length > 0}
+            language={language}
+          >
+            <div className="space-y-6">
+              {topicData && (
+                <div className="mb-6 p-8 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
+                  <div className="text-9xl mb-4 text-center">{topicData.icon}</div>
+                  <div className="text-2xl font-semibold text-white mb-2 text-center">{language === 'en' ? topicData.nameEn : answers.mostImportantTopic}</div>
+                  <div className="text-base text-white opacity-90 max-w-lg mx-auto text-center">
+                    {language === 'en' ? topicData.descriptionEn : topicData.description}
+                  </div>
+                </div>
+              )}
+              
+              <div className="space-y-4">
+                <Input
+                  type="text"
+                  placeholder={language === 'en' ? "What did you learn?" : "Wat heb je geleerd?"}
+                  value={answers.mostInterestingLearned}
+                  onChange={(e) => updateAnswers({ mostInterestingLearned: e.target.value })}
+                  className="text-lg p-4 bg-white bg-opacity-20 backdrop-blur-sm border-white border-opacity-30 text-white placeholder-white placeholder-opacity-70"
+                />
+              </div>
+
+            </div>
+          </Question>
+        );
+
       case 'question-7':
         return (
           <Question
@@ -599,15 +719,7 @@ export default function Home() {
             buttonColor={topicData?.hexColor ? '' : 'bg-cyan-600 hover:bg-cyan-700'}
             style={topicData?.hexColor ? { background: getTopicGradient(topicData.hexColor) } : {}}
             onNext={() => setCurrentSection('question-8')}
-            onPrevious={() => {
-              if (checkoutOnly) {
-                // For checkout-only users, go back to topic selection
-                setCurrentSection('question-3');
-              } else {
-                // For regular users, go to question 6
-                setCurrentSection('question-6');
-              }
-            }}
+            onPrevious={() => setCurrentSection('question-6c')}
             showPrevious={true}
             showNext={true}
             isValid={answers.actionChoice.length > 0}

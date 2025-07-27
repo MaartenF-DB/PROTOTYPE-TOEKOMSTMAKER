@@ -7,9 +7,12 @@ export interface SurveyAnswers {
   mostImportantTopic: string;
   feelingBefore: number | null;
   confidenceBefore: number | null;
+  knowledgeBefore: number | null;
   feelingAfter: number | null;
   actionChoice: string;
   confidenceAfter: number | null;
+  learnedSomethingNew: number | null;
+  mostInterestingLearned: string;
   result: string;
   isNewCheckoutUser?: boolean;
 }
@@ -90,4 +93,28 @@ export const CONFIDENCE_SCALE_EN = [
   { value: 3, label: 'I have normal confidence', emoji: '😐' },
   { value: 4, label: 'I have a lot of confidence', emoji: '💪' },
   { value: 5, label: 'I have sooooo much confidence!', emoji: '🚀' }
+] as const;
+
+export const KNOWLEDGE_SCALE = [
+  { value: 3, label: 'Heel veel!', emoji: '🧠' },
+  { value: 2, label: 'Een beetje.', emoji: '🤔' },
+  { value: 1, label: 'Bijna niks.', emoji: '🤷' }
+] as const;
+
+export const KNOWLEDGE_SCALE_EN = [
+  { value: 3, label: 'A lot!', emoji: '🧠' },
+  { value: 2, label: 'A little bit.', emoji: '🤔' },
+  { value: 1, label: 'Almost nothing.', emoji: '🤷' }
+] as const;
+
+export const LEARNED_SCALE = [
+  { value: 3, label: 'Ja, heel veel!', emoji: '🤯' },
+  { value: 2, label: 'Ja, een beetje.', emoji: '💡' },
+  { value: 1, label: 'Nee, niet echt.', emoji: '😐' }
+] as const;
+
+export const LEARNED_SCALE_EN = [
+  { value: 3, label: 'Yes, a lot!', emoji: '🤯' },
+  { value: 2, label: 'Yes, a little bit.', emoji: '💡' },
+  { value: 1, label: 'No, not really.', emoji: '😐' }
 ] as const;

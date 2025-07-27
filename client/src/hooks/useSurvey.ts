@@ -12,9 +12,12 @@ const initialAnswers: SurveyAnswers = {
   mostImportantTopic: '',
   feelingBefore: null,
   confidenceBefore: null,
+  knowledgeBefore: null,
   feelingAfter: null,
   actionChoice: '',
   confidenceAfter: null,
+  learnedSomethingNew: null,
+  mostInterestingLearned: '',
   result: '',
   isNewCheckoutUser: false
 };
@@ -41,9 +44,12 @@ export function useSurvey() {
         mostImportantTopic: answers.mostImportantTopic,
         feelingBefore: answers.feelingBefore || 0,
         confidenceBefore: answers.confidenceBefore || 0,
+        knowledgeBefore: answers.knowledgeBefore || 0,
         feelingAfter: answers.feelingAfter || 0,
         actionChoice: answers.actionChoice,
         confidenceAfter: answers.confidenceAfter || 0,
+        learnedSomethingNew: answers.learnedSomethingNew || 0,
+        mostInterestingLearned: answers.mostInterestingLearned,
         result: answers.result,
         isNewCheckoutUser: answers.isNewCheckoutUser || false
       });
