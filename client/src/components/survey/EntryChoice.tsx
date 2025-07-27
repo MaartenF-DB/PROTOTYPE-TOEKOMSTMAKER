@@ -21,25 +21,47 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
       ? "Welcome to Future Makers! What kind of futuremaker are you? Let's find out together! Are you a newcomer or have you just finished the exhibition?"
       : "Welkom bij Toekomstmakers! Wat voor toekomstmaker ben jij? Laten we het samen uitzoeken! Kom je net binnen of ben je net klaar met de tentoonstelling?";
     
-    // Play immediately, then set up interval for repeat
-    speak(message, language);
-    
     // Clear any existing interval first
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
     
-    // Set up interval to repeat every 8 seconds
-    intervalRef.current = setInterval(() => {
+    // Function to ensure speech starts immediately
+    const startSpeechLoop = () => {
+      console.log('🎤 Starting homepage audio loop immediately');
+      
+      // Start speaking immediately without any delay
       speak(message, language);
-    }, 8000);
+      
+      // Set up interval to repeat every 8 seconds
+      intervalRef.current = setInterval(() => {
+        console.log('🔄 Repeating homepage audio');
+        speak(message, language);
+      }, 8000);
+    };
+    
+    // Start immediately, regardless of voice loading state
+    startSpeechLoop();
+    
+    // Also listen for voice changes as backup
+    const handleVoicesChanged = () => {
+      if (!intervalRef.current) {
+        console.log('🎤 Voice loaded - starting backup audio loop');
+        startSpeechLoop();
+      }
+    };
+    
+    speechSynthesis.addEventListener('voiceschanged', handleVoicesChanged);
     
     // Cleanup interval on unmount
     return () => {
+      console.log('🛑 Cleaning up homepage audio');
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
       }
+      // Remove event listener
+      speechSynthesis.removeEventListener('voiceschanged', handleVoicesChanged);
       // Stop any ongoing speech when component unmounts
       window.speechSynthesis.cancel();
     };
