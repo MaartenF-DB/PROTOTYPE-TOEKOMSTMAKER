@@ -136,6 +136,12 @@
     .p-8 {
       padding: 2rem !important;
     }
+    
+    /* Make smileys/emojis larger on iPad */
+    .text-4xl {
+      font-size: 4rem !important; /* Increased from default 2.25rem to 4rem */
+      line-height: 1 !important;
+    }
   }
 
   /* Apple device emoji compatibility */
