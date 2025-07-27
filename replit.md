@@ -118,6 +118,8 @@ The application follows a modern full-stack architecture with the following comp
 - **Action Question Spacing**: Increased spacing between action choice answers and navigation buttons by 2cm for better visual separation
 - **Language Selector Repositioning**: Moved language selector 3cm to the left (from right-12 to right-20) for better iPad accessibility
 - **Comprehensive CSV Export**: Enhanced dashboard CSV export to include all survey questions: knowledge before, learned something new, most interesting learned, and checkout user status fields
+- **Radio Button Alignment**: Fixed radio buttons under Likert scale emojis to be perfectly centered using flex-1 and justify-center wrapper
+- **Audio Volume Enhancement**: Increased all speech synthesis volume to 300% (3.0) across useSpeech hook and Results component for better exhibition audio
 
 ### July 27, 2025 - Project Migration and Question Updates
 - **Migration to Replit**: Successfully migrated project from Replit Agent to standard Replit environment

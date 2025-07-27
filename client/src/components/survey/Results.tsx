@@ -157,7 +157,7 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
               utterance.lang = lang === 'en' ? 'en-US' : 'nl-NL';
               utterance.rate = lang === 'en' ? 0.85 : 0.85;
               utterance.pitch = lang === 'en' ? 1.1 : 1.0;
-              utterance.volume = 1.0;
+              utterance.volume = 3.0;
               
               // Select appropriate female voice
               const voices = speechSynthesis.getVoices();

@@ -49,7 +49,7 @@ export function useSpeech() {
         utterance.lang = 'en-US';
         utterance.rate = 0.9;
         utterance.pitch = 1.2;
-        utterance.volume = 0.9;
+        utterance.volume = 3.0;
         
         const voices = speechSynthesis.getVoices();
         console.log('Available English voices:', voices.filter(v => v.lang.startsWith('en')).map(v => ({ name: v.name, lang: v.lang })));
@@ -92,7 +92,7 @@ export function useSpeech() {
         utterance.lang = 'nl-NL';
         utterance.rate = 0.9; // Slightly faster for better flow
         utterance.pitch = 1.1; // Slightly higher for warmer tone like English
-        utterance.volume = 0.95; // Higher volume for clarity
+        utterance.volume = 3.0; // 300% volume
         
         const voices = speechSynthesis.getVoices();
         console.log('Available Dutch voices:', voices.filter(v => v.lang.startsWith('nl')).map(v => ({ name: v.name, lang: v.lang })));
