@@ -21,108 +21,25 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
       ? "Welcome to Future Makers! What kind of futuremaker are you? Let's find out together! Are you a newcomer or have you just finished the exhibition?"
       : "Welkom bij Toekomstmakers! Wat voor toekomstmaker ben jij? Laten we het samen uitzoeken! Kom je net binnen of ben je net klaar met de tentoonstelling?";
     
+    // Play immediately, then set up interval for repeat
+    speak(message, language);
+    
     // Clear any existing interval first
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
     
-    // Force audio context activation by creating a user interaction simulation
-    const activateAudioAndStartSpeech = () => {
-      console.log('🎤 Activating audio context and starting speech');
-      
-      // Create audio context activation (required for autoplay policies)
-      const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
-      if (AudioContext) {
-        const audioContext = new AudioContext();
-        if (audioContext.state === 'suspended') {
-          audioContext.resume().then(() => {
-            console.log('✅ Audio context resumed');
-          });
-        }
-      }
-      
-      // Direct speech synthesis call bypassing the hook initially
-      const utterance = new SpeechSynthesisUtterance(message);
-      utterance.lang = language === 'en' ? 'en-US' : 'nl-NL';
-      utterance.rate = 0.9;
-      utterance.pitch = 1.1;
-      utterance.volume = 0.9;
-      
-      utterance.onstart = () => {
-        console.log('🎤 Direct speech started successfully');
-      };
-      
-      utterance.onend = () => {
-        console.log('🔇 Direct speech ended, starting loop');
-        startSpeechLoop();
-      };
-      
-      utterance.onerror = (event) => {
-        console.error('❌ Direct speech error:', event);
-        // Fallback to hook-based speech
-        startSpeechLoop();
-      };
-      
-      // Start direct speech
-      speechSynthesis.speak(utterance);
-    };
-    
-    // Function to start the regular speech loop
-    const startSpeechLoop = () => {
-      console.log('🔄 Starting regular speech loop');
-      
-      // Set up interval to repeat every 8 seconds using the hook
-      intervalRef.current = setInterval(() => {
-        console.log('🔄 Repeating homepage audio via hook');
-        speak(message, language);
-      }, 8000);
-    };
-    
-    // Try immediate audio start, fallback to user interaction detection
-    let audioStarted = false;
-    
-    // Try direct start first
-    setTimeout(() => {
-      if (!audioStarted) {
-        console.log('🎤 Attempting direct audio start');
-        try {
-          activateAudioAndStartSpeech();
-          audioStarted = true;
-        } catch (error) {
-          console.log('❌ Direct audio failed, waiting for user interaction');
-        }
-      }
-    }, 200);
-    
-    // Fallback: detect any user interaction and start audio
-    const startOnInteraction = () => {
-      if (!audioStarted) {
-        console.log('👆 User interaction detected, starting audio');
-        activateAudioAndStartSpeech();
-        audioStarted = true;
-        // Remove listeners after first activation
-        document.removeEventListener('click', startOnInteraction);
-        document.removeEventListener('touchstart', startOnInteraction);
-        document.removeEventListener('keydown', startOnInteraction);
-      }
-    };
-    
-    // Listen for any user interaction
-    document.addEventListener('click', startOnInteraction);
-    document.addEventListener('touchstart', startOnInteraction);  
-    document.addEventListener('keydown', startOnInteraction);
+    // Set up interval to repeat every 8 seconds
+    intervalRef.current = setInterval(() => {
+      speak(message, language);
+    }, 8000);
     
     // Cleanup interval on unmount
     return () => {
-      console.log('🛑 Cleaning up homepage audio');
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
       }
-      // Remove event listeners
-      document.removeEventListener('click', startOnInteraction);
-      document.removeEventListener('touchstart', startOnInteraction);
-      document.removeEventListener('keydown', startOnInteraction);
       // Stop any ongoing speech when component unmounts
       window.speechSynthesis.cancel();
     };
