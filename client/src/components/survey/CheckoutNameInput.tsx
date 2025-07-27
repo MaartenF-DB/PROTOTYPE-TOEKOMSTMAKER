@@ -83,7 +83,7 @@ export function CheckoutNameInput({ existingResponses, onNameConfirm, language =
               value={enteredName}
               onChange={(e) => setEnteredName(e.target.value)}
               placeholder={t.placeholders?.typeName || "Type your name here..."}
-              className="w-full p-4 text-2xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-blue-300 outline-none"
+              className="w-full py-4 px-20 text-2xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-blue-300 outline-none"
               onKeyPress={(e) => e.key === 'Enter' && handleNameSubmit()}
             />
             {hasNameConflict && (
