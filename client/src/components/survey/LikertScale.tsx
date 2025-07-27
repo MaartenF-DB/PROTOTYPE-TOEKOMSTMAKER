@@ -32,25 +32,25 @@ export function LikertScale({ options, value, onValueChange, language = 'nl' }: 
       <div className="flex justify-between items-center px-8">
         {options.map((option) => (
           <div key={option.value} className="flex flex-col items-center justify-start space-y-2 min-h-[6rem]">
-            <div className="text-4xl emoji-container likert-emoji">{option.emoji}</div>
-            <label className="flex items-center cursor-pointer touch-target">
-              <input
-                type="radio"
-                name="likert-scale"
-                value={option.value}
-                checked={value === option.value}
-                onChange={() => handleValueChange(option.value)}
-                className="sr-only"
-              />
-              <div className={`w-8 h-8 rounded-full border-2 border-white flex items-center justify-center transition-all touch-target ${
-                value === option.value 
-                  ? 'bg-white' 
-                  : 'bg-transparent hover:bg-white hover:bg-opacity-20'
-              }`}>
-                {value === option.value && <div className="w-4 h-4 rounded-full bg-blue-600" />}
-              </div>
-            </label>
-            {/* Show selected answer label below the circle */}
+            <button
+              onClick={() => handleValueChange(option.value)}
+              className={`text-4xl emoji-container likert-emoji cursor-pointer touch-target transition-all transform hover:scale-110 ${
+                value === option.value ? 'scale-125 selected' : 'hover:scale-110'
+              }`}
+              type="button"
+            >
+              {option.emoji}
+            </button>
+            {/* Hidden radio input for form compatibility */}
+            <input
+              type="radio"
+              name="likert-scale"
+              value={option.value}
+              checked={value === option.value}
+              onChange={() => handleValueChange(option.value)}
+              className="sr-only"
+            />
+            {/* Show selected answer label when selected */}
             {value === option.value && (
               <div className="text-xs text-white text-center px-2 py-1 bg-white bg-opacity-20 rounded">
                 {option.label}

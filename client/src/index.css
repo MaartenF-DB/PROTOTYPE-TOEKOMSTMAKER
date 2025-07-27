@@ -149,6 +149,31 @@
     min-width: 80px;
   }
   
+  /* Likert emoji buttons */
+  .likert-emoji {
+    padding: 0.5rem;
+    border-radius: 50%;
+    min-height: 80px;
+    min-width: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+  }
+  
+  .likert-emoji:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+  }
+  
+  .likert-emoji.selected {
+    background: rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+  }
+  
   .ranking-item {
     min-height: 70px;
     font-size: 1.2rem;
