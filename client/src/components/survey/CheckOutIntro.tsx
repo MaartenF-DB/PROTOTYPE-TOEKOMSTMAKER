@@ -17,7 +17,19 @@ export function CheckOutIntro({ onStart, mostImportantTopic, language = 'nl' }: 
     const text = language === 'en' 
       ? "Are you coming back at the end of the exhibition? Then we'll explore further what kind of future maker you are!"
       : "Kom je aan het einde van de tentoonstelling terug? Dan onderzoeken we verder wat voor toekomstmaker jij bent!";
+    
+    // Initial speech
     speak(text, language);
+    
+    // Set up 15-second loop
+    const speechLoop = setInterval(() => {
+      speak(text, language);
+    }, 15000); // 15 seconds
+    
+    // Cleanup interval on unmount
+    return () => {
+      clearInterval(speechLoop);
+    };
   }, [speak, language]);
 
   return (

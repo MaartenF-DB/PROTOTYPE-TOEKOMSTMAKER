@@ -42,7 +42,18 @@ export function Question({
 
   useEffect(() => {
     if (question) {
+      // Initial speech
       speak(question, language);
+      
+      // Set up 15-second loop
+      const speechLoop = setInterval(() => {
+        speak(question, language);
+      }, 15000); // 15 seconds
+      
+      // Cleanup interval on unmount or question change
+      return () => {
+        clearInterval(speechLoop);
+      };
     }
   }, [speak, question, language]);
 

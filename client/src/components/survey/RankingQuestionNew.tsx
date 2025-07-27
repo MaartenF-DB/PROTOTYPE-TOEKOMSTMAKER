@@ -42,9 +42,8 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
     }
   }, [ranking, onRankingChange, shuffledTopics.length]);
 
-  // Speak the main question when component mounts - only once
+  // Speak the main question when component mounts with 15-second loop
   useEffect(() => {
-    // Only speak once when component first mounts and has topics
     if (shuffledTopics.length > 0 && !hasSpoken) {
       const mainQuestion = language === 'en' ? 
         "Which topic do you think is most important?" : 
@@ -52,8 +51,21 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
       const instructions = language === 'en' ? 
         "Drag the topics to the right place." : 
         "Versleep de onderwerpen naar de goede plek.";
-      speak(`${mainQuestion} ${instructions}`, language);
+      const fullText = `${mainQuestion} ${instructions}`;
+      
+      // Initial speech
+      speak(fullText, language);
       setHasSpoken(true);
+      
+      // Set up 15-second loop
+      const speechLoop = setInterval(() => {
+        speak(fullText, language);
+      }, 15000); // 15 seconds
+      
+      // Cleanup interval on unmount
+      return () => {
+        clearInterval(speechLoop);
+      };
     }
   }, [speak, language, shuffledTopics.length, hasSpoken]);
 

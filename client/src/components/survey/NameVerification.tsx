@@ -25,7 +25,19 @@ export function NameVerification({
     const text = language === 'en'
       ? `Hello ${originalName}! Can you enter your name again? If there are multiple people with the same name, type your name with a number, for example ${originalName} 1.`
       : `Hallo ${originalName}! Kun je je naam nog een keer invullen? Als er meer mensen zijn met dezelfde naam, typ dan je naam met een nummer, bijvoorbeeld ${originalName} 1.`;
+    
+    // Initial speech
     speak(text, language);
+    
+    // Set up 15-second loop
+    const speechLoop = setInterval(() => {
+      speak(text, language);
+    }, 15000); // 15 seconds
+    
+    // Cleanup interval on unmount
+    return () => {
+      clearInterval(speechLoop);
+    };
   }, [speak, originalName, language]);
 
   const isValid = nameVerification.trim().length > 0;

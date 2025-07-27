@@ -17,7 +17,19 @@ export function CheckInIntro({ onStart, language = 'nl' }: CheckInIntroProps) {
     const text = language === 'en' 
       ? "Hey Future Maker! Shall we discover together what kind of future maker you are?"
       : "Hé Toekomstmaker! Zullen we samen uitvinden wat voor toekomstmaker jij bent?";
+    
+    // Initial speech
     speak(text, language);
+    
+    // Set up 15-second loop
+    const speechLoop = setInterval(() => {
+      speak(text, language);
+    }, 15000); // 15 seconds
+    
+    // Cleanup interval on unmount
+    return () => {
+      clearInterval(speechLoop);
+    };
   }, [speak, language]);
 
   return (

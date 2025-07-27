@@ -18,7 +18,20 @@ export function CheckoutNameInput({ existingResponses, onNameConfirm, language =
   const { speak } = useSpeech();
 
   useEffect(() => {
-    speak(t.questions?.name || "What is your name?", language);
+    const text = t.questions?.name || "What is your name?";
+    
+    // Initial speech
+    speak(text, language);
+    
+    // Set up 15-second loop
+    const speechLoop = setInterval(() => {
+      speak(text, language);
+    }, 15000); // 15 seconds
+    
+    // Cleanup interval on unmount
+    return () => {
+      clearInterval(speechLoop);
+    };
   }, [speak, t.questions, language]);
 
 
