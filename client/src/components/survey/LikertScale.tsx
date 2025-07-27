@@ -33,7 +33,7 @@ export function LikertScale({ options, value, onValueChange, language = 'nl' }: 
         {options.map((option) => (
           <div key={option.value} className="flex flex-col items-center justify-start space-y-2 min-h-[6rem]">
             <div className="text-4xl emoji-container likert-emoji">{option.emoji}</div>
-            <label className="flex items-center cursor-pointer">
+            <label className="flex items-center cursor-pointer touch-target">
               <input
                 type="radio"
                 name="likert-scale"
@@ -42,12 +42,12 @@ export function LikertScale({ options, value, onValueChange, language = 'nl' }: 
                 onChange={() => handleValueChange(option.value)}
                 className="sr-only"
               />
-              <div className={`w-6 h-6 rounded-full border-2 border-white flex items-center justify-center transition-all ${
+              <div className={`w-8 h-8 rounded-full border-2 border-white flex items-center justify-center transition-all touch-target ${
                 value === option.value 
                   ? 'bg-white' 
                   : 'bg-transparent hover:bg-white hover:bg-opacity-20'
               }`}>
-                {value === option.value && <div className="w-3 h-3 rounded-full bg-blue-600" />}
+                {value === option.value && <div className="w-4 h-4 rounded-full bg-blue-600" />}
               </div>
             </label>
             {/* Show selected answer label below the circle */}

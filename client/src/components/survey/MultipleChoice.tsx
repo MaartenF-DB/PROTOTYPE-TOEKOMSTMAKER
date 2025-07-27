@@ -66,7 +66,7 @@ export function MultipleChoice({
           <Button
             key={option.value}
             onClick={() => handleOptionClick(option.value, option.label)}
-            className={`p-4 rounded-xl text-xl font-semibold transition-all transform hover:scale-105 flex flex-col items-center justify-center space-y-3 min-h-[7rem] ${
+            className={`p-4 rounded-xl text-xl font-semibold transition-all transform hover:scale-105 flex flex-col items-center justify-center space-y-3 min-h-[7rem] survey-button touch-target emoji-button ${
               value === option.value
                 ? 'bg-blue-600 bg-opacity-70 text-white'
                 : 'bg-white bg-opacity-30 hover:bg-opacity-50 text-white'

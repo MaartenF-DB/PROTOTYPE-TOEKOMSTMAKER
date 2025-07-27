@@ -64,6 +64,67 @@
   --radius: 0.5rem;
 }
 
+/* iPad-specific optimizations */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .survey-container {
+    max-width: 90vw;
+    padding: 2rem;
+  }
+  
+  .survey-question {
+    font-size: 1.5rem;
+    line-height: 1.4;
+  }
+  
+  .survey-button {
+    min-height: 60px;
+    font-size: 1.1rem;
+    padding: 1rem 2rem;
+  }
+  
+  .emoji-button {
+    font-size: 3rem;
+    min-height: 80px;
+    min-width: 80px;
+  }
+  
+  .ranking-item {
+    min-height: 70px;
+    font-size: 1.2rem;
+    padding: 1rem;
+  }
+  
+  .text-input {
+    min-height: 50px;
+    font-size: 1.1rem;
+    padding: 0.75rem;
+  }
+}
+
+/* iPad landscape specific */
+@media screen and (orientation: landscape) and (min-width: 1024px) and (max-width: 1366px) {
+  .survey-container {
+    max-width: 85vw;
+  }
+  
+  .video-container {
+    height: 60vh;
+    max-height: 500px;
+  }
+}
+
+/* Touch-friendly interactions */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.draggable-item {
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -73,6 +134,11 @@
     @apply font-sans antialiased bg-background text-foreground;
     /* Touch optimization for iPad */
     -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    overscroll-behavior: none;
+  }
     -webkit-user-select: none;
     -webkit-tap-highlight-color: transparent;
     /* iPad text sizing optimization */
@@ -233,7 +299,6 @@
       font-family: -apple-system, BlinkMacSystemFont, "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
     }
   }
-}
 
 /* Fortune Teller mystical animations */
 @keyframes twinkle {

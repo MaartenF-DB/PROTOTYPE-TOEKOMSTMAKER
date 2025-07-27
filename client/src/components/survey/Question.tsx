@@ -83,12 +83,12 @@ export function Question({
 
   return (
     <section 
-      className={`min-h-screen flex flex-col items-center justify-center p-6 text-white relative ${style ? '' : `bg-gradient-to-br ${bgGradient}`}`}
+      className={`min-h-screen flex flex-col items-center justify-center p-6 text-white relative survey-container ${style ? '' : `bg-gradient-to-br ${bgGradient}`}`}
       style={style}
     >
       <div className="text-center max-w-5xl w-full relative z-10">
         <div className="bg-white bg-opacity-20 rounded-2xl p-8 mb-8">
-          <h2 className="text-3xl font-bold mb-6">{question}</h2>
+          <h2 className="text-3xl font-bold mb-6 survey-question">{question}</h2>
           {children}
         </div>
         
@@ -96,7 +96,7 @@ export function Question({
           {showPrevious && onPrevious && (
             <Button 
               onClick={onPrevious}
-              className="bg-gray-600 hover:bg-gray-700 px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg"
+              className="bg-gray-600 hover:bg-gray-700 px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg survey-button touch-target"
             >
               <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -108,7 +108,7 @@ export function Question({
           {showNext && onNext && (
             <Button 
               onClick={handleNext}
-              className={`${buttonColor} px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg`}
+              className={`${buttonColor} px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg survey-button touch-target`}
             >
               {translations[language].buttons.next}
               <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -120,7 +120,7 @@ export function Question({
           {showComplete && onComplete && (
             <Button 
               onClick={handleComplete}
-              className={`${buttonColor} px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg`}
+              className={`${buttonColor} px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 shadow-lg survey-button touch-target`}
             >
               {translations[language].buttons.finish}
               <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
