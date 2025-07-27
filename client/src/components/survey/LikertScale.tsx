@@ -32,7 +32,7 @@ export function LikertScale({ options, value, onValueChange, language = 'nl' }: 
       <div className="flex justify-between items-center px-8">
         {options.map((option) => (
           <div key={option.value} className="flex flex-col items-center space-y-2">
-            <div className="text-6xl">{option.emoji}</div>
+            <div className="text-4xl ipad:text-6xl">{option.emoji}</div>
             <label className="flex items-center cursor-pointer">
               <input
                 type="radio"
