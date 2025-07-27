@@ -83,7 +83,8 @@ export function MultipleChoice({
           value={otherValue}
           onChange={(e) => onOtherValueChange(e.target.value)}
           placeholder="Anders..."
-          className="w-full py-4 px-20 text-xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-blue-300 outline-none"
+          className="w-full py-4 text-xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-blue-300 outline-none"
+          style={{ paddingLeft: '76px', paddingRight: '76px' }}
         />
       )}
     </div>
