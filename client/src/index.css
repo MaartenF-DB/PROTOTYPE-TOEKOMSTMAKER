@@ -185,6 +185,12 @@
       min-height: 18rem !important;
     }
     
+    /* Position language selector in bottom right with same spacing as columns (1.5cm) */
+    .language-selector {
+      bottom: 3rem !important;
+      right: 56.7px !important; /* Same as column margin - 1.5cm */
+    }
+    
     /* Reset all other text sizes to normal */
     .text-4xl:not(.emoji-container) {
       font-size: 2.25rem !important; /* Normal text-4xl size */
