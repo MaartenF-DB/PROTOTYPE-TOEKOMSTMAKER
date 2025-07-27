@@ -104,6 +104,21 @@ The application follows a modern full-stack architecture with the following comp
 
 ## Recent Changes
 
+### July 27, 2025 - Project Migration and Question Updates
+- **Migration to Replit**: Successfully migrated project from Replit Agent to standard Replit environment
+- **Database Setup**: Configured PostgreSQL database with proper environment variables
+- **Question Modifications**: Updated feeling questions to focus on future thinking:
+  - Check-in question changed from "Hoe voel je je over het onderwerp X?" to "Hoe denk jij over [onderwerp X] in de toekomst?"
+  - Check-out question changed to "Hoe denk jij nu over [onderwerp X] in de toekomst?"
+- **New Answer Scale**: Replaced emotion-based answers with thinking-based scale:
+  - 😥 Heel slecht (Very bad)
+  - 😟 Slecht (Bad) 
+  - 😐 Neutraal (Neutral)
+  - 🙂 Goed (Good)
+  - 😊 Heel goed (Very good)
+- **Bilingual Support**: Updated both Dutch and English translations for the new question format
+- **Technical Fixes**: Resolved TypeScript compilation errors in storage layer
+
 ### July 21, 2025 - Homepage Layout & Apple Device Optimization
 - **Video Replacement**: Updated homepage video to new "Ontwerp zonder titel" video
 - **Two Column Layout**: Video left, text right with matching heights (32-36rem)

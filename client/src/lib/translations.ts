@@ -35,9 +35,9 @@ export const translations = {
       visitingWith: "Met wie bezoek je de tentoonstelling?",
       topicRanking: "Welk onderwerp vind jij het meest belangrijk?",
       mostImportant: "Wat vind je het belangrijkste onderwerp?",
-      feelingBefore: "Hoe voel je je over het onderwerp {topic}?",
+      feelingBefore: "Hoe denk jij over {topic} in de toekomst?",
       confidenceBefore: "Hoeveel vertrouwen heb je dat je iets kan veranderen aan {topic}?",
-      feelingAfter: "Hoe voel je je over het onderwerp {topic} als je kijkt naar de toekomst?",
+      feelingAfter: "Hoe denk jij nu over {topic} in de toekomst?",
       actionChoice: "Wat zou je doen voor {topic} in de toekomst?",
       confidenceAfter: "Hoeveel vertrouwen heb je dat je iets kan veranderen aan {topic} in de toekomst?"
     },
@@ -161,9 +161,9 @@ export const translations = {
       visitingWith: "Who are you visiting the exhibition with?",
       topicRanking: "Which topic do you think is most important?",
       mostImportant: "What do you think is the most important topic?",
-      feelingBefore: "How do you feel about the topic {topic}?",
+      feelingBefore: "What do you think about {topic} in the future?",
       confidenceBefore: "How confident are you that you can make a change regarding {topic}?",
-      feelingAfter: "How do you feel about the topic {topic} when you look to the future?",
+      feelingAfter: "What do you think about {topic} in the future now?",
       actionChoice: "What would you do for {topic} in the future?",
       confidenceAfter: "How confident are you that you can make a change regarding {topic} in the future?"
     },

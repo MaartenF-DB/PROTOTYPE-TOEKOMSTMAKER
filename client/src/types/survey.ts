@@ -61,19 +61,19 @@ export const ACTION_OPTIONS_EN = [
 ] as const;
 
 export const LIKERT_SCALE = [
-  { value: 1, label: 'Ik maak me zorgen', emoji: '😟' },
-  { value: 2, label: 'Ik vind het oké', emoji: '😐' },
-  { value: 3, label: 'Ik voel me neutraal', emoji: '🙂' },
-  { value: 4, label: 'Ik voel me positief', emoji: '😊' },
-  { value: 5, label: 'Ik heb er zin in!', emoji: '🤩' }
+  { value: 1, label: 'Heel slecht', emoji: '😥' },
+  { value: 2, label: 'Slecht', emoji: '😟' },
+  { value: 3, label: 'Neutraal', emoji: '😐' },
+  { value: 4, label: 'Goed', emoji: '🙂' },
+  { value: 5, label: 'Heel goed', emoji: '😊' }
 ] as const;
 
 export const LIKERT_SCALE_EN = [
-  { value: 1, label: 'I am worried', emoji: '😟' },
-  { value: 2, label: 'I think it\'s okay', emoji: '😐' },
-  { value: 3, label: 'I feel neutral', emoji: '🙂' },
-  { value: 4, label: 'I feel positive', emoji: '😊' },
-  { value: 5, label: 'I am excited!', emoji: '🤩' }
+  { value: 1, label: 'Very bad', emoji: '😥' },
+  { value: 2, label: 'Bad', emoji: '😟' },
+  { value: 3, label: 'Neutral', emoji: '😐' },
+  { value: 4, label: 'Good', emoji: '🙂' },
+  { value: 5, label: 'Very good', emoji: '😊' }
 ] as const;
 
 export const CONFIDENCE_SCALE = [
