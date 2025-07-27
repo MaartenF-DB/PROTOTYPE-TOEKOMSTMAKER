@@ -26,7 +26,7 @@ export class DbStorage implements IStorage {
 
   async createSurveyResponse(insertResponse: InsertSurveyResponse): Promise<SurveyResponse> {
     try {
-      const results = await db.insert(surveyResponses).values(insertResponse).returning();
+      const results = await db.insert(surveyResponses).values([insertResponse]).returning();
       return results[0];
     } catch (error) {
       console.error('Error creating survey response:', error);
