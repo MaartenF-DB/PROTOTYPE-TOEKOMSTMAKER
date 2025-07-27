@@ -210,7 +210,7 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
                 onDragOver={handleDragOver}
                 onDrop={(e) => handleDrop(e, position)}
               >
-                <div className="h-64 border-2 border-dashed border-white border-opacity-50 rounded-xl flex flex-col items-center justify-center bg-white bg-opacity-10 hover:bg-opacity-20 transition-all relative">
+                <div className="min-h-[18rem] border-2 border-dashed border-white border-opacity-50 rounded-xl flex flex-col items-center justify-center bg-white bg-opacity-10 hover:bg-opacity-20 transition-all relative">
                   {/* Position indicator */}
                   <div className="absolute top-3 left-3 w-8 h-8 bg-white rounded-full flex items-center justify-center">
                     <span className="text-gray-800 text-lg font-bold">{6 - position}</span>

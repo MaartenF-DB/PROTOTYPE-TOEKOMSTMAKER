@@ -137,36 +137,52 @@
       padding: 2rem !important;
     }
     
-    /* Make specific emoji types larger/smaller on iPad for survey sections */
+    /* Make specific emoji types adjusted for iPad with auto-sizing containers */
     
-    /* VISITING WITH options - larger */
+    /* VISITING WITH options - 0.5x smaller (4rem) with taller containers */
     .multiple-choice-emoji {
-      font-size: 8rem !important; /* Larger for visiting options */
+      font-size: 4rem !important;
       line-height: 1 !important;
     }
     
-    /* TOPIC icons - larger */
+    /* Adjust MultipleChoice button containers to be taller for larger emojis */
+    .grid button {
+      min-height: 7rem !important;
+      padding: 1.5rem 1rem !important;
+    }
+    
+    /* TOPIC icons - 0.5x smaller (4rem) with taller containers */
     .topic-emoji {
-      font-size: 8rem !important; /* Larger for topic icons */
+      font-size: 4rem !important;
       line-height: 1 !important;
     }
     
-    /* Topic icons in questions (text-9xl) - larger */
+    /* Adjust topic containers to be taller */
+    .topic-emoji ~ h3 {
+      margin-top: 0.75rem !important;
+    }
+    
+    /* Topic icons in questions (text-9xl) - 0.5x smaller (6rem) */
     .text-9xl {
-      font-size: 12rem !important; /* Larger for main topic display */
+      font-size: 6rem !important;
       line-height: 1 !important;
     }
     
-    /* ACTION options - larger */
+    /* ACTION options - 0.5x smaller (4rem) */
     .text-6xl:not(.multiple-choice-emoji):not(.topic-emoji) {
-      font-size: 8rem !important; /* Larger for action options */
+      font-size: 4rem !important;
       line-height: 1 !important;
     }
     
-    /* LIKERT/CONFIDENCE emojis - smaller (half of original 6rem = 3rem) */
+    /* LIKERT/CONFIDENCE emojis - keep at 3rem but adjust containers */
     .likert-emoji {
-      font-size: 3rem !important; /* Smaller for feeling/confidence smileys */
+      font-size: 3rem !important;
       line-height: 1 !important;
+    }
+    
+    /* Adjust ranking question containers to be taller */
+    .h-64 {
+      min-height: 18rem !important;
     }
     
     /* Reset all other text sizes to normal */

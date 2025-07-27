@@ -31,7 +31,7 @@ export function LikertScale({ options, value, onValueChange, language = 'nl' }: 
     <div className="flex flex-col space-y-6 w-full max-w-4xl mx-auto">
       <div className="flex justify-between items-center px-8">
         {options.map((option) => (
-          <div key={option.value} className="flex flex-col items-center space-y-2">
+          <div key={option.value} className="flex flex-col items-center justify-start space-y-2 min-h-[6rem]">
             <div className="text-4xl emoji-container likert-emoji">{option.emoji}</div>
             <label className="flex items-center cursor-pointer">
               <input
