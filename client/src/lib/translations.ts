@@ -33,7 +33,7 @@ export const translations = {
       name: "Wat is je naam?",
       age: "Hoe oud ben je?",
       visitingWith: "Met wie bezoek je de tentoonstelling?",
-      topicRanking: "Welk onderwerp vind jij het meest belangrijk?",
+      topicRanking: "Wat vind jij het meest belangrijk in de toekomst?",
       mostImportant: "Wat vind je het belangrijkste onderwerp?",
       feelingBefore: "Hoe denk jij over {topic} in de toekomst?",
       confidenceBefore: "Hoeveel vertrouwen heb je dat je iets kan veranderen aan {topic}?",
@@ -67,7 +67,7 @@ export const translations = {
     
     // Check Out Questions
     checkOutQuestions: {
-      feeling: "Hoe voel je je over het onderwerp",
+      feeling: "Hoe denk je nu over",
       action: "Wat zou je doen voor",
       confidence: "Hoeveel vertrouwen heb je dat je iets kan veranderen aan",
       future: "in de toekomst",
@@ -162,7 +162,7 @@ export const translations = {
       name: "What is your name?",
       age: "How old are you?",
       visitingWith: "Who are you visiting the exhibition with?",
-      topicRanking: "Which topic do you think is most important?",
+      topicRanking: "What do you think is most important for the future?",
       mostImportant: "What do you think is the most important topic?",
       feelingBefore: "What do you think about {topic} in the future?",
       confidenceBefore: "How confident are you that you can make a change regarding {topic}?",
@@ -230,7 +230,7 @@ export const translations = {
     
     // Check Out Questions
     checkOutQuestions: {
-      feeling: "How do you feel about the topic",
+      feeling: "What do you think about the topic",
       action: "What would you do for",
       confidence: "How confident are you that you can change something about",
       future: "in the future",

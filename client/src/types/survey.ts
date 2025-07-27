@@ -96,25 +96,25 @@ export const CONFIDENCE_SCALE_EN = [
 ] as const;
 
 export const KNOWLEDGE_SCALE = [
-  { value: 3, label: 'Heel veel!', emoji: '🧠' },
+  { value: 1, label: 'Bijna niks.', emoji: '🤷' },
   { value: 2, label: 'Een beetje.', emoji: '🤔' },
-  { value: 1, label: 'Bijna niks.', emoji: '🤷' }
+  { value: 3, label: 'Heel veel!', emoji: '🧠' }
 ] as const;
 
 export const KNOWLEDGE_SCALE_EN = [
-  { value: 3, label: 'A lot!', emoji: '🧠' },
+  { value: 1, label: 'Almost nothing.', emoji: '🤷' },
   { value: 2, label: 'A little bit.', emoji: '🤔' },
-  { value: 1, label: 'Almost nothing.', emoji: '🤷' }
+  { value: 3, label: 'A lot!', emoji: '🧠' }
 ] as const;
 
 export const LEARNED_SCALE = [
-  { value: 3, label: 'Ja, heel veel!', emoji: '🤯' },
+  { value: 1, label: 'Nee, niet echt.', emoji: '😐' },
   { value: 2, label: 'Ja, een beetje.', emoji: '💡' },
-  { value: 1, label: 'Nee, niet echt.', emoji: '😐' }
+  { value: 3, label: 'Ja, heel veel!', emoji: '🤯' }
 ] as const;
 
 export const LEARNED_SCALE_EN = [
-  { value: 3, label: 'Yes, a lot!', emoji: '🤯' },
+  { value: 1, label: 'No, not really.', emoji: '😐' },
   { value: 2, label: 'Yes, a little bit.', emoji: '💡' },
-  { value: 1, label: 'No, not really.', emoji: '😐' }
+  { value: 3, label: 'Yes, a lot!', emoji: '🤯' }
 ] as const;
