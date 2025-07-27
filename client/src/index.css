@@ -64,24 +64,38 @@
   --radius: 0.5rem;
 }
 
-/* iPad-specific optimizations */
+/* iPad-specific optimizations for optimal layout */
 @media screen and (min-width: 768px) and (max-width: 1024px) {
   .survey-container {
     max-width: 90vw;
     padding: 2rem;
+    margin: 0 auto;
   }
   
   .survey-question {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     line-height: 1.4;
+    margin-bottom: 1.5rem;
   }
   
+  /* Button optimizations for touch */
   .survey-button {
     min-height: 60px;
+    padding: 1rem 1.5rem;
     font-size: 1.1rem;
-    padding: 1rem 2rem;
+    border-radius: 12px;
+    touch-action: manipulation;
   }
   
+  /* Input field optimizations */
+  .text-input, input {
+    min-height: 56px;
+    font-size: 1.1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+  }
+  
+  /* Emoji sizing for iPad */
   .emoji-button {
     font-size: 3rem;
     min-height: 80px;
@@ -94,15 +108,16 @@
     padding: 1rem;
   }
   
-  .text-input {
-    min-height: 50px;
-    font-size: 1.1rem;
-    padding: 0.75rem;
+  /* Choice cards spacing */
+  .choice-card {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 12px;
   }
 }
 
-/* iPad landscape specific */
-@media screen and (orientation: landscape) and (min-width: 1024px) and (max-width: 1366px) {
+/* iPad Pro and larger tablets */
+@media screen and (min-width: 1024px) and (max-width: 1366px) {
   .survey-container {
     max-width: 85vw;
   }
@@ -125,195 +140,20 @@
   -webkit-user-select: none;
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-
-  body {
-    @apply font-sans antialiased bg-background text-foreground;
-    /* Touch optimization for iPad */
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-    overscroll-behavior: none;
-  }
-    -webkit-user-select: none;
-    -webkit-tap-highlight-color: transparent;
-    /* iPad text sizing optimization */
-    -webkit-text-size-adjust: 100%;
-    text-size-adjust: 100%;
-  }
-
-  /* Touch-friendly button styling */
-  button {
-    touch-action: manipulation;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  /* Video touch optimization */
-  video {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-  }
-
-  /* Force desktop-like layout on iPad */
-  @media screen and (min-device-width: 768px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 1) {
-    body {
-      /* Force desktop-like viewport behavior */
-      min-width: 1024px;
-      overflow-x: auto;
-    }
-    
-    /* Ensure all content maintains desktop proportions */
-    .min-h-screen {
-      min-height: 100vh !important;
-    }
-    
-    /* Maintain desktop font sizes */
-    * {
-      font-size: inherit !important;
-      line-height: inherit !important;
-    }
-    
-    /* Prevent any mobile-specific scaling */
-    button, input, textarea, select {
-      font-size: inherit !important;
-      transform: none !important;
-    }
-    
-    /* Ensure containers maintain their intended widths */
-    .max-w-5xl {
-      max-width: 64rem !important;
-    }
-    
-    .max-w-lg {
-      max-width: 32rem !important;
-    }
-    
-    /* Force proper spacing and padding */
-    .p-6 {
-      padding: 1.5rem !important;
-    }
-    
-    .p-8 {
-      padding: 2rem !important;
-    }
-    
-    /* Make specific emoji types adjusted for iPad with auto-sizing containers */
-    
-    /* VISITING WITH options - 0.5x smaller (4rem) with taller containers */
-    .multiple-choice-emoji {
-      font-size: 4rem !important;
-      line-height: 1 !important;
-    }
-    
-    /* Adjust MultipleChoice button containers to be taller for larger emojis */
-    .grid button {
-      min-height: 7rem !important;
-      padding: 1.5rem 1rem !important;
-    }
-    
-    /* TOPIC icons - 0.5x smaller (4rem) with taller containers */
-    .topic-emoji {
-      font-size: 4rem !important;
-      line-height: 1 !important;
-    }
-    
-    /* Adjust topic containers to be taller */
-    .topic-emoji ~ h3 {
-      margin-top: 0.75rem !important;
-    }
-    
-    /* Topic icons in questions (text-9xl) - 0.5x smaller (6rem) */
-    .text-9xl {
-      font-size: 6rem !important;
-      line-height: 1 !important;
-    }
-    
-    /* ACTION options - 0.5x smaller (4rem) */
-    .text-6xl:not(.multiple-choice-emoji):not(.topic-emoji) {
-      font-size: 4rem !important;
-      line-height: 1 !important;
-    }
-    
-    /* LIKERT/CONFIDENCE emojis - keep at 3rem but adjust containers */
-    .likert-emoji {
-      font-size: 3rem !important;
-      line-height: 1 !important;
-    }
-    
-    /* Adjust ranking question containers to be taller */
-    .h-64 {
-      min-height: 18rem !important;
-    }
-    
-    /* Position language selector 3cm from right edge of iPad */
-    .language-selector {
-      bottom: 3rem !important;
-      right: 113.4px !important; /* 3cm = 113.4px */
-    }
-    
-    /* Reset all other text sizes to normal */
-    .text-4xl:not(.emoji-container) {
-      font-size: 2.25rem !important; /* Normal text-4xl size */
-      line-height: 2.5rem !important;
-    }
-    
-    .text-3xl:not(.emoji-container) {
-      font-size: 1.875rem !important; /* Normal text-3xl size */
-      line-height: 2.25rem !important;
-    }
-    
-    .text-2xl:not(.emoji-container) {
-      font-size: 1.5rem !important; /* Normal text-2xl size */
-      line-height: 2rem !important;
-    }
-    
-    /* Survey column margins - 1.5cm = approximately 0.59 inches = 56.7px */
-    .max-w-5xl {
-      max-width: calc(64rem - 113.4px) !important; /* Reduce by 2 * 1.5cm */
-      margin-left: 56.7px !important; /* 1.5cm left margin */
-      margin-right: 56.7px !important; /* 1.5cm right margin */
-    }
-    
-    .max-w-4xl {
-      max-width: calc(56rem - 113.4px) !important; /* Reduce by 2 * 1.5cm */
-      margin-left: 56.7px !important; /* 1.5cm left margin */
-      margin-right: 56.7px !important; /* 1.5cm right margin */
-    }
-  }
-
-  /* Apple device emoji compatibility */
-  @supports (-webkit-appearance: none) {
-    /* Ensure Apple emojis are used on Safari/iOS/iPadOS */
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
-    }
-    
-    /* Force Apple emoji rendering */
-    span, div {
-      font-family: -apple-system, BlinkMacSystemFont, "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
-    }
-  }
-
-/* Fortune Teller mystical animations */
+/* Mystical animations */
 @keyframes twinkle {
-  0%, 100% { opacity: 0.3; transform: scale(0.8); }
-  50% { opacity: 1; transform: scale(1.2); }
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
 }
 
 @keyframes mystical-glow {
-  0%, 100% { box-shadow: 0 0 20px var(--fortune-glow), 0 0 40px var(--fortune-glow); }
-  50% { box-shadow: 0 0 30px var(--fortune-glow), 0 0 60px var(--fortune-glow); }
+  0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
+  50% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.6); }
 }
 
 @keyframes crystal-pulse {
-  0%, 100% { transform: scale(1); opacity: 0.8; }
-  50% { transform: scale(1.1); opacity: 1; }
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
 
 @keyframes floating {
@@ -335,7 +175,7 @@
 }
 
 .animate-crystal-pulse {
-  animation: crystal-pulse 4s ease-in-out infinite;
+  animation: crystal-pulse 2s ease-in-out infinite;
 }
 
 .animate-floating {
@@ -343,100 +183,138 @@
 }
 
 .animate-mystical-shimmer {
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
   background-size: 200% 100%;
-  animation: mystical-shimmer 2s ease-in-out infinite;
+  animation: mystical-shimmer 2s linear infinite;
 }
 
-/* Fortune Teller theme utility classes */
-.fortune-bg-primary {
-  background-color: var(--fortune-primary);
+/* Topic-specific background gradients */
+.bg-topic-vrede {
+  background: linear-gradient(135deg, var(--topic-vrede), hsl(156, 73%, 57%));
 }
 
-.fortune-bg-secondary {
-  background-color: var(--fortune-secondary);
+.bg-topic-gezondheid {
+  background: linear-gradient(135deg, var(--topic-gezondheid), hsl(43, 96%, 66%));
 }
 
-.fortune-bg-accent {
-  background-color: var(--fortune-accent);
+.bg-topic-rijkdom {
+  background: linear-gradient(135deg, var(--topic-rijkdom), hsl(263, 70%, 72%));
 }
 
-.fortune-bg-mystical {
-  background-color: var(--fortune-mystical);
+.bg-topic-vrije-tijd {
+  background: linear-gradient(135deg, var(--topic-vrije-tijd), hsl(0, 84%, 70%));
 }
 
-.fortune-text-primary {
-  color: var(--fortune-primary);
+.bg-topic-klimaat {
+  background: linear-gradient(135deg, var(--topic-klimaat), hsl(187, 85%, 56%));
 }
 
-.fortune-text-accent {
-  color: var(--fortune-accent);
+.bg-topic-wonen {
+  background: linear-gradient(135deg, var(--topic-wonen), hsl(25, 95%, 63%));
 }
 
-.fortune-text-glow {
-  color: var(--fortune-glow);
-  text-shadow: 0 0 10px var(--fortune-glow);
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    /* Touch optimization for iPad */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    overscroll-behavior: none;
+    /* iPad text sizing optimization */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  /* Touch-friendly button styling */
+  button {
+    touch-action: manipulation;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Video touch optimization */
+  video {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+  }
 }
 
-.fortune-border-glow {
-  border-color: var(--fortune-glow);
-  box-shadow: 0 0 15px var(--fortune-glow);
+/* Apple emoji support */
+.emoji {
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
 }
 
-@layer utilities {
-  .bg-topic-vrede {
-    background-color: var(--topic-vrede);
-  }
-  
-  .bg-topic-gezondheid {
-    background-color: var(--topic-gezondheid);
-  }
-  
-  .bg-topic-rijkdom {
-    background-color: var(--topic-rijkdom);
-  }
-  
-  .bg-topic-vrije-tijd {
-    background-color: var(--topic-vrije-tijd);
-  }
-  
-  .bg-topic-klimaat {
-    background-color: var(--topic-klimaat);
-  }
-  
-  .bg-topic-wonen {
-    background-color: var(--topic-wonen);
-  }
+/* Background stars for mystical theme */
+.background-stars {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
 
-  /* Additional grid column classes for surveys */
-  .grid-cols-5 {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
-  
-  .grid-cols-6 {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-  }
-  
-  .grid-cols-7 {
-    grid-template-columns: repeat(7, minmax(0, 1fr));
-  }
-  
-  .grid-cols-8 {
-    grid-template-columns: repeat(8, minmax(0, 1fr));
-  }
+.star {
+  position: absolute;
+  color: rgba(255, 255, 255, 0.6);
+  animation: twinkle 3s ease-in-out infinite;
+}
 
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+.star:nth-child(odd) {
+  animation-delay: 0.5s;
+}
 
-  .animate-fade-in {
-    animation: fade-in 0.8s ease-out;
-  }
+.star:nth-child(3n) {
+  animation-delay: 1s;
+}
+
+.star:nth-child(4n) {
+  animation-delay: 1.5s;
+}
+
+/* Mystical card styling */
+.mystical-card {
+  background: linear-gradient(145deg, rgba(66, 32, 158, 0.1), rgba(147, 51, 234, 0.1));
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(147, 51, 234, 0.2);
+  box-shadow: 0 8px 32px rgba(147, 51, 234, 0.1);
+}
+
+.mystical-border {
+  position: relative;
+  background: linear-gradient(145deg, rgba(66, 32, 158, 0.05), rgba(147, 51, 234, 0.05));
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.mystical-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  background: linear-gradient(145deg, #fbbf24, #a855f7, #ec4899);
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+}
+
+/* Fortune teller theme specific styles */
+.fortune-teller-bg {
+  background: radial-gradient(ellipse at center, rgba(66, 32, 158, 0.3) 0%, rgba(17, 24, 39, 0.8) 70%);
+}
+
+.fortune-glow {
+  text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+}
+
+.crystal-ball-glow {
+  filter: drop-shadow(0 0 20px rgba(251, 191, 36, 0.6));
 }

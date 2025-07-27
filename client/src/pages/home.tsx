@@ -77,7 +77,7 @@ export default function Home() {
   const { data: existingResponses = [], isLoading: isLoadingResponses } = useQuery({
     queryKey: ['/api/survey-responses'],
     enabled: true
-  });
+  }) as { data: any[], isLoading: boolean };
 
   console.log('🔍 EXISTING RESPONSES QUERY:', { existingResponses, isLoadingResponses });
   
@@ -809,8 +809,8 @@ export default function Home() {
 
   return (
     <FortuneTellerTheme language={language}>
-      {/* Progress Bar - mystical style */}
-      <div className="fixed top-0 left-0 w-full h-2 bg-purple-900/50 z-50">
+      {/* Progress Bar - mystical style with iPad optimization */}
+      <div className="fixed top-0 left-0 w-full h-2 bg-purple-900/50 z-50 progress-container">
         <div 
           className="h-full bg-gradient-to-r from-yellow-400 via-purple-500 to-pink-500 transition-all duration-300 animate-mystical-shimmer"
           style={{ width: `${progressPercentage}%` }}
@@ -841,10 +841,12 @@ export default function Home() {
 
       {renderCurrentSection()}
       
-      <LanguageSelector 
-        currentLanguage={language} 
-        onLanguageChange={handleLanguageChange}
-      />
+      <div className="language-selector-ipad">
+        <LanguageSelector 
+          currentLanguage={language} 
+          onLanguageChange={handleLanguageChange}
+        />
+      </div>
     </FortuneTellerTheme>
   );
 }
