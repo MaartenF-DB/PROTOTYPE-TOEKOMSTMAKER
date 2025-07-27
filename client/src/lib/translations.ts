@@ -40,7 +40,7 @@ export const translations = {
       knowledgeBefore: "Hoeveel weet je al over {topic}?",
       feelingAfter: "Hoe denk jij nu over {topic} in de toekomst?",
       learnedSomethingNew: "Heb je iets nieuws geleerd over {topic}?",
-      mostInterestingLearned: "Wat was het meest interessante dat je hebt geleerd?",
+      mostInterestingLearned: "Wat heb je geleerd over {topic} vandaag?",
       actionChoice: "Wat zou jij zelf willen doen voor {topic} in de toekomst?",
       confidenceAfter: "Denk jij dat kinderen iets kunnen doen om {topic} te helpen in de toekomst?"
     },
@@ -70,7 +70,7 @@ export const translations = {
       feeling: "Hoe denk je nu over",
       action: "Wat zou jij zelf willen doen voor",
       confidence: "Denk jij dat kinderen iets kunnen doen om",
-      future: "te helpen in de toekomst",
+      future: "in de toekomst",
       selectFromList: "Of kies je naam uit de lijst",
       notAnsweredBefore: "Ik heb de eerdere vragen niet beantwoord",
       futureContext: "De toekomst is 10 jaar vanaf nu, dan ben jij {age} jaar."
@@ -169,7 +169,7 @@ export const translations = {
       knowledgeBefore: "How much do you already know about {topic}?",
       feelingAfter: "What do you think about {topic} in the future now?",
       learnedSomethingNew: "Did you learn something new about {topic}?",
-      mostInterestingLearned: "What was the most interesting thing you learned?",
+      mostInterestingLearned: "What did you learn about {topic} today?",
       actionChoice: "What would you yourself want to do for {topic} in the future?",
       confidenceAfter: "Do you think children can do something to help {topic} in the future?"
     },

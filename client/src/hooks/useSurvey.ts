@@ -101,9 +101,9 @@ export function useSurvey() {
     
     saveResponseMutation.mutate({
       ...state.answers,
-      feelingAfter: null, // Check-in only, no checkout data yet
+      feelingAfter: 0, // Check-in only, no checkout data yet
       actionChoice: null,
-      confidenceAfter: null,
+      confidenceAfter: 0,
       result: null
     });
   }, [saveResponseMutation, state.answers]);

@@ -682,7 +682,7 @@ export default function Home() {
             onPrevious={() => setCurrentSection('question-6b')}
             showPrevious={true}
             showNext={true}
-            isValid={answers.mostInterestingLearned.length > 0}
+            isValid={true}
             language={language}
           >
             <div className="space-y-6">
