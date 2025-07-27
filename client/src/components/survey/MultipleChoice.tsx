@@ -60,20 +60,20 @@ export function MultipleChoice({
                   'grid-cols-8';
 
   return (
-    <div className="w-full max-w-lg mx-auto">
-      <div className={`grid ${gridCols} gap-3 md:gap-4 mb-6`}>
+    <div className="w-full max-w-2xl mx-auto">
+      <div className={`grid ${gridCols} gap-4 md:gap-6 mb-6`}>
         {options.map((option) => (
           <Button
             key={option.value}
             onClick={() => handleOptionClick(option.value, option.label)}
-            className={`p-4 rounded-xl text-xl font-semibold transition-all transform hover:scale-105 flex flex-col items-center space-y-2 ${
+            className={`p-4 md:p-6 rounded-xl text-lg md:text-xl font-semibold transition-all transform hover:scale-105 flex flex-col items-center justify-center space-y-3 min-h-[120px] md:min-h-[140px] ${
               value === option.value
-                ? 'bg-blue-600 bg-opacity-70 text-white'
-                : 'bg-white bg-opacity-30 hover:bg-opacity-50 text-white'
+                ? 'bg-blue-600 bg-opacity-70 text-white border-2 border-blue-300 shadow-lg'
+                : 'bg-white bg-opacity-30 hover:bg-opacity-50 text-white border-2 border-transparent hover:border-white hover:border-opacity-30'
             }`}
           >
-            {option.icon && <span className="text-6xl">{option.icon}</span>}
-            <span className="text-center">{option.label}</span>
+            {option.icon && <span className="text-4xl md:text-5xl lg:text-6xl">{option.icon}</span>}
+            <span className="text-center text-sm md:text-base lg:text-lg leading-tight">{option.label}</span>
           </Button>
         ))}
       </div>

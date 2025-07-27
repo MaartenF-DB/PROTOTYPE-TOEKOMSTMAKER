@@ -74,9 +74,9 @@ export function CheckoutNameInput({ existingResponses, onNameConfirm, language =
 
   return (
     <section className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-blue-500 to-teal-500 text-white relative">
-      <div className="text-center max-w-2xl w-full relative z-10">
-        <div className="bg-white bg-opacity-20 rounded-2xl p-4 md:p-6 lg:p-8 mb-8">
-          <h2 className="text-3xl font-bold mb-6">{t.questions?.name || "What is your name?"}</h2>
+      <div className="text-center max-w-3xl w-full relative z-10 px-4">
+        <div className="bg-white bg-opacity-20 rounded-2xl p-6 md:p-8 mb-6">
+          <h2 className="text-2xl md:text-3xl font-bold mb-8 leading-tight">{t.questions?.name || "What is your name?"}</h2>
           
           <div className="space-y-4">
             <Input
