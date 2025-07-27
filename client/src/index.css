@@ -137,10 +137,46 @@
       padding: 2rem !important;
     }
     
-    /* Make smileys/emojis larger on iPad */
-    .text-4xl {
-      font-size: 4rem !important; /* Increased from default 2.25rem to 4rem */
+    /* Make smileys/emojis larger on iPad for survey sections (not entry-choice/home) */
+    /* Target any emoji text that's not in entry-choice section */
+    section:not([class*="entry"]) .text-4xl {
+      font-size: 5rem !important; /* Increased to 5rem for better visibility */
       line-height: 1 !important;
+    }
+    
+    section:not([class*="entry"]) .text-2xl {
+      font-size: 3rem !important;
+      line-height: 1 !important;
+    }
+    
+    section:not([class*="entry"]) .text-3xl {
+      font-size: 4rem !important;
+      line-height: 1 !important;
+    }
+    
+    section:not([class*="entry"]) .text-5xl {
+      font-size: 6rem !important;
+      line-height: 1 !important;
+    }
+    
+    /* More specific targeting for survey questions and likert scales */
+    .text-4xl[class*="emoji"],
+    .text-4xl:not(.bg-gradient-to-br):not([class*="entry"]) {
+      font-size: 5rem !important;
+      line-height: 1 !important;
+    }
+    
+    /* Survey column margins - 1.5cm = approximately 0.59 inches = 56.7px */
+    .max-w-5xl {
+      max-width: calc(64rem - 113.4px) !important; /* Reduce by 2 * 1.5cm */
+      margin-left: 56.7px !important; /* 1.5cm left margin */
+      margin-right: 56.7px !important; /* 1.5cm right margin */
+    }
+    
+    .max-w-4xl {
+      max-width: calc(56rem - 113.4px) !important; /* Reduce by 2 * 1.5cm */
+      margin-left: 56.7px !important; /* 1.5cm left margin */
+      margin-right: 56.7px !important; /* 1.5cm right margin */
     }
   }
 
