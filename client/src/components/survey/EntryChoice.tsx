@@ -29,10 +29,10 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
       clearInterval(intervalRef.current);
     }
     
-    // Set up interval to repeat every 10 seconds
+    // Set up interval to repeat every 8 seconds
     intervalRef.current = setInterval(() => {
       speak(message, language);
-    }, 10000);
+    }, 8000);
     
     // Cleanup interval on unmount
     return () => {
