@@ -33,8 +33,9 @@ export function CheckOutIntro({ onStart, mostImportantTopic, language = 'nl' }: 
   }, [speak, language]);
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-green-600 to-teal-600 text-white">
-      <div className="text-center max-w-2xl">
+    <section className="survey-section bg-gradient-to-br from-green-600 to-teal-600 text-white">
+      <div className="survey-container">
+        <div className="question-content text-center">
         <h2 className="text-4xl font-bold mb-6">{t.checkInClosing.title}</h2>
         <p className="text-2xl font-bold mb-8">{t.checkOutIntro.subtitle}</p>
         
@@ -49,6 +50,7 @@ export function CheckOutIntro({ onStart, mostImportantTopic, language = 'nl' }: 
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
           </svg>
         </Button>
+        </div>
       </div>
     </section>
   );

@@ -46,7 +46,7 @@ export function EntryChoice({ onCheckIn, onCheckOut, language = 'nl' }: EntryCho
   }, [speak, language]);
 
   return (
-    <section className="min-h-screen flex items-center justify-center p-4 md:p-6 lg:p-8 text-white relative bg-gradient-to-br from-purple-900 via-purple-800 to-purple-900">
+    <section className="survey-section text-white bg-gradient-to-br from-purple-900 via-purple-800 to-purple-900">
       {/* Two column layout - Video left, Text right */}
       <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-center">
         

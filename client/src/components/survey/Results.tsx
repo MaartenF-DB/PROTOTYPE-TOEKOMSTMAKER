@@ -45,7 +45,7 @@ export function Results({ answers, onRestart, language = 'nl' }: ResultsProps) {
   if (!topicData) {
     console.error('No topic data found for:', answers.mostImportantTopic);
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 to-blue-600 text-white">
+      <div className="survey-section bg-gradient-to-br from-purple-600 to-blue-600 text-white">
         <div className="text-center">
           <h1 className="text-3xl font-bold mb-4">Oeps! Er ging iets mis.</h1>
           <Button onClick={onRestart} className="bg-white text-purple-600 px-6 py-3 rounded-full font-semibold">
