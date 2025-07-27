@@ -185,10 +185,10 @@
       min-height: 18rem !important;
     }
     
-    /* Position language selector in bottom right with same spacing as columns (1.5cm) */
+    /* Position language selector in bottom right, 1cm left from original position */
     .language-selector {
       bottom: 3rem !important;
-      right: 56.7px !important; /* Same as column margin - 1.5cm */
+      right: 19px !important; /* 1.5cm - 1cm = 0.5cm ≈ 19px */
     }
     
     /* Reset all other text sizes to normal */
