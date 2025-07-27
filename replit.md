@@ -111,7 +111,7 @@ The application follows a modern full-stack architecture with the following comp
 - **Question Text Refinement**: Updated confidence question wording from "Denk jij dat kinderen iets kunnen doen om [onderwerp x] te helpen in de toekomst" to "Denk je dat kinderen iets kunnen doen voor [onderwerp x] in de toekomst?" for both check-in and check-out phases
 - **Bilingual Consistency**: Applied same text improvements to English translations for consistency across languages
 - **Full Viewport Coverage**: Implemented survey-section class for complete screen coverage (100vw x 100vh) eliminating purple background visibility
-- **Content Width Optimization**: Updated question-content to use 2.5cm margins from screen edges (calc(100% - 5cm) width) for better iPad readability
+- **Content Width Optimization**: Updated question-content to use 0.5cm margins from screen edges (calc(100% - 1cm) width) for better iPad readability and wider content area
 - **Consistent Component Styling**: Applied new layout system to all survey components (EntryChoice, CheckInClosing, CheckOutIntro, Results) for uniform full-screen experience
 
 ### July 27, 2025 - Project Migration and Question Updates
