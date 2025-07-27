@@ -110,8 +110,8 @@ export function AnimatedResult({ finalResult, onComplete, language = 'nl' }: Ani
     <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-purple-900 to-indigo-900 text-white relative">
       <div className="text-center max-w-2xl w-full relative z-10">
         <div className="bg-white bg-opacity-40 rounded-2xl p-8 mb-8 backdrop-blur-sm border border-white border-opacity-30">
-          <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
-            {language === 'en' ? 'The fortune teller reveals your personality... ' : 'De waarzegster onthult je persoonlijkheid... '}<span className="text-purple-300">🔮</span>
+          <h2 className="text-4xl font-bold mb-8 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
+            {language === 'en' ? 'The fortune teller reveals your personality... ' : 'De waarzegster onthult je persoonlijkheid... '}<span className="text-purple-300 text-5xl">🔮</span>
           </h2>
           <div className="text-2xl font-bold mb-4 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
             {timeRemaining} {language === 'en' ? 'seconds' : 'seconden'}
@@ -127,7 +127,7 @@ export function AnimatedResult({ finalResult, onComplete, language = 'nl' }: Ani
                 border: `3px solid ${currentColor}80`
               }}
             >
-              <span className="text-6xl animate-pulse">{currentIcon}</span>
+              <span className="text-8xl animate-pulse">{currentIcon}</span>
             </div>
             
             <div className="absolute inset-0 flex items-center justify-center">
@@ -156,7 +156,7 @@ export function AnimatedResult({ finalResult, onComplete, language = 'nl' }: Ani
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
-                fontSize: `${0.8 + Math.random() * 0.5}rem`,
+                fontSize: `${1.5 + Math.random() * 1}rem`,
                 animationDelay: `${Math.random() * 3}s`,
                 animationDuration: `${4 + Math.random() * 2}s`
               }}

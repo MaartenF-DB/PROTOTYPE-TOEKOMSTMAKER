@@ -94,7 +94,7 @@
     -webkit-user-select: none;
   }
 
-  /* Force desktop-like layout on iPad */
+  /* Force desktop-like layout on iPad with enlarged text */
   @media screen and (min-device-width: 768px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 1) {
     body {
       /* Force desktop-like viewport behavior */
@@ -107,16 +107,46 @@
       min-height: 100vh !important;
     }
     
-    /* Maintain desktop font sizes */
-    * {
-      font-size: inherit !important;
-      line-height: inherit !important;
+    /* Enlarged text sizes for iPad visibility */
+    h1 {
+      font-size: 3.5rem !important;
     }
     
-    /* Prevent any mobile-specific scaling */
-    button, input, textarea, select {
-      font-size: inherit !important;
-      transform: none !important;
+    h2 {
+      font-size: 2.5rem !important;
+    }
+    
+    /* Question titles */
+    .text-3xl {
+      font-size: 3.5rem !important;
+    }
+    
+    /* Button text */
+    .text-xl {
+      font-size: 2rem !important;
+    }
+    
+    /* Regular text */
+    .text-base, .text-lg {
+      font-size: 1.5rem !important;
+    }
+    
+    /* Small text */
+    .text-sm {
+      font-size: 1.25rem !important;
+    }
+    
+    /* Extra large emojis */
+    .text-4xl {
+      font-size: 4rem !important;
+    }
+    
+    .text-5xl {
+      font-size: 5rem !important;
+    }
+    
+    .text-6xl {
+      font-size: 6rem !important;
     }
     
     /* Ensure containers maintain their intended widths */
@@ -135,6 +165,12 @@
     
     .p-8 {
       padding: 2rem !important;
+    }
+    
+    /* Larger buttons for better touch */
+    button {
+      padding: 1.25rem 2rem !important;
+      min-height: 4rem !important;
     }
   }
 
