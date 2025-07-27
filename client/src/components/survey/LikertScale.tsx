@@ -34,8 +34,8 @@ export function LikertScale({ options, value, onValueChange, language = 'nl' }: 
           <div key={option.value} className="flex flex-col items-center justify-start space-y-2 min-h-[6rem]">
             <button
               onClick={() => handleValueChange(option.value)}
-              className={`text-4xl emoji-container likert-emoji cursor-pointer touch-target transition-all transform hover:scale-110 ${
-                value === option.value ? 'scale-125 selected' : 'hover:scale-110'
+              className={`text-4xl emoji-container likert-emoji cursor-pointer touch-target ${
+                value === option.value ? 'selected' : ''
               }`}
               type="button"
             >
