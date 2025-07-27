@@ -42,10 +42,10 @@ export function LikertScale({ options, value, onValueChange, language = 'nl' }: 
               {option.emoji}
             </button>
             
-            {/* Clickable radio button */}
+            {/* Clickable radio button - centered */}
             <button
               onClick={() => handleValueChange(option.value)}
-              className="flex items-center cursor-pointer touch-target"
+              className="flex items-center justify-center cursor-pointer touch-target"
               type="button"
             >
               <div className={`w-6 h-6 rounded-full border-2 border-white flex items-center justify-center transition-all ${
