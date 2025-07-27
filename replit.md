@@ -104,6 +104,13 @@ The application follows a modern full-stack architecture with the following comp
 
 ## Recent Changes
 
+### July 27, 2025 - iPad Layout Fixes and Question Text Updates
+- **iPad CSS Optimizations**: Fixed CSS syntax errors and implemented iPad-specific optimizations for better tablet user experience
+- **Viewport Improvements**: Updated viewport meta tag for optimal iPad performance and touch interactions
+- **Touch-Friendly Elements**: Enhanced button sizes, input fields, and interactive elements for iPad usage
+- **Question Text Refinement**: Updated confidence question wording from "Denk jij dat kinderen iets kunnen doen om [onderwerp x] te helpen in de toekomst" to "Denk je dat kinderen iets kunnen doen voor [onderwerp x] in de toekomst?" for both check-in and check-out phases
+- **Bilingual Consistency**: Applied same text improvements to English translations for consistency across languages
+
 ### July 27, 2025 - Project Migration and Question Updates
 - **Migration to Replit**: Successfully migrated project from Replit Agent to standard Replit environment
 - **Database Setup**: Configured PostgreSQL database with proper environment variables
