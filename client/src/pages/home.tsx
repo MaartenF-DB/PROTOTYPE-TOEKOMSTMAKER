@@ -736,14 +736,15 @@ export default function Home() {
                 </div>
               )}
               
-              <MultipleChoice
-                options={getActionOptions()}
-                value={answers.actionChoice}
-                onValueChange={(value) => updateAnswers({ actionChoice: value })}
-                columns={3}
-                language={language}
-              />
-              
+              <div className="mb-16">
+                <MultipleChoice
+                  options={getActionOptions()}
+                  value={answers.actionChoice}
+                  onValueChange={(value) => updateAnswers({ actionChoice: value })}
+                  columns={3}
+                  language={language}
+                />
+              </div>
 
             </div>
           </Question>
