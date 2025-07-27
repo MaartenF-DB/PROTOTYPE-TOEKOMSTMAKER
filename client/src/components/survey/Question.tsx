@@ -83,16 +83,18 @@ export function Question({
 
   return (
     <section 
-      className={`min-h-screen flex flex-col items-center justify-center p-6 text-white relative survey-container ${style ? '' : `bg-gradient-to-br ${bgGradient}`}`}
+      className={`survey-section text-white relative ${style ? '' : `bg-gradient-to-br ${bgGradient}`}`}
       style={style}
     >
-      <div className="text-center max-w-5xl w-full relative z-10">
-        <div className="bg-white bg-opacity-20 rounded-2xl p-8 mb-8">
+      <div className="survey-container">
+        <div className="question-content">
           <h2 className="text-3xl font-bold mb-6 survey-question">{question}</h2>
-          {children}
+          <div className="w-full">
+            {children}
+          </div>
         </div>
         
-        <div className="flex justify-center gap-4">
+        <div className="flex justify-center gap-4 mt-8">
           {showPrevious && onPrevious && (
             <Button 
               onClick={onPrevious}

@@ -67,15 +67,23 @@
 /* iPad-specific optimizations for optimal layout */
 @media screen and (min-width: 768px) and (max-width: 1024px) {
   .survey-container {
-    max-width: 90vw;
-    padding: 2rem;
+    max-width: 95vw;
+    width: 100vw;
+    padding: 1rem 2rem;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
   }
   
   .survey-question {
     font-size: 1.75rem;
     line-height: 1.4;
     margin-bottom: 1.5rem;
+    text-align: center;
+    width: 100%;
   }
   
   /* Button optimizations for touch */
@@ -113,6 +121,32 @@
     margin-bottom: 1rem;
     padding: 1rem;
     border-radius: 12px;
+    width: 100%;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* Question content centering */
+  .question-content {
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+  }
+  
+  /* Survey section full coverage */
+  .survey-section {
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    box-sizing: border-box;
   }
 }
 
