@@ -36,13 +36,13 @@ export const translations = {
       topicRanking: "Wat vind jij het meest belangrijk in de toekomst?",
       mostImportant: "Wat vind je het belangrijkste onderwerp?",
       feelingBefore: "Hoe denk jij over {topic} in de toekomst?",
-      confidenceBefore: "Hoeveel vertrouwen heb je dat je iets kan veranderen aan {topic}?",
+      confidenceBefore: "Denk jij dat kinderen iets kunnen doen om {topic} te helpen in de toekomst?",
       knowledgeBefore: "Hoeveel weet je al over {topic}?",
       feelingAfter: "Hoe denk jij nu over {topic} in de toekomst?",
       learnedSomethingNew: "Heb je iets nieuws geleerd over {topic}?",
       mostInterestingLearned: "Wat was het meest interessante dat je hebt geleerd?",
       actionChoice: "Wat zou jij zelf willen doen voor {topic} in de toekomst?",
-      confidenceAfter: "Hoeveel vertrouwen heb je dat je iets kan veranderen aan {topic} in de toekomst?"
+      confidenceAfter: "Denk jij dat kinderen iets kunnen doen om {topic} te helpen in de toekomst?"
     },
     
     // Buttons
@@ -69,8 +69,8 @@ export const translations = {
     checkOutQuestions: {
       feeling: "Hoe denk je nu over",
       action: "Wat zou jij zelf willen doen voor",
-      confidence: "Hoeveel vertrouwen heb je dat je iets kan veranderen aan",
-      future: "in de toekomst",
+      confidence: "Denk jij dat kinderen iets kunnen doen om",
+      future: "te helpen in de toekomst",
       selectFromList: "Of kies je naam uit de lijst",
       notAnsweredBefore: "Ik heb de eerdere vragen niet beantwoord",
       futureContext: "De toekomst is 10 jaar vanaf nu, dan ben jij {age} jaar."
@@ -165,13 +165,13 @@ export const translations = {
       topicRanking: "What do you think is most important for the future?",
       mostImportant: "What do you think is the most important topic?",
       feelingBefore: "What do you think about {topic} in the future?",
-      confidenceBefore: "How confident are you that you can make a change regarding {topic}?",
+      confidenceBefore: "Do you think children can do something to help {topic} in the future?",
       knowledgeBefore: "How much do you already know about {topic}?",
       feelingAfter: "What do you think about {topic} in the future now?",
       learnedSomethingNew: "Did you learn something new about {topic}?",
       mostInterestingLearned: "What was the most interesting thing you learned?",
       actionChoice: "What would you yourself want to do for {topic} in the future?",
-      confidenceAfter: "How confident are you that you can make a change regarding {topic} in the future?"
+      confidenceAfter: "Do you think children can do something to help {topic} in the future?"
     },
     
     // Buttons
@@ -232,7 +232,7 @@ export const translations = {
     checkOutQuestions: {
       feeling: "What do you think about the topic",
       action: "What would you yourself want to do for",
-      confidence: "How confident are you that you can change something about",
+      confidence: "Do you think children can do something to help",
       future: "in the future",
       selectFromList: "Or choose your name from the list",
       notAnsweredBefore: "I haven't answered the previous questions",

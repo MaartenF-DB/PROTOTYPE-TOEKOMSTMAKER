@@ -80,19 +80,19 @@ export const LIKERT_SCALE_EN = [
 ] as const;
 
 export const CONFIDENCE_SCALE = [
-  { value: 1, label: 'Ik heb een ienie mini beetje vertrouwen', emoji: '🤏' },
-  { value: 2, label: 'Ik heb een beetje vertrouwen', emoji: '🤔' },
-  { value: 3, label: 'Ik heb gewoon vertrouwen', emoji: '😐' },
-  { value: 4, label: 'Ik heb veel vertrouwen', emoji: '💪' },
-  { value: 5, label: 'Ik heb héééél veel vertrouwen!', emoji: '🚀' }
+  { value: 1, label: 'Echt niet!', emoji: '❌' },
+  { value: 2, label: 'Ik denk het niet', emoji: '👎' },
+  { value: 3, label: 'Misschien', emoji: '🤔' },
+  { value: 4, label: 'Ik denk het wel', emoji: '👍' },
+  { value: 5, label: 'Zeker weten!', emoji: '🚀' }
 ] as const;
 
 export const CONFIDENCE_SCALE_EN = [
-  { value: 1, label: 'I have a tiny bit of confidence', emoji: '🤏' },
-  { value: 2, label: 'I have some confidence', emoji: '🤔' },
-  { value: 3, label: 'I have normal confidence', emoji: '😐' },
-  { value: 4, label: 'I have a lot of confidence', emoji: '💪' },
-  { value: 5, label: 'I have sooooo much confidence!', emoji: '🚀' }
+  { value: 1, label: 'Definitely not!', emoji: '❌' },
+  { value: 2, label: 'I don\'t think so', emoji: '👎' },
+  { value: 3, label: 'Maybe', emoji: '🤔' },
+  { value: 4, label: 'I think so', emoji: '👍' },
+  { value: 5, label: 'Absolutely!', emoji: '🚀' }
 ] as const;
 
 export const KNOWLEDGE_SCALE = [
