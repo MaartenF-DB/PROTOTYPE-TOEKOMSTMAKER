@@ -60,20 +60,20 @@ export function MultipleChoice({
                   'grid-cols-8';
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      <div className={`grid ${gridCols} gap-4 md:gap-6 mb-6`}>
+    <div className="w-full">
+      <div className={`grid ${gridCols} gap-4 mb-6`}>
         {options.map((option) => (
           <Button
             key={option.value}
             onClick={() => handleOptionClick(option.value, option.label)}
-            className={`p-4 md:p-6 rounded-xl text-lg md:text-xl font-semibold transition-all transform hover:scale-105 flex flex-col items-center justify-center space-y-3 min-h-[120px] md:min-h-[140px] ${
+            className={`p-4 rounded-xl text-xl font-semibold transition-all transform hover:scale-105 flex flex-col items-center space-y-2 ${
               value === option.value
-                ? 'bg-blue-600 bg-opacity-70 text-white border-2 border-blue-300 shadow-lg'
-                : 'bg-white bg-opacity-30 hover:bg-opacity-50 text-white border-2 border-transparent hover:border-white hover:border-opacity-30'
+                ? 'bg-blue-600 bg-opacity-70 text-white'
+                : 'bg-white bg-opacity-30 hover:bg-opacity-50 text-white'
             }`}
           >
-            {option.icon && <span className="text-4xl md:text-5xl lg:text-6xl">{option.icon}</span>}
-            <span className="text-center text-sm md:text-base lg:text-lg leading-tight">{option.label}</span>
+            {option.icon && <span className="text-6xl">{option.icon}</span>}
+            <span className="text-center">{option.label}</span>
           </Button>
         ))}
       </div>
@@ -83,7 +83,7 @@ export function MultipleChoice({
           value={otherValue}
           onChange={(e) => onOtherValueChange(e.target.value)}
           placeholder="Anders..."
-          className="w-full py-4 px-4 md:px-8 lg:px-12 text-xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-blue-300 outline-none"
+          className="w-full py-4 px-20 text-xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-blue-300 outline-none"
         />
       )}
     </div>

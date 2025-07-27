@@ -7,12 +7,12 @@ interface LanguageSelectorProps {
 
 export function LanguageSelector({ onLanguageChange, currentLanguage }: LanguageSelectorProps) {
   return (
-    <div className="fixed bottom-12 left-1/2 transform -translate-x-1/2 flex space-x-4 z-50">
+    <div className="fixed bottom-12 left-1/2 transform -translate-x-1/2 flex space-x-2 z-50">
       <button
         onClick={() => onLanguageChange('nl')}
-        className={`w-16 h-16 rounded-full overflow-hidden border-3 transition-all shadow-lg ${
+        className={`w-12 h-12 rounded-full overflow-hidden border-2 transition-all ${
           currentLanguage === 'nl' 
-            ? 'border-white scale-110 shadow-xl' 
+            ? 'border-white shadow-lg scale-110' 
             : 'border-gray-300 hover:border-white hover:scale-105'
         }`}
         title="Nederlands"
@@ -26,36 +26,35 @@ export function LanguageSelector({ onLanguageChange, currentLanguage }: Language
       
       <button
         onClick={() => onLanguageChange('en')}
-        className={`w-16 h-16 rounded-full overflow-hidden border-3 transition-all shadow-lg ${
+        className={`w-12 h-12 rounded-full overflow-hidden border-2 transition-all ${
           currentLanguage === 'en' 
-            ? 'border-white scale-110 shadow-xl' 
+            ? 'border-white shadow-lg scale-110' 
             : 'border-gray-300 hover:border-white hover:scale-105'
         }`}
         title="English"
       >
-        <svg viewBox="0 0 60 60" className="w-full h-full">
+        <svg viewBox="0 0 48 48" className="w-full h-full">
           <defs>
-            <clipPath id="circle-clip">
-              <circle cx="30" cy="30" r="30"/>
+            <clipPath id="circle">
+              <circle cx="24" cy="24" r="24"/>
             </clipPath>
           </defs>
           
-          <g clipPath="url(#circle-clip)">
+          <g clipPath="url(#circle)">
             {/* Blue background */}
-            <rect width="60" height="60" fill="#012169"/>
+            <rect width="48" height="48" fill="#012169"/>
             
             {/* White diagonal stripes (St. Andrew's Cross) */}
-            <path d="M0,0 L60,60 M60,0 L0,60" stroke="#fff" strokeWidth="6"/>
+            <path d="M0,0 L48,48 M48,0 L0,48" stroke="#fff" strokeWidth="5"/>
             
             {/* Red diagonal stripes (St. Patrick's Cross) */}
-            <path d="M0,0 L60,60" stroke="#C8102E" strokeWidth="3" strokeDasharray="0,6,6,6" strokeDashoffset="3"/>
-            <path d="M60,0 L0,60" stroke="#C8102E" strokeWidth="3" strokeDasharray="0,6,6,6" strokeDashoffset="3"/>
+            <path d="M0,0 L48,48 M48,0 L0,48" stroke="#C8102E" strokeWidth="2"/>
             
             {/* White cross (St. George's Cross background) */}
-            <path d="M30,0 V60 M0,30 H60" stroke="#fff" strokeWidth="10"/>
+            <path d="M24,0 V48 M0,24 H48" stroke="#fff" strokeWidth="8"/>
             
             {/* Red cross (St. George's Cross) */}
-            <path d="M30,0 V60 M0,30 H60" stroke="#C8102E" strokeWidth="6"/>
+            <path d="M24,0 V48 M0,24 H48" stroke="#C8102E" strokeWidth="5"/>
           </g>
         </svg>
       </button>

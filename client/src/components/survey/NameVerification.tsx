@@ -50,7 +50,7 @@ export function NameVerification({
           value={nameVerification}
           onChange={(e) => onNameVerificationChange(e.target.value)}
           placeholder="Typ hier je naam..."
-          className="w-full py-4 px-4 md:px-8 lg:px-12 text-2xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-indigo-300 outline-none"
+          className="w-full py-4 px-20 text-2xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-indigo-300 outline-none"
         />
         
 
