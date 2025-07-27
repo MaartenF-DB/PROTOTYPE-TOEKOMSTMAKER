@@ -174,8 +174,7 @@ export default function Home() {
                 value={answers.name}
                 onChange={(e) => updateAnswers({ name: e.target.value })}
                 placeholder={t.placeholders.typeName}
-                className="w-full py-4 text-2xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-blue-300 outline-none"
-                style={{ paddingLeft: '76px', paddingRight: '76px' }}
+                className="w-full py-4 px-4 md:px-8 lg:px-12 text-2xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-blue-300 outline-none"
               />
               {hasNameConflict && (
                 <div className="text-sm text-white opacity-80 space-y-2 bg-red-500 bg-opacity-20 p-4 rounded-lg border border-red-300">

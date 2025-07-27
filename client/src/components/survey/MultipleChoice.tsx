@@ -60,8 +60,8 @@ export function MultipleChoice({
                   'grid-cols-8';
 
   return (
-    <div className="w-full">
-      <div className={`grid ${gridCols} gap-4 mb-6`}>
+    <div className="w-full max-w-lg mx-auto">
+      <div className={`grid ${gridCols} gap-3 md:gap-4 mb-6`}>
         {options.map((option) => (
           <Button
             key={option.value}
@@ -83,8 +83,7 @@ export function MultipleChoice({
           value={otherValue}
           onChange={(e) => onOtherValueChange(e.target.value)}
           placeholder="Anders..."
-          className="w-full py-4 text-xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-blue-300 outline-none"
-          style={{ paddingLeft: '76px', paddingRight: '76px' }}
+          className="w-full py-4 px-4 md:px-8 lg:px-12 text-xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-blue-300 outline-none"
         />
       )}
     </div>

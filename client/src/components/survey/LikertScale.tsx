@@ -28,8 +28,8 @@ export function LikertScale({ options, value, onValueChange, language = 'nl' }: 
   // Keep all options visible - no simplified display
 
   return (
-    <div className="flex flex-col space-y-6 w-full max-w-2xl mx-auto">
-      <div className="flex justify-between items-center px-8">
+    <div className="flex flex-col space-y-6 w-full max-w-lg mx-auto">
+      <div className="flex justify-between items-center px-2 md:px-4 lg:px-8">
         {options.map((option) => (
           <div key={option.value} className="flex flex-col items-center space-y-2">
             <div className="text-4xl">{option.emoji}</div>
@@ -61,7 +61,7 @@ export function LikertScale({ options, value, onValueChange, language = 'nl' }: 
       </div>
       
       {/* X-axis labels */}
-      <div className="flex justify-between items-center px-8">
+      <div className="flex justify-between items-center px-2 md:px-4 lg:px-8">
         <span className="text-sm font-medium">{options[0]?.label}</span>
         <span className="text-sm font-medium">{options[options.length - 1]?.label}</span>
       </div>
