@@ -241,7 +241,7 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
                       }`}
                       style={{ backgroundColor: topicData.hexColor || '#6B7280' }}
                     >
-                      <div className="text-6xl mb-2 text-center">{topicData.icon}</div>
+                      <div className="text-6xl mb-2 text-center topic-emoji">{topicData.icon}</div>
                       <h3 className="text-lg font-bold text-center leading-tight px-1">{getTopicName(topicAtPosition)}</h3>
                       
                       {selectedTopic === topicAtPosition && (

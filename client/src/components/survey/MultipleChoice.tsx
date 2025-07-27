@@ -72,7 +72,7 @@ export function MultipleChoice({
                 : 'bg-white bg-opacity-30 hover:bg-opacity-50 text-white'
             }`}
           >
-            {option.icon && <span className="text-6xl">{option.icon}</span>}
+            {option.icon && <span className="text-6xl multiple-choice-emoji">{option.icon}</span>}
             <span className="text-center">{option.label}</span>
           </Button>
         ))}

@@ -137,9 +137,35 @@
       padding: 2rem !important;
     }
     
-    /* Make ONLY emoji containers larger on iPad for survey sections */
-    .emoji-container {
-      font-size: 6rem !important; /* Larger emojis for better iPad visibility */
+    /* Make specific emoji types larger/smaller on iPad for survey sections */
+    
+    /* VISITING WITH options - larger */
+    .multiple-choice-emoji {
+      font-size: 8rem !important; /* Larger for visiting options */
+      line-height: 1 !important;
+    }
+    
+    /* TOPIC icons - larger */
+    .topic-emoji {
+      font-size: 8rem !important; /* Larger for topic icons */
+      line-height: 1 !important;
+    }
+    
+    /* Topic icons in questions (text-9xl) - larger */
+    .text-9xl {
+      font-size: 12rem !important; /* Larger for main topic display */
+      line-height: 1 !important;
+    }
+    
+    /* ACTION options - larger */
+    .text-6xl:not(.multiple-choice-emoji):not(.topic-emoji) {
+      font-size: 8rem !important; /* Larger for action options */
+      line-height: 1 !important;
+    }
+    
+    /* LIKERT/CONFIDENCE emojis - smaller (half of original 6rem = 3rem) */
+    .likert-emoji {
+      font-size: 3rem !important; /* Smaller for feeling/confidence smileys */
       line-height: 1 !important;
     }
     
