@@ -128,6 +128,7 @@ The application follows a modern full-stack architecture with the following comp
 - **CSS Input Text Fix**: Added CSS rules to ensure all text inputs display black text with gray placeholders, preventing any gray text issues
 - **Check-In Name Layout Fix**: Updated check-in name input (question-0) to match checkout name layout with larger text, better styling, and black text color
 - **Button Spacing Enhancement**: Added 2cm extra spacing (mt-16) for navigation buttons in visiting companions and action choice questions for better iPad usability
+- **Name Input Width Reduction**: Reduced question-content width by 2cm on both sides (from calc(100% - 1cm) to calc(100% - 5cm) with 2.5cm margins) for narrower name input columns
 
 ### July 27, 2025 - Project Migration and Question Updates
 - **Migration to Replit**: Successfully migrated project from Replit Agent to standard Replit environment
