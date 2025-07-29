@@ -14,6 +14,7 @@ import { CheckoutNameInput } from '@/components/survey/CheckoutNameInput';
 import { Input } from '@/components/ui/input';
 import { FortuneTellerTheme } from '@/components/theme/ThemeCustomizer';
 import { FortuneTellerCharacter, MysticalCard } from '@/components/fortune/FortuneTellerCharacter';
+import { BackgroundEmojis } from '@/components/fortune/BackgroundEmojis';
 import { 
   VISITING_OPTIONS, 
   ACTION_OPTIONS, 
@@ -164,35 +165,41 @@ export default function Home() {
 
       case 'question-0':
         return (
-          <Question
-            questionNumber={0}
-            question={t.questions.name}
-            bgGradient="from-blue-500 to-teal-500"
-            buttonColor="bg-blue-600 hover:bg-blue-700"
-            onNext={() => setCurrentSection('question-1')}
-            showPrevious={false}
-            showNext={true}
-            isValid={answers.name.length > 0 && !hasNameConflict}
-            language={language}
-          >
-            <div className="space-y-4">
-              <Input
-                value={answers.name}
-                onChange={(e) => updateAnswers({ name: e.target.value })}
-                placeholder={t.placeholders.typeName}
-                className="w-full py-4 px-20 text-2xl text-black rounded-xl border-none shadow-lg focus:ring-4 focus:ring-blue-300 outline-none text-input touch-target placeholder-gray-500"
-              />
-              {hasNameConflict && (
-                <div className="text-sm text-white opacity-80 space-y-2 bg-red-500 bg-opacity-20 p-4 rounded-lg border border-red-300">
-                  <p className="font-semibold">⚠️ {language === 'en' ? 'This name already exists!' : 'Deze naam bestaat al!'}</p>
-                  <p>{language === 'en' 
-                    ? 'Please add a number to make your name unique (example: "Anna 1")'
-                    : 'Voeg een nummer toe om je naam uniek te maken (bijvoorbeeld: "Anna 1")'}</p>
-                </div>
-              )}
+          <div className="survey-section">
+            <BackgroundEmojis />
+            <div className="question-content">
+              <div className="mb-8 text-center">
+                <h1 className="text-4xl font-bold text-white mb-4">{t.questions.name}</h1>
+              </div>
+              
+              <div className="space-y-4 mb-8">
+                <Input
+                  value={answers.name}
+                  onChange={(e) => updateAnswers({ name: e.target.value })}
+                  placeholder={t.placeholders.typeName}
+                  className="w-full py-6 px-8 text-3xl text-black bg-white rounded-2xl border-none shadow-xl focus:ring-4 focus:ring-blue-300 outline-none font-medium"
+                />
+                {hasNameConflict && (
+                  <div className="text-sm text-white opacity-80 space-y-2 bg-red-500 bg-opacity-20 p-4 rounded-lg border border-red-300">
+                    <p className="font-semibold">⚠️ {language === 'en' ? 'This name already exists!' : 'Deze naam bestaat al!'}</p>
+                    <p>{language === 'en' 
+                      ? 'Please add a number to make your name unique (example: "Anna 1")'
+                      : 'Voeg een nummer toe om je naam uniek te maken (bijvoorbeeld: "Anna 1")'}</p>
+                  </div>
+                )}
+              </div>
 
+              <div className="flex justify-center">
+                <Button
+                  onClick={() => setCurrentSection('question-1')}
+                  disabled={answers.name.length === 0 || hasNameConflict}
+                  className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-500 text-white px-12 py-4 text-xl font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all"
+                >
+                  {language === 'en' ? 'Next' : 'Volgende'}
+                </Button>
+              </div>
             </div>
-          </Question>
+          </div>
         );
 
       case 'question-1':
@@ -246,6 +253,7 @@ export default function Home() {
             showNext={true}
             isValid={answers.visitingWith.length > 0}
             language={language}
+            buttonSpacing="mt-16"
           >
             <div className="space-y-4">
               <MultipleChoice
@@ -724,6 +732,7 @@ export default function Home() {
             showNext={true}
             isValid={answers.actionChoice.length > 0}
             language={language}
+            buttonSpacing="mt-16"
           >
             <div className="space-y-6">
               {topicData && (

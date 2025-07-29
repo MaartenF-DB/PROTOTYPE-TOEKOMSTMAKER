@@ -20,6 +20,7 @@ interface QuestionProps {
   isValid?: boolean;
   style?: React.CSSProperties;
   language?: 'nl' | 'en';
+  buttonSpacing?: string;
 }
 
 export function Question({
@@ -36,7 +37,8 @@ export function Question({
   buttonColor = "bg-blue-600 hover:bg-blue-700",
   isValid = true,
   style,
-  language = 'nl'
+  language = 'nl',
+  buttonSpacing = "mt-8"
 }: QuestionProps) {
   const { speak } = useSpeech();
 
@@ -94,7 +96,7 @@ export function Question({
           </div>
           
           {/* Navigation buttons moved inside question-content */}
-          <div className="flex justify-center gap-4 mt-8">
+          <div className={`flex justify-center gap-4 ${buttonSpacing}`}>
           {showPrevious && onPrevious && (
             <Button 
               onClick={onPrevious}
