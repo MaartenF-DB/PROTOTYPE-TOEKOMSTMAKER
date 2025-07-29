@@ -12,6 +12,7 @@ import { NameVerification } from '@/components/survey/NameVerification';
 import { NameMatching } from '@/components/survey/NameMatching';
 import { CheckoutNameInput } from '@/components/survey/CheckoutNameInput';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { FortuneTellerTheme } from '@/components/theme/ThemeCustomizer';
 import { FortuneTellerCharacter, MysticalCard } from '@/components/fortune/FortuneTellerCharacter';
 import { BackgroundEmojis } from '@/components/fortune/BackgroundEmojis';
