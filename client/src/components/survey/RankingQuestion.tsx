@@ -166,7 +166,12 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
               style={{ backgroundColor: topicData?.hexColor || '#6B7280' }}
             >
               <div className="text-6xl mb-2 text-center topic-emoji">{topicData?.icon || '❓'}</div>
-              <h3 className="text-lg font-bold text-center leading-tight px-1">{topic}</h3>
+              <h3 className="text-sm font-bold text-center px-1" style={{ 
+                lineHeight: '1.1', 
+                whiteSpace: 'nowrap',
+                fontSize: topic === 'VRIJE TIJD' ? '0.8rem' : '0.9rem',
+                marginTop: '0.5rem'
+              }}>{topic}</h3>
               
               {selectedTopic === topic && (
                 <div className="mt-3 p-3 bg-white bg-opacity-30 rounded-lg text-sm text-white text-center font-medium leading-tight">
