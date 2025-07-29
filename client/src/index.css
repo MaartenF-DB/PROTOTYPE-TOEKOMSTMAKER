@@ -177,6 +177,38 @@
     overflow-wrap: break-word;
   }
   
+  /* Specific fixes for ranking question topic names */
+  .text-lg.font-bold.text-center.leading-tight.px-1 {
+    /* Ensure GEZONDHEID centers properly under heart icon */
+    text-align: center !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3rem;
+    /* Prevent VRIJE TIJD from wrapping to two lines */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* For very long text, reduce font size if needed */
+    font-size: 0.95rem;
+    line-height: 1.2;
+    padding: 0 0.25rem;
+  }
+  
+  /* Additional specific fixes for topic names in ranking questions */
+  h3.text-lg.font-bold.text-center.leading-tight.px-1 {
+    /* Perfect centering under emoji */
+    text-align: center !important;
+    display: block;
+    width: 100%;
+    /* Keep VRIJE TIJD on one line */
+    white-space: nowrap;
+    font-size: 0.9rem;
+    line-height: 1.1;
+    margin-top: 0.5rem;
+    word-spacing: -0.1rem;
+  }
+  
   /* Ensure all Input components have black text */
   .text-input {
     color: black !important;
