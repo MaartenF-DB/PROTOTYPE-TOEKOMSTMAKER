@@ -158,20 +158,28 @@ export function RankingQuestion({ ranking, onRankingChange, language = 'nl' }: R
                   speak(topicData.description, language);
                 }
               }}
-              className={`p-4 rounded-xl cursor-move shadow-lg transform hover:scale-105 transition-all text-white border-2 select-none ${
+              className={`p-3 rounded-xl cursor-move shadow-lg transform hover:scale-105 transition-all text-white border-2 select-none flex flex-col items-center justify-start ${
                 draggedItem === topic || touchItem === topic
                   ? 'opacity-50 border-yellow-400' 
                   : 'border-white border-opacity-30 hover:border-opacity-60'
               }`}
-              style={{ backgroundColor: topicData?.hexColor || '#6B7280' }}
+              style={{ 
+                backgroundColor: topicData?.hexColor || '#6B7280',
+                minHeight: '140px'
+              }}
             >
-              <div className="text-6xl mb-2 text-center topic-emoji">{topicData?.icon || '❓'}</div>
-              <h3 className="text-sm font-bold text-center px-1" style={{ 
-                lineHeight: '1.1', 
-                whiteSpace: 'nowrap',
-                fontSize: topic === 'VRIJE TIJD' ? '0.8rem' : '0.9rem',
-                marginTop: '0.5rem'
-              }}>{topic}</h3>
+              <div className="text-6xl mb-1 text-center topic-emoji">{topicData?.icon || '❓'}</div>
+              <div 
+                className="font-bold text-center w-full flex items-center justify-center" 
+                style={{ 
+                  fontSize: topic === 'VRIJE TIJD' ? '0.7rem' : '0.8rem',
+                  lineHeight: '1',
+                  color: 'white',
+                  whiteSpace: 'nowrap',
+                  minHeight: '1.5rem',
+                  letterSpacing: topic === 'VRIJE TIJD' ? '-0.02em' : '0'
+                }}
+              >{topic}</div>
               
               {selectedTopic === topic && (
                 <div className="mt-3 p-3 bg-white bg-opacity-30 rounded-lg text-sm text-white text-center font-medium leading-tight">
