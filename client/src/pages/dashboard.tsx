@@ -82,13 +82,55 @@ export default function Dashboard() {
     // Add UTF-8 BOM for proper Numbers import
     const csv = '\uFEFF' + [headers, ...rows].join('\n');
 
+    const filename = `museum-responses-${new Date().toISOString().split('T')[0]}.csv`;
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `museum-responses-${new Date().toISOString().split('T')[0]}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
+    
+    // Check if we're on iOS/iPad
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    
+    if (isIOS || isSafari) {
+      // For iOS/Safari, use a different approach to ensure Downloads folder
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.style.display = 'none';
+      
+      // Add to DOM and trigger download
+      document.body.appendChild(a);
+      
+      // Use user interaction event for iOS
+      const clickEvent = new MouseEvent('click', {
+        view: window,
+        bubbles: true,
+        cancelable: true
+      });
+      
+      a.dispatchEvent(clickEvent);
+      
+      // Cleanup
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 100);
+    } else {
+      // Standard download for other browsers
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'noopener noreferrer');
+      
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      
+      setTimeout(() => {
+        URL.revokeObjectURL(url);
+      }, 100);
+    }
   };
 
   const handleExportAndDeleteAll = async () => {

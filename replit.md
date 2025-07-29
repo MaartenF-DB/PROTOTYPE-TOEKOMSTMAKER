@@ -124,6 +124,7 @@ The application follows a modern full-stack architecture with the following comp
 - **CSV Format Enhancement**: Improved Numbers app compatibility with UTF-8 BOM and semicolon separators instead of commas
 - **Topic Name Display Fix**: Added CSS word-wrap rules to prevent GEZONDHEID text truncation in all topic displays
 - **Dashboard Bug Fix**: Resolved actionChoice null value issue in statistics calculation to prevent TypeScript errors
+- **iPad CSV Download Fix**: Enhanced CSV download to work properly on iPad devices with automatic Downloads folder saving and improved mobile compatibility
 
 ### July 27, 2025 - Project Migration and Question Updates
 - **Migration to Replit**: Successfully migrated project from Replit Agent to standard Replit environment
