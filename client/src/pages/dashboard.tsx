@@ -66,12 +66,23 @@ export default function Dashboard() {
       'Tijd': new Date(response.createdAt).toLocaleTimeString('nl-NL')
     }));
 
-    const csv = [
-      Object.keys(csvContent[0]).join(','),
-      ...csvContent.map(row => Object.values(row).map(val => `"${val}"`).join(','))
-    ].join('\n');
+    // Create proper CSV with UTF-8 BOM for Numbers compatibility
+    const headers = Object.keys(csvContent[0]).join(';');
+    const rows = csvContent.map(row => 
+      Object.values(row).map(val => {
+        const stringVal = String(val || '');
+        // Escape quotes and wrap in quotes if contains special characters
+        if (stringVal.includes(';') || stringVal.includes('"') || stringVal.includes('\n')) {
+          return `"${stringVal.replace(/"/g, '""')}"`;
+        }
+        return stringVal;
+      }).join(';')
+    );
+    
+    // Add UTF-8 BOM for proper Numbers import
+    const csv = '\uFEFF' + [headers, ...rows].join('\n');
 
-    const blob = new Blob([csv], { type: 'text/csv' });
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -165,7 +176,9 @@ export default function Dashboard() {
       return acc;
     }, {} as Record<string, number>),
     topActions: [...completeResponses, ...checkOutOnlyResponses].reduce((acc, r) => {
-      acc[r.actionChoice] = (acc[r.actionChoice] || 0) + 1;
+      if (r.actionChoice) {
+        acc[r.actionChoice] = (acc[r.actionChoice] || 0) + 1;
+      }
       return acc;
     }, {} as Record<string, number>),
     feelingChanges: completeResponses.filter(r => r.feelingBefore !== null && r.feelingAfter !== null).map(r => ({

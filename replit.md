@@ -120,6 +120,10 @@ The application follows a modern full-stack architecture with the following comp
 - **Comprehensive CSV Export**: Enhanced dashboard CSV export to include all survey questions: knowledge before, learned something new, most interesting learned, and checkout user status fields
 - **Radio Button Alignment**: Fixed radio buttons under Likert scale emojis to be perfectly centered using flex-1 and justify-center wrapper
 - **Audio Volume Enhancement**: Increased all speech synthesis volume to 300% (3.0) across useSpeech hook and Results component for better exhibition audio
+- **Text Color Fix**: Changed check-in name input text color from gray to black for better visibility and consistency with checkout
+- **CSV Format Enhancement**: Improved Numbers app compatibility with UTF-8 BOM and semicolon separators instead of commas
+- **Topic Name Display Fix**: Added CSS word-wrap rules to prevent GEZONDHEID text truncation in all topic displays
+- **Dashboard Bug Fix**: Resolved actionChoice null value issue in statistics calculation to prevent TypeScript errors
 
 ### July 27, 2025 - Project Migration and Question Updates
 - **Migration to Replit**: Successfully migrated project from Replit Agent to standard Replit environment

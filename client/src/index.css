@@ -149,6 +149,22 @@
     min-width: 80px;
   }
   
+  /* Topic name display fix for GEZONDHEID text wrapping */
+  .topic-name-display {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    max-width: 100%;
+  }
+  
+  /* Global fix for GEZONDHEID and all topic names */
+  .text-2xl.font-semibold.text-white.mb-2.text-center {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+  
   /* Likert emoji buttons */
   .likert-emoji {
     padding: 1rem;

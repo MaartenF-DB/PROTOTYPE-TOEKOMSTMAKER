@@ -180,7 +180,7 @@ export default function Home() {
                 value={answers.name}
                 onChange={(e) => updateAnswers({ name: e.target.value })}
                 placeholder={t.placeholders.typeName}
-                className="w-full py-4 px-20 text-2xl text-gray-800 rounded-xl border-none shadow-lg focus:ring-4 focus:ring-blue-300 outline-none text-input touch-target"
+                className="w-full py-4 px-20 text-2xl text-black rounded-xl border-none shadow-lg focus:ring-4 focus:ring-blue-300 outline-none text-input touch-target"
               />
               {hasNameConflict && (
                 <div className="text-sm text-white opacity-80 space-y-2 bg-red-500 bg-opacity-20 p-4 rounded-lg border border-red-300">
@@ -307,7 +307,7 @@ export default function Home() {
         return (
           <Question
             questionNumber={4}
-            question={`${t.questions.feelingBefore.replace('{topic}', language === 'en' ? topicData?.nameEn || answers.mostImportantTopic : answers.mostImportantTopic)}`}
+            question={`${t.questions.feelingBefore.replace('{topic}', language === 'en' ? topicData?.nameEn || answers.mostImportantTopic : topicData?.name || answers.mostImportantTopic)}`}
             bgGradient={topicData?.hexColor ? '' : 'from-red-500 to-pink-500'}
             buttonColor={topicData?.hexColor ? '' : 'bg-red-600 hover:bg-red-700'}
             style={topicData?.hexColor ? { background: getTopicGradient(topicData.hexColor) } : {}}
@@ -344,7 +344,7 @@ export default function Home() {
         return (
           <Question
             questionNumber={4}
-            question={`${t.questions.knowledgeBefore.replace('{topic}', language === 'en' ? topicData?.nameEn || answers.mostImportantTopic : answers.mostImportantTopic)}`}
+            question={`${t.questions.knowledgeBefore.replace('{topic}', language === 'en' ? topicData?.nameEn || answers.mostImportantTopic : topicData?.name || answers.mostImportantTopic)}`}
             bgGradient={topicData?.hexColor ? '' : 'from-indigo-500 to-purple-500'}
             buttonColor={topicData?.hexColor ? '' : 'bg-indigo-600 hover:bg-indigo-700'}
             style={topicData?.hexColor ? { background: getTopicGradient(topicData.hexColor) } : {}}
@@ -381,7 +381,7 @@ export default function Home() {
         return (
           <Question
             questionNumber={5}
-            question={`${t.questions.confidenceBefore.replace('{topic}', language === 'en' ? topicData?.nameEn || answers.mostImportantTopic : answers.mostImportantTopic)}`}
+            question={`${t.questions.confidenceBefore.replace('{topic}', language === 'en' ? topicData?.nameEn || answers.mostImportantTopic : topicData?.name || answers.mostImportantTopic)}`}
             bgGradient={topicData?.hexColor ? '' : 'from-blue-500 to-purple-600'}
             buttonColor={topicData?.hexColor ? '' : 'bg-blue-600 hover:bg-blue-700'}
             style={topicData?.hexColor ? { background: getTopicGradient(topicData.hexColor) } : {}}
@@ -637,7 +637,7 @@ export default function Home() {
         return (
           <Question
             questionNumber={6}
-            question={`${t.questions.learnedSomethingNew.replace('{topic}', language === 'en' ? topicData?.nameEn || answers.mostImportantTopic : answers.mostImportantTopic)}`}
+            question={`${t.questions.learnedSomethingNew.replace('{topic}', language === 'en' ? topicData?.nameEn || answers.mostImportantTopic : topicData?.name || answers.mostImportantTopic)}`}
             bgGradient={topicData?.hexColor ? '' : 'from-indigo-500 to-purple-500'}
             buttonColor={topicData?.hexColor ? '' : 'bg-indigo-600 hover:bg-indigo-700'}
             style={topicData?.hexColor ? { background: getTopicGradient(topicData.hexColor) } : {}}
@@ -674,7 +674,7 @@ export default function Home() {
         return (
           <Question
             questionNumber={6}
-            question={t.questions.mostInterestingLearned}
+            question={`${t.questions.mostInterestingLearned.replace('{topic}', language === 'en' ? topicData?.nameEn || answers.mostImportantTopic : topicData?.name || answers.mostImportantTopic)}`}
             bgGradient={topicData?.hexColor ? '' : 'from-green-500 to-teal-500'}
             buttonColor={topicData?.hexColor ? '' : 'bg-green-600 hover:bg-green-700'}
             style={topicData?.hexColor ? { background: getTopicGradient(topicData.hexColor) } : {}}
@@ -714,7 +714,7 @@ export default function Home() {
         return (
           <Question
             questionNumber={7}
-            question={`${t.checkOutQuestions.action} ${language === 'en' ? topicData.nameEn : answers.mostImportantTopic} ${t.checkOutQuestions.future}?`}
+            question={`${t.checkOutQuestions.action} ${language === 'en' ? topicData?.nameEn || answers.mostImportantTopic : topicData?.name || answers.mostImportantTopic} ${t.checkOutQuestions.future}?`}
             bgGradient={topicData?.hexColor ? '' : 'from-cyan-500 to-blue-500'}
             buttonColor={topicData?.hexColor ? '' : 'bg-cyan-600 hover:bg-cyan-700'}
             style={topicData?.hexColor ? { background: getTopicGradient(topicData.hexColor) } : {}}
@@ -754,7 +754,7 @@ export default function Home() {
         return (
           <Question
             questionNumber={8}
-            question={`${t.checkOutQuestions.confidence} ${language === 'en' ? topicData.nameEn : answers.mostImportantTopic} ${t.checkOutQuestions.future}?`}
+            question={`${t.checkOutQuestions.confidence} ${language === 'en' ? topicData?.nameEn || answers.mostImportantTopic : topicData?.name || answers.mostImportantTopic} ${t.checkOutQuestions.future}?`}
             bgGradient={topicData?.hexColor ? '' : 'from-green-500 to-emerald-600'}
             buttonColor={topicData?.hexColor ? '' : 'bg-green-600 hover:bg-green-700'}
             style={topicData?.hexColor ? { background: getTopicGradient(topicData.hexColor) } : {}}
