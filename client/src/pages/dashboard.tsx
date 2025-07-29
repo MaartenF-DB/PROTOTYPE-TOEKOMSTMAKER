@@ -172,7 +172,7 @@ export default function Dashboard() {
     }
   };
 
-  // Separate responses by type
+  // Separate responses by type - now that check-in and check-out are combined, we have simpler logic
   const completeResponses = responses.filter(r => 
     r.feelingAfter !== null && 
     r.feelingAfter !== 0 &&
@@ -185,19 +185,11 @@ export default function Dashboard() {
   const checkInOnlyResponses = responses.filter(r => 
     (r.feelingAfter === null || r.feelingAfter === 0) &&
     (!r.actionChoice || r.actionChoice.trim() === '') &&
-    (r.confidenceAfter === null || r.confidenceAfter === 0) &&
-    !r.isNewCheckoutUser
+    (r.confidenceAfter === null || r.confidenceAfter === 0)
   );
   
-  const checkOutOnlyResponses = responses.filter(r => 
-    r.isNewCheckoutUser === true &&
-    r.feelingAfter !== null && 
-    r.feelingAfter !== 0 &&
-    r.actionChoice && 
-    r.actionChoice.trim() !== '' &&
-    r.confidenceAfter !== null &&
-    r.confidenceAfter !== 0
-  );
+  // No more separate checkout-only responses since they get merged into existing check-in records
+  const checkOutOnlyResponses: SurveyResponse[] = [];
 
   const stats = {
     totalResponses: responses.length,
@@ -217,7 +209,7 @@ export default function Dashboard() {
       acc[r.mostImportantTopic] = (acc[r.mostImportantTopic] || 0) + 1;
       return acc;
     }, {} as Record<string, number>),
-    topActions: [...completeResponses, ...checkOutOnlyResponses].reduce((acc, r) => {
+    topActions: completeResponses.reduce((acc, r) => {
       if (r.actionChoice) {
         acc[r.actionChoice] = (acc[r.actionChoice] || 0) + 1;
       }
