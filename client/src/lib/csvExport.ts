@@ -63,8 +63,9 @@ export function exportToCSV(answers: SurveyAnswers, filename?: string) {
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
     }, 100);
-  } else if (link.download !== undefined) {
+  } else {
     // Standard browser download
+    const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
     link.setAttribute('href', url);
     link.setAttribute('download', downloadFilename);

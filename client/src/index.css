@@ -165,6 +165,15 @@
     overflow-wrap: break-word;
   }
   
+  /* Ensure all Input components have black text */
+  .text-input {
+    color: black !important;
+  }
+  
+  .text-input::placeholder {
+    color: #6b7280 !important;
+  }
+  
   /* Likert emoji buttons */
   .likert-emoji {
     padding: 1rem;

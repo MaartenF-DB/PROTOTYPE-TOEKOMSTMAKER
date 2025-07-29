@@ -125,6 +125,7 @@ The application follows a modern full-stack architecture with the following comp
 - **Topic Name Display Fix**: Added CSS word-wrap rules to prevent GEZONDHEID text truncation in all topic displays
 - **Dashboard Bug Fix**: Resolved actionChoice null value issue in statistics calculation to prevent TypeScript errors
 - **iPad CSV Download Fix**: Enhanced CSV download to work properly on iPad devices with automatic Downloads folder saving and improved mobile compatibility
+- **CSS Input Text Fix**: Added CSS rules to ensure all text inputs display black text with gray placeholders, preventing any gray text issues
 
 ### July 27, 2025 - Project Migration and Question Updates
 - **Migration to Replit**: Successfully migrated project from Replit Agent to standard Replit environment
