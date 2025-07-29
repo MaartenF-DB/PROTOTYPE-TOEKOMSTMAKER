@@ -130,6 +130,7 @@ The application follows a modern full-stack architecture with the following comp
 - **Button Spacing Enhancement**: Added 2cm extra spacing (mt-16) for navigation buttons in visiting companions and action choice questions for better iPad usability
 - **Name Input Width Reduction**: Reduced question-content width by 2cm on both sides (from calc(100% - 1cm) to calc(100% - 5cm) with 2.5cm margins) for narrower name input columns
 - **Topic Text Alignment Fix**: Added CSS to center GEZONDHEID text under heart icon and keep VRIJE TIJD on single line in ranking questions
+- **Complete Survey Data Storage**: Modified storage logic to combine check-in and check-out into single record instead of creating duplicate entries - when user completes checkout, existing check-in record is updated with checkout data
 
 ### July 27, 2025 - Project Migration and Question Updates
 - **Migration to Replit**: Successfully migrated project from Replit Agent to standard Replit environment
