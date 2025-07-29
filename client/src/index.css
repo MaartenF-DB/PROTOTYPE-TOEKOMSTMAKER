@@ -92,6 +92,18 @@
 }
 
 .question-content {
+  width: calc(100% - 1cm);
+  margin: 0 0.5cm;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  position: relative;
+  z-index: 20;
+}
+
+/* Specific styling for name input sections only */
+.name-input-content {
   width: calc(100% - 5cm);
   margin: 0 2.5cm;
   padding: 1.5rem;
@@ -254,6 +266,18 @@
   
   /* iPad Question content centering */
   .question-content {
+    width: calc(100% - 1cm);
+    margin: 0 0.5cm;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    position: relative;
+    z-index: 20;
+  }
+  
+  /* iPad specific styling for name input sections only */
+  .name-input-content {
     width: calc(100% - 5cm);
     margin: 0 2.5cm;
     padding: 2rem;

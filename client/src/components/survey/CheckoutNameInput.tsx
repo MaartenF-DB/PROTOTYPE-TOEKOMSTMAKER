@@ -86,10 +86,13 @@ export function CheckoutNameInput({ existingResponses, onNameConfirm, language =
   };
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-blue-500 to-teal-500 text-white relative">
-      <div className="text-center max-w-5xl w-full relative z-10">
-        <div className="bg-white bg-opacity-20 rounded-2xl p-8 mb-8">
-          <h2 className="text-3xl font-bold mb-6">{t.questions?.name || "What is your name?"}</h2>
+    <section className="survey-section bg-gradient-to-br from-blue-500 to-teal-500 text-white relative">
+      <BackgroundEmojis />
+      <div className="name-input-content">
+        <div className="text-center">
+          <div className="mb-8">
+            <h2 className="text-3xl font-bold mb-6">{t.questions?.name || "What is your name?"}</h2>
+          </div>
           
           <div className="space-y-4">
             <Input
@@ -111,7 +114,7 @@ export function CheckoutNameInput({ existingResponses, onNameConfirm, language =
           </div>
         </div>
         
-        <div className="flex justify-center gap-4">
+        <div className="flex justify-center gap-4 mt-8">
           <Button
             onClick={handleNameSubmit}
             disabled={!enteredName.trim() || hasNameConflict}
@@ -124,9 +127,6 @@ export function CheckoutNameInput({ existingResponses, onNameConfirm, language =
           </Button>
         </div>
       </div>
-
-      {/* Background emojis for name input */}
-      <BackgroundEmojis sectionType="checkout" />
     </section>
   );
 }
